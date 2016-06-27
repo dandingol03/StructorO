@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>cross-over structor programe</title>
+    <link href="/public/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet">
+    <link href="/public/font-awesome-4.5.0/css/font-awesome.css" rel="stylesheet">
+    <link href="/public/css/app.css" rel="stylesheet">
+
+
+    <script src="/public/js/jquery-latest.js"></script>
+    <script src="/public/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
+    <script>
+        function foldingMenu(target){
+            var  $target=$(target);
+            if($target.hasClass("opened"))
+            {
+                $target.removeClass("opened");
+            }
+            else{
+                $target.addClass("opened");
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+           $(".component-type.dropdown-menu li a").click(function(evt){
+               var target=evt.target;
+               console.log("value===="+target.value);
+               var parent=$(target).parentElement;
+               $(parent).children("button").children(".content").text(target.value);
+           });
+
+
+        });
+    </script>
+</head>
+<body>
+<div class="row">
+    <!-- menu_button setting_menu -->
+
+    <ul class="left-nav">
+        <li style="margin-bottom:10px">
+            <div class="setting_menu" onclick="foldingMenu(this)">
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <div>
+                <span>
+                    <i class="fa fa-plus" style="font-size:40px;"> </i>
+                </span>
+            </div>
+        </li>
+        <li>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="content">component A</span> <span class="caret"></span>
+                </button>
+                <ul class="component-type dropdown-menu">
+                    <li><a href="#">component A</a></li>
+                    <li><a href="#">component B</a></li>
+                    <li><a href="#">component C</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">component D</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+    <div class="work_station">
+
+    </div>
+
+</div>
+
+</body>
+</html>

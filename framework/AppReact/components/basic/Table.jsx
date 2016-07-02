@@ -13,7 +13,20 @@ var Table=React.createClass({
             this.props.query.params,
             'json',
             function(response){
-                alert("response==="+response);
+                var data;
+                var ob=new Object();
+                if(Object.prototype.toString.call(response)!='[object Array]')
+                    if(response.arr!==undefined&&response.arr!==null)
+                        if(Object.prototype.toString.call(response.arr)=='[object Array]')
+                            data=response.arr;
+                        else
+                            data=response;
+                else
+                    data=response.data;
+                if(data!==undefined&&data!==null)
+                    ob.data=data;
+                ob.data$initialed=true;
+                this.setState(ob);
             }.bind(this)
         )
     },
@@ -45,31 +58,22 @@ var Table=React.createClass({
         }
         else{
             var trs=new Array();
-            var fields=new Array();
-            for(var field in this.state.data[0])
-            {
-                fields.push(<td key={field}>{field}</td>);
-            }
-
-            this.state.data.map(function(item,i) {
-                var tds=new Array();
-
-                var k=0;
-                for(var field in item)
+            var k=0;
+            var state=this.state;
+            this.props.filterField.map(function(field,i) {
+                if(state.data[field]!==undefined&&state.data[field]!==null)
                 {
-                    tds.push(<td key={k++}>{field}</td>);
+                    trs.push(
+                        <tr key={i}>
+                            <td key={0}>{field}</td>
+                            <td key={1}>{state.data[field]}</td>
+                        </tr>);
                 }
-                trs.push(
-                    <tr key={i}>
-                        {tds}
-                    </tr>
-                );
             });
 
             return(
-                <table className="table table-bordered center ordinaryTable" key={i}>
+                <table className="table table-bordered center ordinaryTable" style={{marginBottom:"0px"}}>
                     <tbody >
-                    <tr>{fields}</tr>
                     {trs}
                     </tbody>
                 </table>

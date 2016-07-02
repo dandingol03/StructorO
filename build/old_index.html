@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>cross-over structor programe</title>
+    <link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet">
+    <link href="/font-awesome-4.5.0/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+
+
+    <script src="/js/jquery-latest.js"></script>
+    <script src="/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
+    <script>
+        function foldingMenu(target){
+            var  $target=$(target);
+            if($target.hasClass("opened"))
+            {
+                $target.removeClass("opened");
+            }
+            else{
+                $target.addClass("opened");
+            }
+        }
+        function typeChange(target){
+            var type=target.value;
+            $.ajax({
+                type:'POST',
+                url: '/app/changeType',
+                dataType:'json',
+                data: {
+                    type:type
+                },
+                cache: false,
+                success: function(response) {
+                    console.log(".....communicate success.....");
+                },
+                error: function(xhr, status, err) {
+                    console.error(this.props.url, status, err.toString());
+                }
+            });
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+           $(".component-type.dropdown-menu li a").click(function(evt){
+               var target=evt.target;
+               console.log("value===="+target.value);
+               var parent=$(target).parentElement;
+               $(parent).children("button").children(".content").text(target.value);
+           });
+
+
+        });
+    </script>
+</head>
+<body>
+<div class="row">
+    <!-- menu_button setting_menu -->
+
+    <ul class="left-nav">
+        <li style="margin-bottom:10px">
+            <div class="setting_menu" onclick="foldingMenu(this)">
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <div>
+                <span>
+                    <i class="fa fa-plus" style="font-size:40px;"> </i>
+                </span>
+            </div>
+        </li>
+        <li>
+            <div class="btn-group">
+                <select  id="type_select" onchange="typeChange(this)">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                </select>
+            </div>
+        </li>
+    </ul>
+    <div id="work_station">
+    </div>
+    <script src="./bundle.js"></script>
+</div>
+
+</body>
+</html>

@@ -18,8 +18,36 @@
     <script src="/js/socket.io.js"></script>
     <script src="/ace/ace.js"></script>
     <script src="/highlight/highlight.pack.js"></script>
+    <script src="/js/structor.js"></script>
+    <script>
+        $(document).ready(function(){
+            var as=$(".panel.panel-default").find(".list-group-item");
+            as.map(function(i,a) {
+                var $a=$(a);
+
+                $a.find("span:first").click(function(){
+                    var component=$a.find("span:last").attr("data-component");
+                    Structor.dispatchClipboardRenderEvent(component);
+                });
+            });
+
+            $("#render")[0].addEventListener("render",function(data) {
+                var ob=data.detail;
+                var str="";
+                for(var field in ob)
+                {
+                    str+=field+":"+ob[field];
+                }
+                alert("data receive:====\r\n"+str);
+            });
+
+        });
+    </script>
 </head>
 <body>
+
+<div id="render"></div>
+
 <div style="overflow: hidden;width:100%">
     <div     style="padding-left:0px;min-height:800px">
 
@@ -72,55 +100,45 @@
                 <div style="position: relative; width: 100%; margin-top: 5px;">
                     <!-- 主题选择 -->
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <!-- Bootstrap 主题  -->
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingOne">
-                                <a role="button" data-toggle="collapse" href="#groupBootstrap10" aria-expanded="true" aria-controls="groupBootstrap10" style="outline: 0px;">
+                                <a role="button" data-toggle="collapse" href="#groupBootstrap4" aria-expanded="true" aria-controls="groupBootstrap4" style="outline: 0px;">
                                     Bootstrap
                                 </a>
                             </div>
-                            <div id="groupBootstrap10" class="panel-collapse collapse " role="tabpanel" aria-labelledby="groupBootstrap10">
+
+                            <div id="groupBootstrap4" class="panel-collapse collapse " role="tabpanel" aria-labelledby="groupBootstrap4">
                                 <div class="list-group">
-                                    <a class="list-group-item" href="#" title="Grid" data-component="Grid"><span>Grid</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Grid"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Row" data-component="Row"><span>Row</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Row"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Col" data-component="Col"><span>Col</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Col"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="ButtonToolbar" data-component="ButtonToolbar"><span>ButtonToolbar</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="ButtonToolbar"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="ButtonGroup" data-component="ButtonGroup"><span>ButtonGroup</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="ButtonGroup"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Button" data-component="Button"><span>Button</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Button"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="DropdownButton" data-component="DropdownButton"><span>DropdownButton</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="DropdownButton"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="SplitButton" data-component="SplitButton"><span>SplitButton</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="SplitButton"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="MenuItem" data-component="MenuItem"><span>MenuItem</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="MenuItem"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Panel" data-component="Panel"><span>Panel</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Panel"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Input" data-component="Input"><span>Input</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Input"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Table" data-component="Table"><span>Table</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Table"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Tab" data-component="Tab"><span>Tab</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Tab"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Image" data-component="Image"><span>Image</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Image"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Thumbnail" data-component="Thumbnail"><span>Thumbnail</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Thumbnail"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="ProgressBar" data-component="ProgressBar"><span>ProgressBar</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="ProgressBar"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Breadcrumb" data-component="Breadcrumb"><span>Breadcrumb</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Breadcrumb"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="BreadcrumbItem" data-component="BreadcrumbItem"><span>BreadcrumbItem</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="BreadcrumbItem"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Pagination" data-component="Pagination"><span>Pagination</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Pagination"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Pager" data-component="Pager"><span>Pager</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Pager"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="PageItem" data-component="PageItem"><span>PageItem</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="PageItem"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="ListGroup" data-component="ListGroup"><span>ListGroup</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="ListGroup"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="ListGroupItem" data-component="ListGroupItem"><span>ListGroupItem</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="ListGroupItem"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Label" data-component="Label"><span>Label</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Label"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Badge" data-component="Badge"><span>Badge</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Badge"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Well" data-component="Well"><span>Well</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Well"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Alert" data-component="Alert"><span>Alert</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Alert"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="Jumbotron" data-component="Jumbotron"><span>Jumbotron</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Jumbotron"><i class="fa fa-clipboard"></i></span></a>
-                                    <a class="list-group-item" href="#" title="PageHeader" data-component="PageHeader"><span>PageHeader</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="PageHeader"><i class="fa fa-clipboard"></i></span></a>
+                                    <a class="list-group-item" href="#" title="Grid" data-component="Grid">
+                                        <span>Grid</span>
+                                        <span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Grid">
+                                            <i class="fa fa-clipboard"></i>
+                                        </span>
+                                    </a>
+                                    <a class="list-group-item" href="#" title="Input" data-component="Input">
+                                        <span>Input</span>
+                                        <span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Input">
+                                            <i class="fa fa-clipboard"></i>
+                                        </span>
+                                    </a>
+                                    <a class="list-group-item" href="#" title="Well" data-component="Well">
+                                        <span>Well</span>
+                                        <span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Well">
+                                            <i class="fa fa-clipboard"></i>
+                                        </span>
+                                    </a>
+                                    <a class="list-group-item" href="#" title="Jumbotron" data-component="Jumbotron">
+                                        <span>Jumbotron</span>
+                                        <span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Jumbotron">
+                                            <i class="fa fa-clipboard"></i>
+                                        </span>
+                                    </a>
                                 </div>
                                 <div style="height: 0px;"></div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingOne"><a role="button" data-toggle="collapse" href="#groupShangDongUniversity20" aria-expanded="true" aria-controls="groupShangDongUniversity20" style="outline: 0px;">ShangDongUniversity</a>
-                            </div>
-                            <div id="groupShangDongUniversity20" class="panel-collapse collapse " role="tabpanel" aria-labelledby="groupShangDongUniversity20">
-                                <div class="list-group"><a class="list-group-item" href="#" title="generatedSelect" data-component="generatedSelect"><span>generatedSelect</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="generatedSelect"><i class="fa fa-clipboard"></i></span></a></div>
-                                <div style="height: 0px;"></div>
-                            </div>
-                        </div>
+
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingOne"><a role="button" data-toggle="collapse" href="#groupTest30" aria-expanded="true" aria-controls="groupTest30" style="outline: 0px;">Test</a>
                             </div>
@@ -129,14 +147,7 @@
                                 <div style="height: 0px;"></div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingOne"><a role="button" data-toggle="collapse" href="#groupHtml40" aria-expanded="true" aria-controls="groupHtml40" style="outline: 0px;">Html</a>
-                            </div>
-                            <div id="groupHtml40" class="panel-collapse collapse " role="tabpanel" aria-labelledby="groupHtml40">
-                                <div class="list-group"><a class="list-group-item" href="#" title="a" data-component="a"><span>a</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="a"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="article" data-component="article"><span>article</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="article"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="aside" data-component="aside"><span>aside</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="aside"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="blockquote" data-component="blockquote"><span>blockquote</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="blockquote"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="button" data-component="button"><span>button</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="button"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="code" data-component="code"><span>code</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="code"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="dd" data-component="dd"><span>dd</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="dd"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="div" data-component="div"><span>div</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="div"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="dl" data-component="dl"><span>dl</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="dl"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="dt" data-component="dt"><span>dt</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="dt"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="em" data-component="em"><span>em</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="em"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="fieldset" data-component="fieldset"><span>fieldset</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="fieldset"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="footer" data-component="footer"><span>footer</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="footer"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="form" data-component="form"><span>form</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="form"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="h1" data-component="h1"><span>h1</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="h1"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="h2" data-component="h2"><span>h2</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="h2"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="h3" data-component="h3"><span>h3</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="h3"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="h4" data-component="h4"><span>h4</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="h4"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="h5" data-component="h5"><span>h5</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="h5"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="header" data-component="header"><span>header</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="header"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="hr" data-component="hr"><span>hr</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="hr"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="i" data-component="i"><span>i</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="i"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="img" data-component="img"><span>img</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="img"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="input" data-component="input"><span>input</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="input"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="label" data-component="label"><span>label</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="label"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="li" data-component="li"><span>li</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="li"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="main" data-component="main"><span>main</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="main"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="nav" data-component="nav"><span>nav</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="nav"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="ol" data-component="ol"><span>ol</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="ol"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="option" data-component="option"><span>option</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="option"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="p" data-component="p"><span>p</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="p"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="path" data-component="path"><span>path</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="path"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="pre" data-component="pre"><span>pre</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="pre"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="select" data-component="select"><span>select</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="select"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="small" data-component="small"><span>small</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="small"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="span" data-component="span"><span>span</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="span"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="strong" data-component="strong"><span>strong</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="strong"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="table" data-component="table"><span>table</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="table"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="tbody" data-component="tbody"><span>tbody</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="tbody"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="td" data-component="td"><span>td</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="td"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="th" data-component="th"><span>th</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="th"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="thead" data-component="thead"><span>thead</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="thead"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="tr" data-component="tr"><span>tr</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="tr"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="ul" data-component="ul"><span>ul</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="ul"><i class="fa fa-clipboard"></i></span></a></div>
-                                <div style="height: 0px;"></div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -200,13 +211,21 @@
                 </div>
                 <div style="padding: 0px; margin: 0px 0px 0px 0.5em;">
                     <div class="btn-group" role="group">
-                        <button class="btn btn-default btn-xs" disabled="" data-func="pasteBefore" title="Append components from clipboard before selected component"><span style="margin: 0px 0.5em;">Before</span></button>
+                        <button class="btn btn-default btn-xs" disabled="" data-func="pasteBefore" title="Append components from clipboard before selected component">
+                            <span style="margin: 0px 0.5em;">Before</span>
+                        </button>
                         <button class="btn btn-default btn-xs" disabled="" data-func="pasteFirst" title="Insert components from clipboard into selected component on the first position">
-                            <span style="margin: 0px 0.5em;">First</span></button>
+                            <span style="margin: 0px 0.5em;">First</span>
+                        </button>
                         <button class="btn btn-default btn-xs" disabled="" data-func="pasteLast" title="Insert components from clipboard into selected component on the last position">
-                            <span style="margin: 0px 0.5em;">Last</span></button>
-                        <button class="btn btn-default btn-xs" disabled="" data-func="pasteAfter" title="Append components from clipboard after selected component"><span style="margin: 0px 0.5em;">After</span></button>
-                        <button class="btn btn-default btn-xs" disabled="" data-func="pasteReplace" title="Replace selected component with components from clipboard"><span style="margin: 0px 0.5em;">Replace</span></button>
+                            <span style="margin: 0px 0.5em;">Last</span>
+                        </button>
+                        <button class="btn btn-default btn-xs" disabled="" data-func="pasteAfter" title="Append components from clipboard after selected component">
+                            <span style="margin: 0px 0.5em;">After</span>
+                        </button>
+                        <button class="btn btn-default btn-xs" disabled="" data-func="pasteReplace" title="Replace selected component with components from clipboard">
+                            <span style="margin: 0px 0.5em;">Replace</span>
+                        </button>
                     </div>
                 </div>
                 <div class="btn-group" role="group" style="padding: 0px; margin: 0px 0px 0px 0.5em;">
@@ -215,11 +234,17 @@
                     <button class="btn btn-default btn-xs" disabled="" title="Cut selected components to clipboard"><span class="fa fa-scissors" style="margin: 0px 0.5em;"></span>
                     </button>
                     <button class="btn btn-default btn-xs" disabled="" title="Clone selected components">
-                        <span class="fa fa-clone" style="margin: 0px 0.5em;"></span></button>
-                    <button class="btn btn-default btn-xs" disabled="" title="Move up selected components within their parents"><span class="fa fa-arrow-up" style="margin: 0px 0.5em;"></span></button>
-                    <button class="btn btn-default btn-xs" disabled="" title="Move down selected components within their parents"><span class="fa fa-arrow-down" style="margin: 0px 0.5em;"></span></button>
+                        <span class="fa fa-clone" style="margin: 0px 0.5em;"></span>
+                    </button>
+                    <button class="btn btn-default btn-xs" disabled="" title="Move up selected components within their parents">
+                        <span class="fa fa-arrow-up" style="margin: 0px 0.5em;"></span>
+                    </button>
+                    <button class="btn btn-default btn-xs" disabled="" title="Move down selected components within their parents">
+                        <span class="fa fa-arrow-down" style="margin: 0px 0.5em;"></span>
+                    </button>
                     <button class="btn btn-default btn-xs" disabled="" title="Delete selected components">
-                        <span class="fa fa-trash-o" style="margin: 0px 0.5em;"></span></button>
+                        <span class="fa fa-trash-o" style="margin: 0px 0.5em;"></span>
+                    </button>
                 </div>
                 <div style="padding: 0px; margin: 0px 0px 0px 0.5em;">
                     <div style="display: flex; flex-flow: row nowrap; align-items: center;"><span title="Click to remove items from clipboard." style="padding: 3px 6px; border-radius: 3px; cursor: pointer; color: rgb(107, 107, 107); margin-right: 0.3em; text-shadow: rgba(255, 255, 255, 0.8) 0px 1px 0px; background-color: rgb(227, 227, 227);"><span>Empty clipboard</span></span>
@@ -230,7 +255,6 @@
 
         <!--work satation panel-->
         <div style="position: absolute; top: 6em; left: calc(4em + 200px); bottom: 0px; overflow: hidden; right: 5px;">
-
             <div style="height:100%" id="desktop-page">
                 <iframe src="/get_render_page.do"
                         style="height:100%;width:100%;min-width:320px;margin:0px;padding:0px;border:1px solid rgb(0,0,0)"/>

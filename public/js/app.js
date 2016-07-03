@@ -54,8 +54,3 @@ window.App.unSwing = function (ob) {
     }
 
 }
-
-window.aCallback=function(response)
-{
-    console.log("response=====\r\n"+response);
-}

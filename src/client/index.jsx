@@ -9,6 +9,7 @@ var Wrapper=require('../../framework/AppReact/components/wrapper/Wrapper.jsx');
 Boot();
 
 function Boot(){
+
     render(
         <Wrapper>
             <Table
@@ -23,6 +24,9 @@ function Boot(){
                 filterField={['email','perName','perNum','perIdCard']}
                 />
         </Wrapper>
-        , document.getElementById('root'))
+        , document.getElementById('root'));
+
+
+
 }
 

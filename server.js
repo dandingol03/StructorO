@@ -35,12 +35,6 @@ app.get('/', function (req, res) {
 
 app.post('/serviceHall/*',function(req,res) {
     console.log("req======");
-    var str="";
-    for(var field in req)
-    {
-        str+=field+":"+req[field];
-    }
-    console.log(str);
     proxy.web(req, res, {target:'http://localhost:8090'});
 });
 

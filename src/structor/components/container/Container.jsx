@@ -40,7 +40,6 @@ var Container=React.createClass({
     },
     componentDidMount:function(){
         var instance=this;
-
         var dom_node=$("#clipboard")[0];
         dom_node.addEventListener("clipboardRender",function(data){
             var ob=data.detail;

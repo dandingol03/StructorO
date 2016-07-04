@@ -1,15 +1,13 @@
 import React from 'react';
 import {render} from 'react-dom';
+import Container from './components/container/Container.jsx';
+
 
 Boot();
 function Boot(){
 
     render(
-        <div>
-            <button style={{position:"absolute",right:"20px",top:"20px"}}>
-                close me
-            </button>
-        </div>
+        <Container/>
         , document.getElementById('preview_root'));
 
 }

@@ -1,13 +1,12 @@
 import React from 'react';
 import {render} from 'react-dom';
-import Container from './components/container/Container.jsx';
+import Front from './components/container/Front.jsx';
 
 
 Boot();
 function Boot(){
-
     render(
-        <Container/>
+        <Front/>
         , document.getElementById('preview_root'));
 
 }

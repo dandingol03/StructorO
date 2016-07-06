@@ -2,7 +2,8 @@ import React from 'react';
 import {render} from 'react-dom';
 import '../../css/basic/table.css';
 var ProxyQ=require('../proxy/ProxyQ');
-
+var SyncStore=require('../../flux/stores/SyncStore');
+var SyncActions = require('../../flux/actions/SyncActions');
 
 var Table=React.createClass({
     fetch:function(){

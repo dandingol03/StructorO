@@ -1,18 +1,6 @@
 {
-  "Table":{
 
-  },
-  "Li":[
-          {
-          "data":[
-            {"label":"xx","value":1}
-                  ],
-          "highLight":true
-          },
-          {
 
-          }
-       ],
   "Radio":[
     {
        "ctrlName":"出行方式",
@@ -37,5 +25,23 @@
       ]
 
     }
-  ]
+    ],
+
+  "Grid":{
+      "data":["danding","dante","vergile"]
+        },
+  "Table":{
+    "query":
+    {
+      "url":"/serviceHall/bsuims/reactPageDataRequest.do",
+      "params":
+      {
+        "reactPageName":"cultivateTutorPage",
+        "reactActionName":"personIntroductionShow"
+      }
+    },
+    "auto":true,
+    "filterField":["email","perName","perNum","perIdCard"]
+  }
+
 }

@@ -98,9 +98,9 @@ var ProxyQ = {
                 }
                 if(catched==true)
                 {   if(response.re==2||response.re=="2"){
-                    $modal.find(".modal-body").html(content);
+                        $modal.find(".modal-body").html(content);
                     }else {
-                    $modal.find(".modal-body").text(content);
+                        $modal.find(".modal-body").text(content);
                     }
                     $modal.find(".modal-title").text(errType);
                     $modal.modal("show");

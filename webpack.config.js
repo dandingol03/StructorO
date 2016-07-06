@@ -9,9 +9,9 @@ module.exports = {
     entry: [
         'webpack-hot-middleware/client?reload=true',
         path.resolve(__dirname,
-            'src/client/index.jsx'),
+            'src/structor/index.jsx'),
         path.resolve(__dirname,
-            'src/client/preview.jsx')
+            'src/structor/preview.jsx')
     ],
     output: {
         path: path.resolve(__dirname, 'build'),

@@ -1,0 +1,18 @@
+{
+  "Grid":{
+      "data":["danding","dante","vergile"]
+        },
+  "Table":{
+    "query":
+    {
+      "url":"/serviceHall/bsuims/reactPageDataRequest.do",
+      "params":
+      {
+        "reactPageName":"cultivateTutorPage",
+        "reactActionName":"personIntroductionShow"
+      }
+    },
+    "auto":true,
+    "filterField":["email","perName","perNum","perIdCard"]
+  }
+}

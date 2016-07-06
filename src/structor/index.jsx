@@ -4,26 +4,13 @@
 import React from 'react';
 import {render} from 'react-dom';
 import  './css/app.css';
-var Table=require('../../framework/AppReact/components/basic/Table.jsx');
-var Wrapper=require('../../framework/AppReact/components/wrapper/Wrapper.jsx');
+import Container from './components/container/Container.jsx';
 Boot();
 
 function Boot(){
 
     render(
-        <Wrapper>
-            <Table
-                query={{
-           url:"/serviceHall/bsuims/reactPageDataRequest.do",
-           params:{
-                   reactPageName:'cultivateTutorPage',
-                   reactActionName:"personIntroductionShow"
-                  }
-                 }}
-                auto={true}
-                filterField={['email','perName','perNum','perIdCard']}
-                />
-        </Wrapper>
+       <Container/>
         , document.getElementById('root'));
 
 

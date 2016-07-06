@@ -14,7 +14,7 @@ function Boot(){
         <Wrapper>
             <Table
                 query={{
-           url:"/serviceHall/bsuims/reactPageDataRequest.do",
+           url:"/sduyingxin/bsuims/reactPageDataRequest.do",
            params:{
                    reactPageName:'cultivateTutorPage',
                    reactActionName:"personIntroductionShow"

@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
 import Panel from '../../../../framework/AppReact/components/basic/Panel.jsx';
 import Grid from '../../../../framework/AppReact/components/basic/Grid.jsx';
+import Radio from '../../../../framework/AppReact/components/basic/Radio.jsx';
 var  Components =require( '../../../../framework/AppReact/metadata/components.json');
 var SyncStore=require('../../../../framework/AppReact/flux/stores/SyncStore');
 var SyncActions = require('../../../../framework/AppReact/flux/actions/SyncActions');
@@ -40,6 +41,9 @@ var Front=React.createClass({
                     break;
                 case 'Grid':
                     ctrl=<Grid {...Components.Grid}/>;
+                    break;
+                case 'Radio':
+                    ctrl=<Radio {...Components.Radio}/>;
                     break;
                 default:
                     break;

@@ -33,9 +33,9 @@ app.get('/', function (req, res) {
     res.sendfile('build/structor.html');
 });
 
-app.post('/serviceHall/*',function(req,res) {
+app.post('/sduyingxin/*',function(req,res) {
     console.log("req======");
-    proxy.web(req, res, {target:'http://localhost:8090'});
+    proxy.web(req, res, {target:'http://localhost:8080'});
 });
 
 

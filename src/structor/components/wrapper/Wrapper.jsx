@@ -4,6 +4,8 @@ import '../../css/wrapper.css';
 import Grid from '../../../../framework/AppReact/components/basic/Grid.jsx';
 import Panel from '../../../../framework/AppReact/components/basic/Panel.jsx';
 import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
+import Radio from '../../../../framework/AppReact/components/basic/Radio.jsx';
+
 
 var SyncStore=require('../../../../framework/AppReact/flux/stores/SyncStore');
 var SyncActions = require('../../../../framework/AppReact/flux/actions/SyncActions');
@@ -99,6 +101,9 @@ var Wrapper=React.createClass({
                         break;
                     case 'Panel':
                         ctrl=<Panel {...item.ob.data}/>;
+                        break;
+                    case 'Radio':
+                        ctrl=<Radio {...item.ob.data}/>;
                         break;
                     default:
                         break;

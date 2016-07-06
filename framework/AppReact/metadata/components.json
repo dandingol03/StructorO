@@ -1,31 +1,24 @@
 {
 
 
-  "Radio":[
-    {
-       "ctrlName":"出行方式",
-       "data":[
-         {"label":"火车","value":"01"},
-         {"label":"飞机","value":"02"},
-         {"label":"渔船","value":"03"}]
-    },
-    {
-      "ctrlName":"交通工具",
-      "data":[
-        {"label":"火车","value":"01"},
-        {"label":"飞机","value":"02"},
-        {"label":"渔船","value":"03"}]
-    }
-  ],
-  "Attention":[
-    {
-      "data":[
-        {"label":"政策文件","route":"/comminfoservice/link/systemGuideLinkInfoViewInit.do"},
-        {"label":"通知浏览","route":"/groupnews/grouptypenews_list.do"}
-      ]
+  "Radio":
+  {
+    "ctrlName":"鍑鸿鏂瑰紡",
+    "data":[
+      {"label":"鐏溅","value":"01"},
+      {"label":"椋炴満","value":"02"},
+      {"label":"娓旇埞","value":"03"}]
+  }
+  ,
+  "Attention":
+  {
+    "data":[
+      {"label":"鏀跨瓥鏂囦欢","route":"/comminfoservice/link/systemGuideLinkInfoViewInit.do"},
+      {"label":"閫氱煡娴忚","route":"/groupnews/grouptypenews_list.do"}
+    ]
 
-    }
-    ],
+  }
+    ,
 
   "Grid":{
       "data":["danding","dante","vergile"]

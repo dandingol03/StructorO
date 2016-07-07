@@ -1,4 +1,25 @@
 {
+
+
+  "Radio":
+  {
+    "ctrlName":"出行方式",
+    "data":[
+      {"label":"火车","value":"01"},
+      {"label":"飞机","value":"02"},
+      {"label":"渔船","value":"03"}]
+  }
+  ,
+  "Attention":
+  {
+    "data":[
+      {"label":"政策文件","route":"/comminfoservice/link/systemGuideLinkInfoViewInit.do"},
+      {"label":"通知浏览","route":"/groupnews/grouptypenews_list.do"}
+    ]
+
+  }
+    ,
+
   "Grid":{
       "data":["danding","dante","vergile"]
         },
@@ -15,4 +36,5 @@
     "auto":true,
     "filterField":["email","perName","perNum","perIdCard"]
   }
+
 }

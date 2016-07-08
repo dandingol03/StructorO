@@ -9,5 +9,6 @@ module.exports = keyMirror({
     EDIT    : null,
     REMOVE: null,
     CLEAN_ALL:null,
-    MODAL:null
+    MODAL:null,
+    CSS:null
 });

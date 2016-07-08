@@ -8,6 +8,7 @@ import Container from './components/container/Container.jsx';
 import Wrapper from './components/wrapper/Wrapper.jsx';
 import Table from '../../framework/AppReact/components/basic/Table.jsx';
 import Modal from './components/modal/Modal.jsx';
+import Css from './components/css/Css.jsx';
 Boot();
 
 function Boot(){
@@ -18,6 +19,7 @@ function Boot(){
             <Wrapper>
             </Wrapper>
             <Modal/>
+            <Css/>
         </div>
 
         , document.getElementById('root'));

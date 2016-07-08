@@ -9,7 +9,7 @@ import Radio from '../../../../framework/AppReact/components/basic/Radio.jsx';
 
 var SyncStore=require('../../../../framework/AppReact/flux/stores/SyncStore');
 var SyncActions = require('../../../../framework/AppReact/flux/actions/SyncActions');
-
+var ProxyQ=require('../../../../framework/AppReact/components/proxy/ProxyQ');
 /**
  * 1.removeCb:组件的移除上升到父结点进行
  * 2.clipboard:
@@ -18,6 +18,25 @@ var SyncActions = require('../../../../framework/AppReact/flux/actions/SyncActio
 
 
 var Wrapper=React.createClass({
+    cssCb:function(){
+        var componentName=null;
+        if(this.props.children!==undefined&&this.props.children!==null)
+        {
+            componentName=this.props.children.type.displayName;
+        }
+        ProxyQ.queryHandle(
+            null,
+            'get_css.do',
+            {
+                filename:componentName+'.jsx',
+                path:'framework/AppReact'
+            },
+            'json',
+            function(response){
+                console.log("modify is successfully");
+            }.bind(this)
+        )
+    },
     removeCb:function(){
        if(this.props.invokeRemove!==undefined&&this.props.invokeRemove!==null)
         this.props.invokeRemove(this.state.vector);
@@ -64,7 +83,7 @@ var Wrapper=React.createClass({
             borderCtrl=
                 <div style={{display: "flex", flexDirection: "row", position: "absolute", left: "2px", bottom: "2px"}}>
                     <div className="selected-overlay-button selected-overlay-button-quick-add-new">
-                        <span className="fa fa-plus"></span>
+                        <span className="fa fa-code" onClick={this.cssCb}></span>
                     </div>
                     <div className="selected-overlay-button selected-overlay-button-edit">
                         <span className="fa fa-pencil" onClick={this.editCb}></span>

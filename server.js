@@ -16,6 +16,9 @@ var webpackHotMiddleware = require('webpack-hot-middleware');
 var config = require('./webpack.config');
 var ulr = require('url');
 var compiler = webpack(config);
+var fs=require('fs');
+var colors=require('colors');
+
 
 app.enable('trust proxy');
 
@@ -25,6 +28,11 @@ app.enable('trust proxy');
 
 
 app.use(static(__dirname + '/public'));
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json());
+
 app.use(webpackMiddleware(compiler));
 app.use(webpackHotMiddleware(compiler));
 
@@ -38,6 +46,15 @@ app.post('/sduyingxin/*',function(req,res) {
     proxy.web(req, res, {target:'http://localhost:8080'});
 });
 
+app.post('/get_css.do',function(req,res) {
+    var path=req.body.path;
+    var filename=req.body.filename;
+    var content=fs.readFileSync(path+'/components/'+'basic/'+filename,'utf-8');
+    console.log(content.rainbow);
+    //TODO:modify this file
+
+    res.send('hey,it is ok');
+});
 
 app.get('/get_render_page.do',function(req,res) {
     res.sendfile('build/index.html');

@@ -30,6 +30,13 @@ var SyncActions = {
         });
     },
 
+    css:function(ob){
+      AppDispatcher.dispatch({
+          type:SyncConstants.CSS,
+          ob:ob
+      });
+    },
+
     remove:function(vector,callback){
         AppDispatcher.dispatch({
             type: SyncConstants.REMOVE,

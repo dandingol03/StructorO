@@ -22,7 +22,7 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 var EDIT_EVENT='edit';
-
+var CSS_EVENT='css';
 
 var _comp = {};
 var _edit={};
@@ -165,6 +165,10 @@ var SyncStore = assign({}, EventEmitter.prototype, {
         this.emit(EDIT_EVENT);
     },
 
+    emitCss:function() {
+        this.emit(CSS_EVENT);
+    },
+
     /**
      * @param {function} callback
      */
@@ -186,6 +190,15 @@ var SyncStore = assign({}, EventEmitter.prototype, {
 
     removeEditListener:function(callback) {
         this.removeListener(EDIT_EVENT,callback);
+    },
+
+    addCssListener:function(callback) {
+        this.on(CSS_EVENT,callback);
+    },
+
+    removeCssListener:function(callback)
+    {
+        this.removeChangeListener(CSS_EVENT,callback);
     }
 });
 
@@ -201,6 +214,10 @@ AppDispatcher.register(function (action) {
         case SyncConstants.EDIT:
                 edit(action.ob,action.callback);
                 SyncStore.emitEdit();
+            break;
+
+        case SyncConstants.CSS:
+                SyncStore.emitCss();
             break;
 
         case SyncConstants.PASTE:

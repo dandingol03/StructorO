@@ -7,15 +7,18 @@ import  './css/app.css';
 import Container from './components/container/Container.jsx';
 import Wrapper from './components/wrapper/Wrapper.jsx';
 import Table from '../../framework/AppReact/components/basic/Table.jsx';
+import Modal from './components/modal/Modal.jsx';
 Boot();
 
 function Boot(){
 
     var data={email:'xx',perName:'xx',perNum:'xx',perIdCard:1142051104};
     render(
-
-        <Wrapper>
-        </Wrapper>
+        <div>
+            <Wrapper>
+            </Wrapper>
+            <Modal/>
+        </div>
 
         , document.getElementById('root'));
 

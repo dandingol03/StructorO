@@ -14,6 +14,11 @@ var ProxyQ=require('../../../../framework/AppReact/components/proxy/ProxyQ');
  * 1.removeCb:组件的移除上升到父结点进行
  * 2.clipboard:
  * 3.cancelCb:取消业务待做
+ * 4.nesting提取本组件的innerHtml,发送CSS.jsx进行显示和编辑
+ * 5.typeof state._nodes =='[object Object]'
+ *  1>._nodes.ob    自身结点所携带的数据
+ *  2>._nodes.count  自身结点所拥有的子结点数量
+ *  3>._nodes.[int]  自身所携带的子结点皆以0~n作为key
  */
 
 
@@ -79,23 +84,7 @@ var Wrapper=React.createClass({
 
     },
     cssCb:function(){
-        var componentName=null;
-        //if(this.props.children!==undefined&&this.props.children!==null)
-        //{
-        //    componentName=this.props.children.type.displayName;
-        //}
-        //ProxyQ.queryHandle(
-        //    null,
-        //    'get_css.do',
-        //    {
-        //        filename:componentName+'.jsx',
-        //        path:'framework/AppReact'
-        //    },
-        //    'json',
-        //    function(response){
-        //        console.log("modify is successfully");
-        //    }.bind(this)
-        //);
+
         var wrapper=this.refs.wrapper;
         var str=this.nesting(wrapper,'');
         console.log('formatted dom string========\r\n');
@@ -111,6 +100,10 @@ var Wrapper=React.createClass({
             this.setState({_nodes:_nodes});
         }.bind(this));
     },
+    /**
+     * @function createCb,当用户完成粘贴行为时由SyncStore执行的回调
+     *
+     */
     createCb:function(){
         SyncActions.create(this.props.vector,function(ob){
             //TODO:更改数据
@@ -163,12 +156,14 @@ var Wrapper=React.createClass({
         }
 
         var nodes=null;
+        var me=null;
         if(this.state._nodes!==undefined&&this.state._nodes!==null)
         {
             nodes=new Array();
             var invokeRemove=this.invokeRemove;
             var k=0;
             var state=this.state;
+            //渲染子结点
             for(var index in this.state._nodes)
             {
                 if(isNaN(index))
@@ -197,6 +192,31 @@ var Wrapper=React.createClass({
                 </Wrapper>);
             }
 
+            //渲染自身
+            switch (this.state._nodes.ob.type) {
+                case 'Table':
+                    me=<Table  {...item.ob.data}>
+                        {nodes}
+                        </Table>;
+                    break;
+                case 'Grid':
+                    me=<Grid {...item.ob.data}>
+                        {nodes}
+                        </Grid>;
+                    break;
+                case 'Panel':
+                    me=<Panel {...item.ob.data}>
+                        {nodes}
+                        </Panel>;
+                    break;
+                case 'Radio':
+                    me=<Radio {...item.ob.data}>
+                        {nodes}
+                        </Radio>;
+                    break;
+                default:
+                    break;
+            }
 
 
         }
@@ -204,7 +224,7 @@ var Wrapper=React.createClass({
         {
             return (
                 <div className="wrapper hover" ref="wrapper" >
-                    {nodes}
+                    {me}
                     {borderCtrl}
                     {this.props.children}
                 </div>
@@ -213,7 +233,7 @@ var Wrapper=React.createClass({
             return (
                 <div className="wrapper" ref="wrapper">
                     <div>
-                        {nodes}
+                        {me}
                     </div>
                     {borderCtrl}
                     {this.props.children}

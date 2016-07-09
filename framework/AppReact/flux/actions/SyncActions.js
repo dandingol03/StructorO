@@ -37,6 +37,14 @@ var SyncActions = {
       });
     },
 
+    format:function(ob)
+    {
+        AppDispatcher.dispatch({
+            type:SyncConstants.FORMAT,
+            ob:ob
+        });
+    },
+
     remove:function(vector,callback){
         AppDispatcher.dispatch({
             type: SyncConstants.REMOVE,

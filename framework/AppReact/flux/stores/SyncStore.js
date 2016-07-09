@@ -24,10 +24,17 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 var EDIT_EVENT='edit';
 var CSS_EVENT='css';
+var FORMAT_EVENT = 'format';
 
+/**
+ *  1._comp,预览后的组件数据
+ *  2._edit,等
+ */
 var _comp = {};
 var _edit={};
 var _tree={};
+var _format = {};
+var _css={};
 _tree.count=0;
 
 
@@ -109,15 +116,18 @@ function remove(vector,callback)
     }
 }
 
+function css(ob) {
+    _css=ob;
+}
 
-/**
- *
- * @param ob
- * @param callback
- */
 function edit(ob, callback) {
     _edit.ob=ob;
     _edit.callback=callback;
+}
+
+function format(ob)
+{
+    _format=ob;
 }
 
 
@@ -125,6 +135,8 @@ function cleanAll() {
     _comp=null;
     _tree=null;
     _edit=null;
+    _css=null;
+    _format=null;
 }
 
 
@@ -136,6 +148,10 @@ var SyncStore = assign({}, EventEmitter.prototype, {
 
     getEdit:function(){
         return _edit;
+    },
+
+    getCss:function(){
+        return _css;
     },
 
     getNode:function(vector){
@@ -158,6 +174,10 @@ var SyncStore = assign({}, EventEmitter.prototype, {
 
     },
 
+    getFormat:function(){
+      return _format;
+    },
+
     emitChange  : function () {
         this.emit(CHANGE_EVENT);
     },
@@ -168,6 +188,10 @@ var SyncStore = assign({}, EventEmitter.prototype, {
 
     emitCss:function() {
         this.emit(CSS_EVENT);
+    },
+
+    emitFormat:function(){
+        this.emit(FORMAT_EVENT);
     },
 
     /**
@@ -199,7 +223,15 @@ var SyncStore = assign({}, EventEmitter.prototype, {
 
     removeCssListener:function(callback)
     {
-        this.removeChangeListener(CSS_EVENT,callback);
+        this.removeListener(CSS_EVENT,callback);
+    },
+
+    addFormatListener:function(callback) {
+        this.on(FORMAT_EVENT,callback);
+    },
+
+    removeFormatListener:function(callback) {
+        this.removeListener(FORMAT_EVENT, callback);
     }
 });
 
@@ -218,7 +250,13 @@ AppDispatcher.register(function (action) {
             break;
 
         case SyncConstants.CSS:
-                SyncStore.emitCss();
+            css(action.ob);
+            SyncStore.emitCss();
+            break;
+
+        case SyncConstants.FORMAT:
+            format(action.ob);
+            SyncStore.emitFormat();
             break;
 
         case SyncConstants.PASTE:

@@ -86,10 +86,9 @@ var Wrapper=React.createClass({
     cssCb:function(){
 
         var wrapper=this.refs.wrapper;
+        //format innerHtml
         var str=this.nesting(wrapper,'');
-        console.log('formatted dom string========\r\n');
-        console.log(str);
-        SyncActions.css(str);
+        SyncActions.format(str);
     },
     removeCb:function(){
        if(this.props.invokeRemove!==undefined&&this.props.invokeRemove!==null)

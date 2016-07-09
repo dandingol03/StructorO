@@ -18,24 +18,89 @@ var ProxyQ=require('../../../../framework/AppReact/components/proxy/ProxyQ');
 
 
 var Wrapper=React.createClass({
+    nesting:function(dom,pre){
+        var str = '';
+        str +=   '<' + dom.tagName.toLowerCase();
+        var props = dom.attributes;
+        for (var i = 0; i < props.length; i++) {
+            var prop = props[i].name;
+            str += ' ' + prop + '=' + '\"'
+            if(prop=="class")
+            {
+                var classList=dom.classList;
+                for(var i=0;i<classList.length;i++)
+                {
+                    str+=classList[i];
+                    if(i!=classList.length-1)
+                        str+=" ";
+                }
+            }
+            else if(Object.prototype.toString.call(dom[prop])=='[object CSSStyleDeclaration]')
+            {
+                for(var cssProp in dom[prop])
+                {
+                    if(isNaN(parseInt(cssProp))==true)
+                        continue;
+                    var styleProp=dom[prop][cssProp];
+                    str+=styleProp+":"+dom[prop][styleProp]+";";
+                }
+            }
+            else if(Object.prototype.toString.call(dom[prop])=='[object Function]')
+            {
+                var funcReg=/function(.*?)\(.*?\{([\s|\S]*?)\}/;
+                var re=funcReg.exec(dom[prop]+'');
+                str+=re[2].replace(/\s/g,'');
+            }
+            else if( /data-(.*)/.exec(prop))
+            {
+                str+=dom.dataset[/data-(.*)/.exec(prop)[1]];
+            }
+            else{
+                str+= dom[prop];
+            }
+            str+='\"';
+            console.log('...');
+        }
+
+        str += '>\r\n';
+        for (var i = 0; i < dom.childNodes.length; i++) {
+            var node = dom.childNodes[i];
+            if (node.nodeType == 1)//元素
+            {
+                str += pre+'    '+  this.nesting(node,pre+'    ');
+            }
+            if (node.nodeType == 3)//文本
+            {
+                str += pre+'    '+ node.nodeValue + "\r\n";
+            }
+        }
+        str += pre+'</' + dom.tagName.toLowerCase() + '>\r\n';
+        return str;
+
+    },
     cssCb:function(){
         var componentName=null;
-        if(this.props.children!==undefined&&this.props.children!==null)
-        {
-            componentName=this.props.children.type.displayName;
-        }
-        ProxyQ.queryHandle(
-            null,
-            'get_css.do',
-            {
-                filename:componentName+'.jsx',
-                path:'framework/AppReact'
-            },
-            'json',
-            function(response){
-                console.log("modify is successfully");
-            }.bind(this)
-        )
+        //if(this.props.children!==undefined&&this.props.children!==null)
+        //{
+        //    componentName=this.props.children.type.displayName;
+        //}
+        //ProxyQ.queryHandle(
+        //    null,
+        //    'get_css.do',
+        //    {
+        //        filename:componentName+'.jsx',
+        //        path:'framework/AppReact'
+        //    },
+        //    'json',
+        //    function(response){
+        //        console.log("modify is successfully");
+        //    }.bind(this)
+        //);
+        var wrapper=this.refs.wrapper;
+        var str=this.nesting(wrapper,'');
+        console.log('formatted dom string========\r\n');
+        console.log(str);
+        SyncActions.css(str);
     },
     removeCb:function(){
        if(this.props.invokeRemove!==undefined&&this.props.invokeRemove!==null)

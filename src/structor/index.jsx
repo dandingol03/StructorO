@@ -14,6 +14,11 @@ Boot();
 function Boot(){
 
     var data={email:'xx',perName:'xx',perNum:'xx',perIdCard:1142051104};
+    var content=React.createElement('input',
+        {
+            defaultValue:'fuck u'
+        });
+
     render(
         <div>
             <Wrapper>

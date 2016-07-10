@@ -11,6 +11,7 @@ var Panel=React.createClass({
         return (
             <div className="panel">
                 <span>Panel</span>
+                {this.props.children}
             </div>
         );
     }

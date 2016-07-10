@@ -4,9 +4,14 @@ import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
 import Panel from '../../../../framework/AppReact/components/basic/Panel.jsx';
 import Grid from '../../../../framework/AppReact/components/basic/Grid.jsx';
 import Radio from '../../../../framework/AppReact/components/basic/Radio.jsx';
+import '../../css/front.css';
+
+
 var  Components =require( '../../../../framework/AppReact/metadata/components.json');
 var SyncStore=require('../../../../framework/AppReact/flux/stores/SyncStore');
 var SyncActions = require('../../../../framework/AppReact/flux/actions/SyncActions');
+
+
 
 
 var Front=React.createClass({
@@ -51,14 +56,17 @@ var Front=React.createClass({
         }
 
         return (
-            <div>
+            <div className="front">
                 <button onClick={this.saveClick}>
                     save to clipboard
                 </button>
                 <button style={{position:"absolute",right:"20px",top:"20px"}} onClick={this.backClick}>
                     close me
                 </button>
-                {ctrl}
+                <div style={{marginTop:"20px"}}>
+                    {ctrl}
+                </div>
+
             </div>);
     },
     componentDidMount:function(){

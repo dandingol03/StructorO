@@ -12,7 +12,7 @@
  *        3.vector
  *
  *
- *
+ *                                  
  */
 
 
@@ -41,39 +41,39 @@ _tree.count=0;
 function create(vector,callback) {
     var parent=null;
     //对应第一层组件
-    if(vector==null||vector==undefined)
-    {
-        parent=_tree;
-        //初始化本结点数据
-        parent[parent.count]=new Object();
-        parent[parent.count].ob=_comp;
-        parent[parent.count].count=0;
-        var arr=new Array();
-        arr.push(parent.count);
-        parent[parent.count].vector=arr;
+   if(vector==null||vector==undefined)
+   {
+       parent=_tree;
+       //初始化本结点数据
+       parent[parent.count]=new Object();
+       parent[parent.count].ob=_comp;
+       parent[parent.count].count=0;
+       var arr=new Array();
+       arr.push(parent.count);
+       parent[parent.count].vector=arr;
 
-        callback(parent);
-        parent.count++;
-    }else{//对应子层组件
-        var command="_tree";
-        vector.map(function(p,i) {
-            command+="["+p+"]";
-        });
-        try{
-            var parent=eval(command);
-            //初始化当前结点
-            parent[parent.count]=new Object();
-            parent[parent.count].ob=_comp;
-            parent[parent.count].count=0;
-            parent[parent.count].vector=parent.vector.concat(parent.count);
-            callback(parent);
-            parent.count++;
-        }catch(e)
-        {
+       callback(parent);
+       parent.count++;
+   }else{//对应子层组件
+       var command="_tree";
+       vector.map(function(p,i) {
+          command+="["+p+"]";
+       });
+       try{
+           var parent=eval(command);
+           //初始化当前结点
+           parent[parent.count]=new Object();
+           parent[parent.count].ob=_comp;
+           parent[parent.count].count=0;
+           parent[parent.count].vector=parent.vector.concat(parent.count);
+           callback(parent);
+           parent.count++;
+       }catch(e)
+       {
             alert("node create encount error=========\r\n"+e);
-        }
+       }
 
-    }
+   }
 }
 
 
@@ -175,7 +175,7 @@ var SyncStore = assign({}, EventEmitter.prototype, {
     },
 
     getFormat:function(){
-        return _format;
+      return _format;
     },
 
     emitChange  : function () {
@@ -240,13 +240,13 @@ AppDispatcher.register(function (action) {
 
     switch (action.type) {
         case SyncConstants.CREATE:
-            create(action.vector,action.callback);
-            SyncStore.emitChange();
+                create(action.vector,action.callback);
+                SyncStore.emitChange();
             break;
 
         case SyncConstants.EDIT:
-            edit(action.ob,action.callback);
-            SyncStore.emitEdit();
+                edit(action.ob,action.callback);
+                SyncStore.emitEdit();
             break;
 
         case SyncConstants.CSS:

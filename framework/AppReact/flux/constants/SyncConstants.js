@@ -10,5 +10,6 @@ module.exports = keyMirror({
     REMOVE: null,
     CLEAN_ALL:null,
     MODAL:null,
-    CSS:null
+    CSS:null,
+    FORMAT:null
 });

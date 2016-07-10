@@ -14,6 +14,13 @@ var ProxyQ=require('../../../../framework/AppReact/components/proxy/ProxyQ');
  * 1.removeCb:组件的移除上升到父结点进行
  * 2.clipboard:
  * 3.cancelCb:取消业务待做
+ * 4.nesting提取本组件的innerHtml,发送CSS.jsx进行显示和编辑
+ * 5.typeof state._nodes =='[object Object]'
+ *  1>._nodes.ob    自身结点所携带的数据
+ *  2>._nodes.count  自身结点所拥有的子结点数量
+ *  3>._nodes.[int]  自身所携带的子结点皆以0~n作为key
+ * 6.clickedCb 存在点击事件的冒泡行为
+ * 7.param ob,代表自身数据
  */
 
 
@@ -79,28 +86,11 @@ var Wrapper=React.createClass({
 
     },
     cssCb:function(){
-        var componentName=null;
-        //if(this.props.children!==undefined&&this.props.children!==null)
-        //{
-        //    componentName=this.props.children.type.displayName;
-        //}
-        //ProxyQ.queryHandle(
-        //    null,
-        //    'get_css.do',
-        //    {
-        //        filename:componentName+'.jsx',
-        //        path:'framework/AppReact'
-        //    },
-        //    'json',
-        //    function(response){
-        //        console.log("modify is successfully");
-        //    }.bind(this)
-        //);
+
         var wrapper=this.refs.wrapper;
+        //format innerHtml
         var str=this.nesting(wrapper,'');
-        console.log('formatted dom string========\r\n');
-        console.log(str);
-        SyncActions.css(str);
+        SyncActions.format(str);
     },
     removeCb:function(){
        if(this.props.invokeRemove!==undefined&&this.props.invokeRemove!==null)
@@ -111,6 +101,10 @@ var Wrapper=React.createClass({
             this.setState({_nodes:_nodes});
         }.bind(this));
     },
+    /**
+     * @function createCb,当用户完成粘贴行为时由SyncStore执行的回调
+     *
+     */
     createCb:function(){
         SyncActions.create(this.props.vector,function(ob){
             //TODO:更改数据
@@ -139,7 +133,11 @@ var Wrapper=React.createClass({
         var vector;
         if(this.props.vector!==null&&this.props.vector!==undefined)
             vector=this.props.vector;
-        return ({hover:false,clicked:false,vector:vector,_nodes:null});
+        var ob=null;
+        if(this.props.ob!==null&&this.props.ob!==undefined) {
+            ob=this.props.ob;
+        }
+        return ({hover:false,clicked:false,vector:vector,_nodes:null,ob:ob});
     },
     render:function(){
         var borderCtrl=null;
@@ -163,63 +161,58 @@ var Wrapper=React.createClass({
         }
 
         var nodes=null;
+        var me=null;
         if(this.state._nodes!==undefined&&this.state._nodes!==null)
         {
             nodes=new Array();
             var invokeRemove=this.invokeRemove;
             var k=0;
             var state=this.state;
+            //渲染子结点
             for(var index in this.state._nodes)
             {
                 if(isNaN(index))
                     continue;
-                var ctrl=null;
-                var item=state._nodes[index];
-                switch(item.ob.type)
-                {
-                    case 'Table':
-                        ctrl=<Table  {...item.ob.data}/>;
-                        break;
-                    case 'Grid':
-                        ctrl=<Grid {...item.ob.data}/>;
-                        break;
-                    case 'Panel':
-                        ctrl=<Panel {...item.ob.data}/>;
-                        break;
-                    case 'Radio':
-                        ctrl=<Radio {...item.ob.data}/>;
-                        break;
-                    default:
-                        break;
-                }
-                nodes.push( <Wrapper vector={item.vector} cancelCb={this.cancelCb} key={k++} invokeRemove={invokeRemove}>
-                    {ctrl}
-                </Wrapper>);
+                let item=state._nodes[index];
+                nodes.push( <Wrapper ob={item.ob} vector={item.vector} cancelCb={this.cancelCb} key={k++} invokeRemove={invokeRemove}/>);
             }
-
-
-
         }
-        if(this.state.hover==true)
-        {
-            return (
-                <div className="wrapper hover" ref="wrapper" >
-                    {nodes}
-                    {borderCtrl}
-                    {this.props.children}
-                </div>
-            )
-        }else{
-            return (
-                <div className="wrapper" ref="wrapper">
-                    <div>
+        //渲染自身
+        if(this.state.ob!==undefined&&this.state.ob!==null) {
+            switch (this.state.ob.type) {
+                case 'Table':
+                    me=<Table  {...this.state.ob.data}>
                         {nodes}
-                    </div>
+                    </Table>;
+                    break;
+                case 'Grid':
+                    me=<Grid {...this.state.ob.data}>
+                        {nodes}
+                    </Grid>;
+                    break;
+                case 'Panel':
+                    me=<Panel {...this.state.ob.data}>
+                        {nodes}
+                    </Panel>;
+                    break;
+                case 'Radio':
+                    me=<Radio {...this.state.ob.data}>
+                        {nodes}
+                    </Radio>;
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+            me=nodes;
+
+            return (
+                <div className="wrapper" ref="wrapper" >
+                    {me}
                     {borderCtrl}
-                    {this.props.children}
                 </div>
             )
-        }
     },
     componentDidMount:function(){
         var wrapper=this.refs.wrapper;
@@ -227,9 +220,9 @@ var Wrapper=React.createClass({
         var instance=this;
         $wrapper.hover(
             function(){
-                instance.setState({hover: true});
+                $wrapper.addClass("hover");
             }.bind(instance),function(){
-                instance.setState({hover: false});
+                $wrapper.removeClass("hover");
             }.bind(instance));
         $wrapper.click(function(evt){
             instance.clickCb(evt);

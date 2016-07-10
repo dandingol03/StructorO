@@ -11,7 +11,8 @@
  *        2.count:该结点对应的子结点
  *        3.vector
  *
- *                                  
+ *
+ *
  */
 
 
@@ -23,10 +24,16 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 var EDIT_EVENT='edit';
 var CSS_EVENT='css';
+var FORMAT_EVENT = 'format';
 
+/**
+ *  1._comp,预览后的组件数据
+ *  2._edit,等
+ */
 var _comp = {};
 var _edit={};
 var _tree={};
+var _format = {};
 var _css={};
 _tree.count=0;
 
@@ -34,39 +41,39 @@ _tree.count=0;
 function create(vector,callback) {
     var parent=null;
     //对应第一层组件
-   if(vector==null||vector==undefined)
-   {
-       parent=_tree;
-       //初始化本结点数据
-       parent[parent.count]=new Object();
-       parent[parent.count].ob=_comp;
-       parent[parent.count].count=0;
-       var arr=new Array();
-       arr.push(parent.count);
-       parent[parent.count].vector=arr;
+    if(vector==null||vector==undefined)
+    {
+        parent=_tree;
+        //初始化本结点数据
+        parent[parent.count]=new Object();
+        parent[parent.count].ob=_comp;
+        parent[parent.count].count=0;
+        var arr=new Array();
+        arr.push(parent.count);
+        parent[parent.count].vector=arr;
 
-       callback(parent);
-       parent.count++;
-   }else{//对应子层组件
-       var command="_tree";
-       vector.map(function(p,i) {
-          command+="["+p+"]";
-       });
-       try{
-           var parent=eval(command);
-           //初始化当前结点
-           parent[parent.count]=new Object();
-           parent[parent.count].ob=_comp;
-           parent[parent.count].count=0;
-           parent[parent.count].vector=parent.vector.concat(parent.count);
-           callback(parent);
-           parent.count++;
-       }catch(e)
-       {
+        callback(parent);
+        parent.count++;
+    }else{//对应子层组件
+        var command="_tree";
+        vector.map(function(p,i) {
+            command+="["+p+"]";
+        });
+        try{
+            var parent=eval(command);
+            //初始化当前结点
+            parent[parent.count]=new Object();
+            parent[parent.count].ob=_comp;
+            parent[parent.count].count=0;
+            parent[parent.count].vector=parent.vector.concat(parent.count);
+            callback(parent);
+            parent.count++;
+        }catch(e)
+        {
             alert("node create encount error=========\r\n"+e);
-       }
+        }
 
-   }
+    }
 }
 
 
@@ -109,15 +116,18 @@ function remove(vector,callback)
     }
 }
 
+function css(ob) {
+    _css=ob;
+}
 
-/**
- *
- * @param ob
- * @param callback
- */
 function edit(ob, callback) {
     _edit.ob=ob;
     _edit.callback=callback;
+}
+
+function format(ob)
+{
+    _format=ob;
 }
 
 
@@ -126,6 +136,7 @@ function cleanAll() {
     _tree=null;
     _edit=null;
     _css=null;
+    _format=null;
 }
 
 
@@ -163,6 +174,10 @@ var SyncStore = assign({}, EventEmitter.prototype, {
 
     },
 
+    getFormat:function(){
+        return _format;
+    },
+
     emitChange  : function () {
         this.emit(CHANGE_EVENT);
     },
@@ -173,6 +188,10 @@ var SyncStore = assign({}, EventEmitter.prototype, {
 
     emitCss:function() {
         this.emit(CSS_EVENT);
+    },
+
+    emitFormat:function(){
+        this.emit(FORMAT_EVENT);
     },
 
     /**
@@ -204,7 +223,15 @@ var SyncStore = assign({}, EventEmitter.prototype, {
 
     removeCssListener:function(callback)
     {
-        this.removeChangeListener(CSS_EVENT,callback);
+        this.removeListener(CSS_EVENT,callback);
+    },
+
+    addFormatListener:function(callback) {
+        this.on(FORMAT_EVENT,callback);
+    },
+
+    removeFormatListener:function(callback) {
+        this.removeListener(FORMAT_EVENT, callback);
     }
 });
 
@@ -213,18 +240,23 @@ AppDispatcher.register(function (action) {
 
     switch (action.type) {
         case SyncConstants.CREATE:
-                create(action.vector,action.callback);
-                SyncStore.emitChange();
+            create(action.vector,action.callback);
+            SyncStore.emitChange();
             break;
 
         case SyncConstants.EDIT:
-                edit(action.ob,action.callback);
-                SyncStore.emitEdit();
+            edit(action.ob,action.callback);
+            SyncStore.emitEdit();
             break;
 
         case SyncConstants.CSS:
-            _css=action.ob;
+            css(action.ob);
             SyncStore.emitCss();
+            break;
+
+        case SyncConstants.FORMAT:
+            format(action.ob);
+            SyncStore.emitFormat();
             break;
 
         case SyncConstants.PASTE:

@@ -27,6 +27,7 @@ var CSS_EVENT='css';
 var _comp = {};
 var _edit={};
 var _tree={};
+var _css={};
 _tree.count=0;
 
 
@@ -124,6 +125,7 @@ function cleanAll() {
     _comp=null;
     _tree=null;
     _edit=null;
+    _css=null;
 }
 
 
@@ -135,6 +137,10 @@ var SyncStore = assign({}, EventEmitter.prototype, {
 
     getEdit:function(){
         return _edit;
+    },
+
+    getCss:function(){
+        return _css;
     },
 
     getNode:function(vector){
@@ -217,7 +223,8 @@ AppDispatcher.register(function (action) {
             break;
 
         case SyncConstants.CSS:
-                SyncStore.emitCss();
+            _css=action.ob;
+            SyncStore.emitCss();
             break;
 
         case SyncConstants.PASTE:

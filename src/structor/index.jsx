@@ -9,6 +9,7 @@ import Wrapper from './components/wrapper/Wrapper.jsx';
 import Table from '../../framework/AppReact/components/basic/Table.jsx';
 import Modal from './components/modal/Modal.jsx';
 import Format from './components/format/Format.jsx';
+import Css from './components/css/Css.jsx';
 Boot();
 
 function Boot(){
@@ -25,6 +26,7 @@ function Boot(){
             </Wrapper>
             <Modal/>
             <Format/>
+            <Css/>
         </div>
 
         , document.getElementById('root'));

@@ -76,7 +76,7 @@ app.post('/save_css.do',function(req,res) {
         var exist=fs.existsSync(path+'/css/'+'basic/'+component+'.css');
         if(exist)
         {
-            var content=fs.writeFileSync(path+'/css/'+'basic/'+component+'.css','utf-8');
+            fs.writeFileSync(path+'/css/'+'basic/'+component+'.css',data,'utf-8');
             res.send({re: 1});
         }
         else

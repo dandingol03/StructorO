@@ -12,6 +12,74 @@ var Editor=React.createClass({
         $(target).css("height",target.scrollHeight);
         this.setState({data: target.value});
     },
+    keyUpCb:function(evt){
+        var target=evt.target;
+        if(evt.keyCode==13) {//enter key
+            let start= target.selectionStart;
+            let k=0;
+            let cv=target.value.substring(0,start);
+            let index=cv.split('\n').length-2;
+            let currentLine = cv.split('\n')[index];
+            let quoteReg=/\{$/;
+            let quoteRe = quoteReg.exec(currentLine);
+            let reg=/^(\s*).*/;
+            let re=reg.exec(currentLine);
+            if(re!==null) {
+                console.log("space count====" + re[1].length);
+                for(let i=0;i<re[1].length;i++)
+                {
+                    target.value+=' ';
+                }
+            }
+            if(quoteRe!==null) {//添加内置内容
+                target.value+='  \n}';
+                target.selectionStart=target.value.length-2;
+                target.selectionEnd=target.value.length-2;
+            }
+        }
+        else if(evt.keyCode==8) {//delete key
+            let start= target.selectionStart;
+            let cv=target.value.substring(0,start);
+            let index=cv.split('\n').length-1;
+            let currentLine = cv.split('\n')[index];
+            let blankReg=/^\s*$/;
+            let reg=/^(\s*).*/;
+            let re=reg.exec(currentLine);
+            let blank=blankReg.exec(currentLine);
+            if(blank!==null) {//空行
+                let prefixQuote=/\{$/;
+                let suffixQuote=/^\}/;
+                let prefixContent=null;
+                let suffixContent=null;
+                if(index>0)
+                    prefixContent=cv.split('\n')[index-1];
+                if(index<target.value.split('\n').length-1)
+                    suffixContent=target.value.split('\n')[index+1];
+                if(prefixContent!==null&&suffixContent!==null)
+                {
+                    let start=target.selectionStart;
+                    let end=target.selectionEnd;
+                    if(prefixQuote.exec(prefixContent)!==null&&suffixQuote.exec(suffixContent)!==null) {
+                        target.value = target.value.substring(0, target.selectionStart - re[1].length-2) +
+                            target.value.substring(target.selectionStart+2, target.value.length);
+                        //TODO:change the selectionStart & selectionEnd
+                        target.selectionStart=start-re[1].length-2;
+                        target.selectionEnd=target.selectionStart;
+                    }
+                }else if(prefixContent==null)//首行删除
+                {
+                    if(target.selectionStart==0&&target.selectionEnd==0) {
+                    }
+                    else{
+                        target.value = target.value.substring(0, target.selectionStart -1) +
+                            target.value.substring(target.selectionStart+1, target.value.length);
+                        target.selectionStart=0;
+                        target.selectionEnd=0;
+                    }
+                }
+            }
+        }
+    },
     saveCb:function(){
         var data=$(this.refs.editor).children("textarea")[0].value;
         console.log("data===\r\n" + data);
@@ -33,7 +101,7 @@ var Editor=React.createClass({
             return (
                 <div className="editor" ref='editor'>
                     <button onClick={this.saveCb}>save</button>
-                    <textarea name="editor" value={this.state.data} onChange={this.changeCb} ref='textarea'/>
+                    <textarea name="editor" value={this.state.data} onChange={this.changeCb} onKeyUp={this.keyUpCb} ref='textarea'/>
                 </div>
             );
         }else{

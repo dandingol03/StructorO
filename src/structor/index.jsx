@@ -25,7 +25,6 @@ function Boot(){
             <Wrapper>
             </Wrapper>
             <Modal/>
-            <Format/>
             <Css/>
         </div>
 

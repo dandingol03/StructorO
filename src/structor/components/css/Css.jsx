@@ -26,14 +26,14 @@ var Css=React.createClass({
             }.bind(this)
         );
     },
-    saveHandle:function(data){
+    saveHandle:function(ob){
         ProxyQ.queryHandle(
             null,
             '/save_css.do',
             {
                 path:'framework/AppReact',
                 component:this.state.component,
-                data:data
+                data:ob.data
             },
             'json',
             function(response){

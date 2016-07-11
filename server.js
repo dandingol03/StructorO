@@ -20,6 +20,8 @@ var fs=require('fs');
 var colors=require('colors');
 
 
+
+
 app.enable('trust proxy');
 
 /**
@@ -48,12 +50,42 @@ app.post('/sduyingxin/*',function(req,res) {
 
 app.post('/get_css.do',function(req,res) {
     var path=req.body.path;
-    var filename=req.body.filename;
-    var content=fs.readFileSync(path+'/components/'+'basic/'+filename,'utf-8');
-    console.log(content.rainbow);
-    //TODO:modify this file
+    var component=req.body.component;
+    try{
+        var exist=fs.existsSync(path+'/css/'+'basic/'+component+'.css');
+        if(exist)
+        {
+            var content=fs.readFileSync(path+'/css/'+'basic/'+component+'.css','utf-8');
+            res.send({re: 1, data: content});
+        }
+        else
+            res.send({re: -1,content:"file doesn't exists"});
+    }catch(e)
+    {
+        console.error("error====\r\n"+e);
+        res.send({re: -1, content: "encounter error"});
+    }
 
-    res.send('hey,it is ok');
+});
+
+app.post('/save_css.do',function(req,res) {
+    var path=req.body.path;
+    var component=req.body.component;
+    var data=req.body.data;
+    try{
+        var exist=fs.existsSync(path+'/css/'+'basic/'+component+'.css');
+        if(exist)
+        {
+            var content=fs.writeFileSync(path+'/css/'+'basic/'+component+'.css','utf-8');
+            res.send({re: 1});
+        }
+        else
+            res.send({re: -1,content:"file doesn't exists"});
+    }catch(e)
+    {
+        console.error("error====\r\n"+e);
+        res.send({re: -1, content: "encounter error"});
+    }
 });
 
 app.get('/get_render_page.do',function(req,res) {

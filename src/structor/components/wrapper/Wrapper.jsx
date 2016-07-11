@@ -85,12 +85,19 @@ var Wrapper=React.createClass({
         return str;
 
     },
-    cssCb:function(){
+    formatCb:function(){
 
         var wrapper=this.refs.wrapper;
         //format innerHtml
         var str=this.nesting(wrapper,'');
         SyncActions.format(str);
+    },
+    cssCb:function(){
+        //TODO:emit the component name hang with this node
+        if(this.state.ob!==undefined&&this.state.ob!==null)
+        {
+            SyncActions.css(this.state.ob.type);
+        }
     },
     removeCb:function(){
        if(this.props.invokeRemove!==undefined&&this.props.invokeRemove!==null)
@@ -145,8 +152,11 @@ var Wrapper=React.createClass({
         {
             borderCtrl=
                 <div style={{display: "flex", flexDirection: "row", position: "absolute", left: "2px", bottom: "2px"}}>
+                    <div className="selected-overlay-button selected-overlay-button-quick-edit-css">
+                        <span className="fa fa-css3" onClick={this.cssCb}></span>
+                    </div>
                     <div className="selected-overlay-button selected-overlay-button-quick-add-new">
-                        <span className="fa fa-code" onClick={this.cssCb}></span>
+                        <span className="fa fa-code" onClick={this.formatCb}></span>
                     </div>
                     <div className="selected-overlay-button selected-overlay-button-edit">
                         <span className="fa fa-pencil" onClick={this.editCb}></span>

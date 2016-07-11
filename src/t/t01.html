@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../../public/bootstrap-3.3.5-dist/css/bootstrap.css"/>
+
+    <script src="../../public/js/jquery-latest.js"></script>
+    <script src="../../public/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
+    <script>
+        $(document).ready(function(){
+            //ie => document.selection
+            //chrome => document.selectionStart,document.selectionEnd
+        });
+
+        /**
+         * 1.fix enter and delete 
+         */
+
+        function mmup(target){
+            var start=target.selectionStart;
+            var end=target.selectionEnd;
+            console.log("start====" + start);
+            console.log("end=====" + end);
+        }
+        function keyup() {
+            var target=event.target;
+            if(event.keyCode==13) {//enter key
+                let start= target.selectionStart;
+                let k=0;
+                let cv=target.value.substring(0,start);
+                let index=cv.split('\n').length-2;
+                let currentLine = cv.split('\n')[index];
+                let quoteReg=/\{$/;
+                let quoteRe = quoteReg.exec(currentLine);
+                let reg=/^(\s*).*/;
+                let re=reg.exec(currentLine);
+                if(re!==null) {
+                    console.log("space count====" + re[1].length);
+                    for(let i=0;i<re[1].length;i++)
+                    {
+                        target.value+=' ';
+                    }
+                }
+                if(quoteRe!==null) {//添加内置内容
+                    target.value+='  \n}';
+                    target.selectionStart=target.value.length-2;
+                    target.selectionEnd=target.value.length-2;
+                }
+            }
+            else if(event.keyCode==8) {//delete key
+                let start= target.selectionStart;
+                let cv=target.value.substring(0,start);
+                let index=cv.split('\n').length-1;
+                let currentLine = cv.split('\n')[index];
+                let blankReg=/^\s*$/;
+                let reg=/^(\s*).*/;
+                let re=reg.exec(currentLine);
+                let blank=blankReg.exec(currentLine);
+                if(blank!==null) {//空行
+                    let prefixQuote=/\{$/;
+                    let suffixQuote=/^\}/;
+                    let prefixContent=null;
+                    let suffixContent=null;
+                    if(index>0)
+                        prefixContent=cv.split('\n')[index-1];
+                    if(index<target.value.split('\n').length-1)
+                        suffixContent=target.value.split('\n')[index+1];
+                    if(prefixContent!==null&&suffixContent!==null)
+                    {
+                        let start=target.selectionStart;
+                        let end=target.selectionEnd;
+                        if(prefixQuote.exec(prefixContent)!==null&&suffixQuote.exec(suffixContent)!==null) {
+                            target.value = target.value.substring(0, target.selectionStart - re[1].length-2) +
+                                    target.value.substring(target.selectionStart+2, target.value.length);
+                          //TODO:change the selectionStart & selectionEnd
+                            target.selectionStart=start-re[1].length-2;
+                            target.selectionEnd=target.selectionStart;
+                        }
+                    }else if(prefixContent==null)//首行删除
+                    {
+                        if(target.selectionStart==0&&target.selectionEnd==0) {
+                        }
+                        else{
+                            target.value = target.value.substring(0, target.selectionStart -1) +
+                                    target.value.substring(target.selectionStart+1, target.value.length);
+                            target.selectionStart=0;
+                            target.selectionEnd=0;
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+<textarea id="t2" onkeyup="keyup()">123</textarea>
+
+</body>
+</html>

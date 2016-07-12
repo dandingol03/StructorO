@@ -24,6 +24,11 @@
     width:100%
 }
 
+.fake .back .pre{
+    background:#fff;
+    min-height:300px;
+}
+
 .fake .back .cursor{
     height:16px;
     width:2px;

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>code mirror</title>
+    <link rel="stylesheet" href="../../public/codemirror/codemirror.css"/>
+
+    <script src="../../public/codemirror/codemirror.js"></script>
+    <script src="../../public/codemirror/javascript/javascript.js"></script>
+    <script src="../../public/codemirror/css/css.js"></script>
+    <script src="../../public/codemirror/hint/css-hint.js"></script>
+</head>
+<body>
+<textarea id="editor" name="editor"></textarea>
+<script>
+    var myTextarea = document.getElementById('editor');
+    var CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
+        mode: "css",
+        lineNumbers: true
+    });
+</script>
+</body>
+</html>

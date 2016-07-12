@@ -10,6 +10,7 @@ import Table from '../../framework/AppReact/components/basic/Table.jsx';
 import Modal from './components/modal/Modal.jsx';
 import Format from './components/format/Format.jsx';
 import Css from './components/css/Css.jsx';
+import Fake from './components/css/editor/Fake.jsx';
 Boot();
 
 function Boot(){
@@ -26,6 +27,7 @@ function Boot(){
             </Wrapper>
             <Modal/>
             <Css/>
+            <Fake/>
         </div>
 
         , document.getElementById('root'));

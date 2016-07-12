@@ -1,0 +1,39 @@
+.fake{
+    position:relative;
+    border:0px;
+}
+
+.fake textarea{
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:100%;
+    min-height:300px;
+    padding:0px;
+    z-index:1010;
+    background:transparent;
+    color:transparent;
+}
+
+
+.fake .back{
+    position:absolute;
+    top:0px;
+    left:0px;
+    min-height:300px;
+    width:100%
+}
+
+.fake .back .cursor{
+    height:16px;
+    width:2px;
+    display:inline-block;
+    background:#fff;
+}
+
+.fake .back .cursor.highLight{
+    height:16px;
+    width:2px;
+    display:inline-block;
+    background:#00f;
+}

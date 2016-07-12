@@ -10,7 +10,10 @@ var Editor=React.createClass({
     changeCb:function(evt){
         var target=evt.target;
         $(target).css("height",target.scrollHeight);
-        this.setState({data: target.value});
+        var dom=document.createElement('div');
+        dom.innerHTML=target.value;
+        evt.target.innerHTML=dom.innerHTML;
+        //this.setState({data: target.value});
     },
     keyUpCb:function(evt){
         var target=evt.target;
@@ -101,7 +104,7 @@ var Editor=React.createClass({
             return (
                 <div className="editor" ref='editor'>
                     <button onClick={this.saveCb}>save</button>
-                    <textarea name="editor" value={this.state.data} onChange={this.changeCb} onKeyUp={this.keyUpCb} ref='textarea'/>
+                    <textarea name="editor" onChange={this.changeCb} onKeyUp={this.keyUpCb} ref='textarea'/>
                 </div>
             );
         }else{

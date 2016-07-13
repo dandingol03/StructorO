@@ -237,17 +237,19 @@
                 let curline = lines[index];
                 let re=/(\w)$/.exec(curline);
                 if(re!==null&&re[1].length>0) {
+                    var k=0;
                     assocs.map(function(assoc,i) {
                         if(assoc.indexOf(re[1])==0)
                         {
-                            if(i==0)
-                                arr+='<li class="proposal selected" tabIndex='+0+' '+
+                            if(k==0)
+                                arr+='<li class="proposal selected" '+
                                     'style="">'+
                                     assoc+'</li>';
                             else
-                                arr+='<li class="proposal" tabIndex=' +0+' '+
+                                arr+='<li class="proposal" '+
                                         'style="">'+
                                         assoc+'</li>';
+                            k++;
                         }
                     });
                 }

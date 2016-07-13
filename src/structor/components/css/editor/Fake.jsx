@@ -2,9 +2,19 @@ import React from 'react';
 import {render} from 'react-dom';
 import '../../../css/fake.css';
 
+/**
+ * 1.同时保存2份数据
+ * 2.渲染一份数据
+ *
+ */
+    var classes=['Object'];
 
-
-
+var funcs=[
+    'bind','map','replace','eval','toString','call'
+    ];
+var reserved=[
+  'if','else','this','function','null','var','new'
+];
 
 var Fake=React.createClass({
     keyPressCb:function(event){
@@ -37,8 +47,24 @@ var Fake=React.createClass({
             var enterReg=/\n$/;
             if(enterReg.exec(value))
             {
-                event.target.value=event.target.value.substring(0,event.target.value.length-1);
+                event.target.value=event.target.value.substring(0,event.target.value.length);
             }
+        }
+        if(value!==null)
+        {
+
+            classes.map(function(item,i) {
+                let reg=eval('/'+item+'/g');
+                value=value.replace(reg,'<span style="color:#D02B9B">'+item+'</span>');
+            });
+            funcs.map(function(item,i) {
+                let reg=eval('/'+item+'/g');
+                value=value.replace(reg,'<span style="color:#D09C4A">'+item+'</span>');
+            });
+            reserved.map(function(item,i) {
+                let reg = eval('/' + item + '/g');
+                value=value.replace(reg,'<span style="color:#9F5621">'+item+'</span>');
+            });
         }
         this.setState({data: value});
     },
@@ -47,18 +73,18 @@ var Fake=React.createClass({
 
         //<span style={{color:"red"}}>a</span>
         //<div className="cursor highLight" ref="cursor"></div>
-        return ({data: 'a'});
+        return ({data: '','copy':''});
     },
     render:function(){
         var data=null;
-        data=this.state.data;
+        data=this.state.data+'<div style="background:#00f;display:inline-block;width:2px;height:16px"></div>';
          return (
             <div className="fake">
-                <textarea onKeyUp={this.keyUpCb} onKeyPress={this.keyPressCb} onInput={this.inputCb}></textarea>
+                <textarea onKeyUp={this.keyUpCb} onKeyPress={this.keyPressCb} onInput={this.inputCb}  spellCheck={false}></textarea>
                 <div className="back" ref="back" >
                     <pre className="pre">
-                      <div style={{display:"inline-block"}} dangerouslySetInnerHTML={{__html:data}}>
-                      </div>
+                        <div style={{display:"inline-block"}} dangerouslySetInnerHTML={{__html:data}}>
+                        </div>
                     </pre>
                 </div>
             </div>);

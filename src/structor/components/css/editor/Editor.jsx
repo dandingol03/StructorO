@@ -1,7 +1,8 @@
 import React from 'react';
 import {render} from 'react-dom';
 import '../../../css/editor.css';
-
+var  jsJson=require('./config/js.json');
+var cssJson=require('./config/css.json');
 
 var Editor=React.createClass({
     clickCb:function(){

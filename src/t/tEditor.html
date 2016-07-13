@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>editing ........</title>
+    <link rel="stylesheet" href="../../public/bootstrap-3.3.5-dist/css/bootstrap.css"/>
+    <style>
+        .fake{
+            position:relative;
+        }
+
+        .fake textarea{
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:300px;
+            min-height: 400px;
+            color:transparent;
+            background: transparent;
+            z-index:1010;
+        }
+            
+        .fake .back{
+            position: absolute;
+            top:0px;
+            left:0px;
+            border:0px;
+        }
+
+        .fake .back .pre{
+            background:#fff;
+            border:0px;
+        }
+        
+        #editor{
+            position: absolute;
+            top:0px;
+            left:0px;
+            width:300px;
+            min-height: 400px;
+        }
+
+        li.proposal {
+            background:rgba(255,255,255,.8);
+            text-align:left;
+            padding:5px;
+            border-bottom:1px solid rgba(0,0,0,.16);
+            height:30px;
+            line-height:25px;
+            cursor:pointer;
+        }
+        li.proposal:hover{
+            background: rgba(175,42,0,.52);
+        }
+        li.proposal.selected{
+            background: rgba(175,42,0,.52);
+        }
+    </style>
+    <script src="../../public/js/jquery-latest.js"></script>
+    <script src="../../public/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
+    <script>
+
+        /**
+         * todo:完成自动补齐
+         *
+        */
+        function indentChar(len,ch){
+            let i='';
+            for(let j=0;j<len;j++) {
+                i+=' ';
+            }
+            i+=ch;
+            return i;
+        }
+
+        function accumulateIndentChar(len,ch) {
+            let i='';
+            let index=len;
+            while(index>0)
+            {
+                for(let j=0;j<index;j++) {
+                    i+=' ';
+                }
+                index-=2;
+            }
+            i+=ch;
+            return i;
+        }
+
+        function accumulate(len,step) {
+            let index=len;
+            let i=0;
+            while(index>0) {
+                i+=index;
+                index-=step;
+            }
+            return i;
+        }
+
+
+        var keywords=['var','function','new','if','else'];
+        var classes = ['Object','Array'];
+        var funcs = ['map', 'bind', 'call', 'toString','log'];
+        var assocs=['var','victory','vergile','function','Object','Array','toString'];
+
+
+
+        var UP=38;
+        var DOWN=40;
+        var LEFT=37;
+        var RIGHT=39;
+        var BRACKET=16;
+        var ENTER=13;
+        var DELETE=8;
+        var TAB=9;
+
+        document.onkeydown = function() {
+            switch(event.keyCode)
+            {
+                case UP:
+                    if(!$('#editor').is(':focus'))
+                    {
+                        var props=$('#editor').find('.proposal-list');
+                        var selected=props.children('.selected');
+                        var index=selected.index();
+                        selected.removeClass('selected');
+                        if(index!=0)
+                            selected.prev().addClass('selected');
+                        else
+                            props.children('li').last().addClass('selected');
+                    }
+                    break;
+                case DOWN:
+                    if(!$('#editor').is(':focus'))
+                    {
+                        var props=$('#editor').find('.proposal-list');
+                        var selected=props.children('.selected');
+                        var index=selected.index();
+                        selected.removeClass('selected');
+                        if(index<props.children('li').length-1)
+                            selected.next().addClass('selected');
+                        else
+                            props.children('li').first().addClass('selected');
+                    }
+                    break;
+                case TAB:
+                    return false;
+                    break;
+                case ENTER:
+                    if(!$('#editor').is(':focus'))
+                    {
+                        var props=$('#editor').find('.proposal-list');
+                        var selected=props.children('.selected');
+                        var item=selected[0].innerHTML;
+                        $('textarea').attr('data-assoc',item);
+                        $('textarea').focus();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+
+        var DIRECTIONS={
+            '38':'UP',
+            '40':'DOWN',
+            '37':'LEFT',
+            '39':'RIGHT'
+        }
+        var cursor='END';
+
+        function keyUpCb(){
+            var event=window.event;
+            let target=event.target;
+            var value=target.value;
+            let start=target.selectionStart;
+            let lines=target.value.substring(0,start).split('\n');
+            let index=lines.length-1;
+            let arr='';
+
+            cursor=start;
+
+            if(DIRECTIONS[event.keyCode]!==null&&DIRECTIONS[event.keyCode]!==undefined)//如果用户按的是方向键
+            {}
+            else if(event.keyCode==ENTER)//回车键
+            {
+                let previousLine=lines[index-1];
+                let re=/^(\s*).*/.exec(previousLine);
+                if(/\{$/.exec(previousLine))
+                {
+                    if(re[1].length>0)
+                    {
+                        let previous=event.target.value.substring(0,target.selectionStart);
+                        previous+=indentChar(re[1].length+2,'\n');
+                        previous+=indentChar(re[1].length,'}');
+                        event.target.value=previous+event.target.value.substring(target.selectionStart,event.target.value.length);
+                        event.target.selectionStart=previous.length-re[1].length-2;
+                        event.target.selectionEnd=event.target.selectionStart;
+                    }
+                    else
+                    {
+                        event.target.value+='  \n}';
+                        event.target.selectionStart=target.value.length-2;
+                        event.target.selectionEnd=target.value.length-2;
+                    }
+                }
+                else//单纯空行
+                {
+                    let previous=event.target.value.substring(0,target.selectionStart);
+                    previous+=indentChar(re[1].length,'');
+                    event.target.value=previous+event.target.value.substring(target.selectionStart,event.target.value.length);
+                    event.target.selectionStart=previous.length;
+                    event.target.selectionEnd=event.target.selectionStart;
+                }
+                cursor=event.target.selectionStart;
+                value=target.value;
+            }
+            else if(event.keyCode==DELETE)//删除键
+            {
+                let curLine = lines[index];
+                let re=/(^\s*).*/.exec(curLine);
+                if(re!==null&&re[1].length>0)
+                {
+                    let prefix=event.target.value.substring(0,target.selectionStart-re[1].length-2);
+                    let suffix=event.target.value.substring(target.selectionStart+re[1]-2+4,target.value.length);
+                    event.target.value=prefix+suffix;
+                    event.target.selectionStart=prefix.length;
+                    event.target.selectionEnd=event.target.selectionStart;
+                    cursor=event.target.selectionStart;
+                    value=event.target.value;
+                }
+            }
+            else//普通按键,开启联想功能
+            {
+                let curline = lines[index];
+                let re=/(\w)$/.exec(curline);
+                if(re!==null&&re[1].length>0) {
+                    assocs.map(function(assoc,i) {
+                        if(assoc.indexOf(re[1])==0)
+                        {
+                            if(i==0)
+                                arr+='<li class="proposal selected" tabIndex='+0+' '+
+                                    'style="">'+
+                                    assoc+'</li>';
+                            else
+                                arr+='<li class="proposal" tabIndex=' +0+' '+
+                                        'style="">'+
+                                        assoc+'</li>';
+                        }
+                    });
+                }
+            }
+            if(cursor==event.target.value.length)
+            {
+                if(arr!='')
+                {
+                    value=value+
+                            '<div class="suffix" style="width:1px;position:relative">'+
+                            '<div class="proposal-box" style="width:auto;top:0px;position:absolute;height:auto;' +
+                            'border-left:1px solid rgba(0,0,0,.11);z-index:2000">'+
+                            '<ul class="proposal-list" style="list-style: none;padding-left:0px;box-shadow: 1px 1px 5px rgba(0,0,0,.44)">'+
+                            arr+
+                            '</ul>'+
+                            '</div>'+
+                            '</div>';
+                }
+                else
+                    value=value+ '<div style="display:inline-block;background:#00f;width:2px;height:16px;"></div>';
+            }
+            else
+            {
+                value=value.substring(0,cursor)+'<div style="display:inline-block;background:#00f;width:2px;height:16px;"></div>'+
+                                value.substring(cursor,value.length);
+            }
+            keywords.map(function(item,i) {
+                value=value.replace(eval('/'+item+'/g'),'<span style="color:#9F5621">'+item+'</span>');
+            });
+            classes.map(function(item,i) {
+                value=value.replace(eval('/'+item+'/g'),'<span style="color:#D02B9B">'+item+'</span>');
+            });
+            funcs.map(function(item,i) {
+                let reg=eval('/'+item+'/g');
+                value=value.replace(reg,'<span style="color:#D09C4A">'+item+'</span>');
+            });
+
+            $('#editor')[0].innerHTML=value;
+            if(arr!='')
+            {
+                $('#hidden')[0].focus();
+                $('#hidden')[0].blur();
+            }
+        }
+        function keyDownCb()
+        {
+            var event=window.event;
+            if(event.keyCode==TAB)//tab键捕捉
+            {
+            }
+        }
+        function inputCb(event)
+        {
+
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="fake">
+        <textarea onkeyup="keyUpCb()" onkeydown="keyDownCb()" oninput="inputCb()" spellCheck=false></textarea>
+        <div class="back">
+            <pre class="pre">
+                <div style="display:inline-block" id="editor">
+                </div>
+            </pre>
+        </div>
+    </div>
+    <div style="position:relative;left:500px;">
+        <div style="position:absolute;width:1px;height:1px;top:0px;left:0px;z-index:9999;background:#fff;color:#fff"></div>
+        <input type="text" id="hidden" style="border:0px;position:absolute;top:0px;left:0px;width:1px;height:1px"/>
+    </div>
+</div>
+</body>
+</html>

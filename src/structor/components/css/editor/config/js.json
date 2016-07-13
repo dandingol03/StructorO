@@ -1,0 +1,14 @@
+{
+  "keywords":
+  [
+    "var","function","new","if","else"
+  ],
+  "classes" :
+  [
+    "Object","Array"
+  ],
+  "funcs":
+    [
+      "map", "bind", "call", "toString","log"
+    ]
+}

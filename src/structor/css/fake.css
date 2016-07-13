@@ -36,7 +36,7 @@
     background:#fff;
 }
 
-.fake .back .cursor.highLight{
+.fake .back .pre .cursor.highLight{
     height:16px;
     width:2px;
     display:inline-block;

@@ -5,6 +5,11 @@
     <title>editing ........</title>
     <link rel="stylesheet" href="../../public/bootstrap-3.3.5-dist/css/bootstrap.css"/>
     <style>
+
+        body{
+            /*background:url('../../public/img/home-hero-sm.jpg') no-repeat;*/
+        }
+
         .fake{
             position:relative;
         }
@@ -25,6 +30,7 @@
             top:0px;
             left:0px;
             border:0px;
+            background: #fff;
         }
 
         .fake .back .pre{
@@ -113,12 +119,13 @@
         var ENTER=13;
         var DELETE=8;
         var TAB=9;
+        var CURSOR='<div style="display:inline-block;background:#00f;width:2px;height:16px;"></div>';
 
         document.onkeydown = function() {
             switch(event.keyCode)
             {
                 case UP:
-                    if(!$('#editor').is(':focus'))
+                    if(!$('textarea').is(':focus'))
                     {
                         var props=$('#editor').find('.proposal-list');
                         var selected=props.children('.selected');
@@ -131,7 +138,7 @@
                     }
                     break;
                 case DOWN:
-                    if(!$('#editor').is(':focus'))
+                    if(!$('textarea').is(':focus'))
                     {
                         var props=$('#editor').find('.proposal-list');
                         var selected=props.children('.selected');
@@ -147,11 +154,15 @@
                     return false;
                     break;
                 case ENTER:
-                    if(!$('#editor').is(':focus'))
+                    if(!$('textarea').is(':focus'))
                     {
                         var props=$('#editor').find('.proposal-list');
                         var selected=props.children('.selected');
-                        var item=selected[0].innerHTML;
+                        let item;
+                        if(selected.children('span').length>0)
+                            item=selected.find('span')[0].innerHTML;
+                        else
+                            item=selected[0].innerHTML;
                         $('textarea').attr('data-assoc',item);
                         $('textarea').focus();
                     }
@@ -188,7 +199,21 @@
             {
                 let previousLine=lines[index-1];
                 let re=/^(\s*).*/.exec(previousLine);
-                if(/\{$/.exec(previousLine))
+                if(event.target.getAttribute("data-assoc")!==undefined&&event.target.getAttribute("data-assoc")!==null)//智能提示
+                {
+                    let wo=/(\w)$/.exec(previousLine);
+                    let previous=event.target.value.substring(0,target.selectionStart-1);
+                    let suffix = event.target.value.substring(target.selectionStart, event.target.value.length);
+                    console.log('previous===' + previous);
+                    console.log('last word===' + wo[1]);
+                    event.target.value=previous.substring(0,previous.length-wo[1].length)+
+                            event.target.getAttribute('data-assoc')+suffix;
+                    event.target.selectionStart=previous.length-wo[1].length+event.target.getAttribute('data-assoc').length;
+                    event.target.selectionEnd=event.target.selectionStart;
+
+
+                }
+                else if(/(\{)$/.exec(previousLine))
                 {
                     if(re[1].length>0)
                     {
@@ -201,9 +226,10 @@
                     }
                     else
                     {
+                        let origin=event.target.selectionStart;
                         event.target.value+='  \n}';
-                        event.target.selectionStart=target.value.length-2;
-                        event.target.selectionEnd=target.value.length-2;
+                        event.target.selectionStart=origin+2;
+                        event.target.selectionEnd=event.target.selectionStart;
                     }
                 }
                 else//单纯空行
@@ -220,16 +246,40 @@
             else if(event.keyCode==DELETE)//删除键
             {
                 let curLine = lines[index];
-                let re=/(^\s*).*/.exec(curLine);
-                if(re!==null&&re[1].length>0)
+                let previousline=lines[index-1];
+                let nextline=event.target.value.split('\n')[index+1];
+                let re=/^(\s*)$/.exec(curLine);
+                let  preReg=/\{$/.exec(previousline);
+                if(preReg!==null)
                 {
-                    let prefix=event.target.value.substring(0,target.selectionStart-re[1].length-2);
-                    let suffix=event.target.value.substring(target.selectionStart+re[1]-2+4,target.value.length);
-                    event.target.value=prefix+suffix;
-                    event.target.selectionStart=prefix.length;
-                    event.target.selectionEnd=event.target.selectionStart;
-                    cursor=event.target.selectionStart;
-                    value=event.target.value;
+                    if(nextline!==null&&nextline!==undefined&&re!==null)
+                    {
+                        let nextReg=/(\s*\})$/.exec(nextline);
+                        if(nextReg!==null)//函数体整体删除
+                        {
+                            let origin =event.target.selectionStart;
+                            let prefix=event.target.value.substring(0,target.selectionStart-re[1].length-2);
+                            let suffix=event.target.value.substring(origin+2+nextReg[1].length,target.value.length);
+                            event.target.value=prefix+suffix;
+                            event.target.selectionStart=prefix.length;
+                            event.target.selectionEnd=event.target.selectionStart;
+                            cursor=event.target.selectionStart;
+                            value=event.target.value;
+                        }
+                    }
+                }
+                else{
+                    if(re!==null&&re[1].length>0)
+                    {
+                        let origin =event.target.selectionStart;
+                        let prefix=event.target.value.substring(0,target.selectionStart-re[1].length-1);
+                        let suffix=event.target.value.substring(origin,target.value.length);
+                        event.target.value=prefix+suffix;
+                        event.target.selectionStart=prefix.length;
+                        event.target.selectionEnd=event.target.selectionStart;
+                        cursor=event.target.selectionStart;
+                        value=event.target.value;
+                    }
                 }
             }
             else//普通按键,开启联想功能
@@ -242,18 +292,18 @@
                         if(assoc.indexOf(re[1])==0)
                         {
                             if(k==0)
-                                arr+='<li class="proposal selected" '+
-                                    'style="">'+
+                                arr+='<li class="proposal selected" >'+
                                     assoc+'</li>';
                             else
-                                arr+='<li class="proposal" '+
-                                        'style="">'+
+                                arr+='<li class="proposal">'+
                                         assoc+'</li>';
                             k++;
                         }
                     });
                 }
             }
+
+
             if(cursor==event.target.value.length)
             {
                 if(arr!='')
@@ -273,7 +323,19 @@
             }
             else
             {
-                value=value.substring(0,cursor)+'<div style="display:inline-block;background:#00f;width:2px;height:16px;"></div>'+
+                if(arr!='')
+                {
+                    value=value.substring(0,cursor)+ '<div class="suffix" style="width:1px;position:relative">'+
+                            '<div class="proposal-box" style="width:auto;top:0px;position:absolute;height:auto;' +
+                            'border-left:1px solid rgba(0,0,0,.11);z-index:2000">'+
+                            '<ul class="proposal-list" style="list-style: none;padding-left:0px;box-shadow: 1px 1px 5px rgba(0,0,0,.44)">'+
+                            arr+
+                            '</ul>'+
+                            '</div>'+
+                            '</div>'+value.substring(cursor,value.length);
+                }
+                else
+                    value=value.substring(0,cursor)+'<div style="display:inline-block;background:#00f;width:2px;height:16px;"></div>'+
                                 value.substring(cursor,value.length);
             }
             keywords.map(function(item,i) {
@@ -288,12 +350,32 @@
             });
 
             $('#editor')[0].innerHTML=value;
+            if(event.target.hasAttribute("data-assoc"))
+                event.target.removeAttribute("data-assoc");
             if(arr!='')
             {
                 $('#hidden')[0].focus();
                 $('#hidden')[0].blur();
             }
         }
+
+        function mouseUpCb(){
+            let event=window.event;
+            let start=event.target.selectionStart;
+            let value = event.target.value.substring(0, start) + CURSOR + event.target.value.substring(start , event.target.value.length);
+            keywords.map(function(item,i) {
+                value=value.replace(eval('/'+item+'/g'),'<span style="color:#9F5621">'+item+'</span>');
+            });
+            classes.map(function(item,i) {
+                value=value.replace(eval('/'+item+'/g'),'<span style="color:#D02B9B">'+item+'</span>');
+            });
+            funcs.map(function(item,i) {
+                let reg=eval('/'+item+'/g');
+                value=value.replace(reg,'<span style="color:#D09C4A">'+item+'</span>');
+            });
+            $('#editor')[0].innerHTML=value;
+        }
+
         function keyDownCb()
         {
             var event=window.event;
@@ -310,8 +392,8 @@
 <body>
 <div class="container">
     <div class="fake">
-        <textarea onkeyup="keyUpCb()" onkeydown="keyDownCb()" oninput="inputCb()" spellCheck=false></textarea>
-        <div class="back">
+        <textarea onkeyup="keyUpCb()" onmouseup="mouseUpCb()" onkeydown="keyDownCb()" oninput="inputCb()" spellCheck=false></textarea>
+        <div class="back" >
             <pre class="pre">
                 <div style="display:inline-block" id="editor">
                 </div>

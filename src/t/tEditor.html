@@ -12,6 +12,9 @@
 
         .fake{
             position:relative;
+            float:left;
+            width:300px;
+            min-height: 400px;
         }
 
         .fake textarea{
@@ -49,10 +52,10 @@
         li.proposal {
             background:rgba(255,255,255,.8);
             text-align:left;
-            padding:5px;
-            border-bottom:1px solid rgba(0,0,0,.16);
-            height:30px;
-            line-height:25px;
+            padding-left:5px;
+            height:20px;
+            width:200px;
+            line-height:20px;
             cursor:pointer;
         }
         li.proposal:hover{
@@ -61,6 +64,35 @@
         li.proposal.selected{
             background: rgba(175,42,0,.52);
         }
+
+        .codeMirror-activeline-gutter
+        {
+            position:relative;
+            width: 21px;
+        }
+
+        .codeMirror-gutter {
+            cursor: default;
+            z-index: 4;
+            left: 0px;
+            width: 21px;
+            text-align: center;
+        }
+
+        .codeMirror-gutter-background{
+            background:#F7F7F7;
+        }
+
+        .codeMirror-linenumber {
+            min-width: 20px;
+            text-align: center;
+            color: #999;
+            white-space: nowrap;
+        }
+        .linenumber-box{
+            float:left;
+        }
+
     </style>
     <script src="../../public/js/jquery-latest.js"></script>
     <script src="../../public/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
@@ -357,6 +389,14 @@
                 $('#hidden')[0].focus();
                 $('#hidden')[0].blur();
             }
+            let linenumber_max = event.target.value.split('\n').length;
+            let line_numbers='';
+            for(let i=0;i<linenumber_max;i++) {
+                line_numbers+='<div class="codeMirror-gutter-background codeMirror-activeline-gutter" >'+
+                        '<div class="codeMirror-linenumber codeMirror-gutter">'+i+'</div>'+
+                        '</div>';
+            }
+            $('.linenumber-box')[0].innerHTML=line_numbers;
         }
 
         function mouseUpCb(){
@@ -391,13 +431,17 @@
 </head>
 <body>
 <div class="container">
-    <div class="fake">
-        <textarea onkeyup="keyUpCb()" onmouseup="mouseUpCb()" onkeydown="keyDownCb()" oninput="inputCb()" spellCheck=false></textarea>
-        <div class="back" >
+    <div class="box">
+        <div class="linenumber-box">
+        </div>
+        <div class="fake">
+            <textarea onkeyup="keyUpCb()" onmouseup="mouseUpCb()" onkeydown="keyDownCb()" oninput="inputCb()" spellCheck=false></textarea>
+            <div class="back" >
             <pre class="pre">
                 <div style="display:inline-block" id="editor">
                 </div>
             </pre>
+            </div>
         </div>
     </div>
     <div style="position:relative;left:500px;">

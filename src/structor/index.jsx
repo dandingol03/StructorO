@@ -22,13 +22,12 @@ function Boot(){
         });
 
     render(
-        <div>
+        <Container>
             <Wrapper>
             </Wrapper>
             <Modal/>
             <Css/>
-            <Fake/>
-        </div>
+        </Container>
 
         , document.getElementById('root'));
 

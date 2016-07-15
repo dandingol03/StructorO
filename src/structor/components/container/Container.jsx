@@ -1,29 +1,43 @@
 import React from 'react';
 import {render} from 'react-dom';
-import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
-import Panel from '../../../../framework/AppReact/components/basic/Panel.jsx';
-import Modal from '../modal/Modal.jsx';
-import Wrapper from '../wrapper/Wrapper.jsx';
-
-
+var SyncStore=require('../../../../framework/AppReact/flux/stores/SyncStore');
+var ProxyQ=require('../../../../framework/AppReact/components/proxy/ProxyQ');
 var Container=React.createClass({
-
-    getInitialState:function(){
-        return({_tree:null});
-    },
-    render:function(){
-        if(this.state._tree!==undefined&&this.state._tree!==null)
+    _onExport:function(data){
+        console.log('....');
+        console.log('....');
+        if(data!==undefined&&data!==null&&data.detail.export==true)
         {
-            return <div></div>
-        }
-        else{
-            return (
-                <div>
-                    <Wrapper />
-                    <Modal/>
-                </div>
+            //TODO:export data
+            console.log('export.....');
+            var _tree=SyncStore.getTree();
+            ProxyQ.queryHandle(
+                null,'do_export.do',
+                {
+                   framework:'AppReact',
+                    _tree:JSON.stringify(_tree)
+                },
+                null,
+                function(){
+                    console.log('export success.....');
+                }.bind(this)
             );
         }
+    },
+    render:function(){
+      return (
+          <div>
+              {this.props.children}
+          </div>
+      )
+    },
+    componentDidMount:function(){
+        var dom_node=$("#export")[0];
+        dom_node.addEventListener("export",this._onExport);
+    },
+    componentWillUnmount:function(){
+        var dom_node=$("#export")[0];
+        dom_node.removeEventListener("export",this._onExport);
     }
 });
 module.exports=Container;

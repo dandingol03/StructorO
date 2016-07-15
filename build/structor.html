@@ -19,6 +19,19 @@
     <script src="/highlight/highlight.pack.js"></script>
     <script src="/js/structor.js"></script>
     <script>
+        function toggleMenu(){
+            if($(".framework").css("display")!="none")
+            {
+                $(".framework").css("display", "none");
+                $(".slide-part").css("left"," calc(4em + 0px)");
+            }else{
+                $(".framework").css("display", "block");
+                $(".slide-part").css("left"," calc(4em + 200px)");
+            }
+        }
+        function doExport(){
+
+        }
         $(document).ready(function(){
             var as=$(".panel.panel-default").find(".list-group-item");
             as.map(function(i,a) {
@@ -52,7 +65,7 @@
 
         <!--sidebar-->
         <div style="">
-            <div style="position: relative; min-width: 4em; width: 4em; padding: 10px 0.5em 0px;">
+            <div class="sidebar" style="position: relative; min-width: 4em; width: 4em; padding: 10px 0.5em 0px;">
                 <div class="btn-group" style="width: 100%; text-align: center;">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="fa fa-bars" style="font-size: 32px;"></span>
@@ -74,7 +87,9 @@
                     </ul>
                 </div>
                 <button title="Show the list of available components" type="button" class="btn btn-primary"
-                        style="margin-top: 1em; width: 100%;"><span class="fa fa-plus"></span></button>
+                        style="margin-top: 1em; width: 100%;" onclick="toggleMenu()">
+                    <span class="fa fa-plus"></span>
+                </button>
                 <button title="Show components' hierarchy on current page" type="button" class="btn btn-default"
                         style="margin-top: 0.25em; width: 100%;"><span class="fa fa-code"></span></button>
                 <button title="Show component's quick options panel" type="button" class="btn btn-default"
@@ -85,15 +100,20 @@
                 <button title="Switch to view page mode" type="button" class="btn btn-default"
                         style="margin-top: 0.25em; width: 100%;"><span class="fa fa-hand-pointer-o"></span>
                 </button>
+                <button title="Switch to view page mode" type="button" class="btn btn-default"
+                        style="margin-top: 0.25em; width: 100%;" onclick="Structor.dispatchExportEvent()">
+                    <span class="fa fa-share"></span>
+                </button>
                 <button title="Reload current page. State will be lost." type="button" class="btn btn-default"
                         style="margin-top: 1em; width: 100%;"><span class="fa fa-refresh"></span></button>
+
                 <div style="margin-top: 0.25em; width: 100%; height: 2em;"></div>
             </div>
         </div>
 
 
         <!--framework list-->
-        <div style="position: absolute; top: 0px; left: 4em; bottom: 0px; width: 200px; padding-right: 5px; overflow: auto;">
+        <div class="framework" style="position: absolute; top: 0px; left: 4em; bottom: 0px; width: 200px; padding-right: 5px; overflow: auto;">
             <div style="padding-top: 5px;">
                 <div class="input-group input-group-sm"><input type="text" class="form-control" placeholder="Filter..."><span class="input-group-btn"><button class="btn btn-default" type="button"><span class="fa fa-times"></span></button></span></div>
                 <div style="position: relative; width: 100%; margin-top: 5px;">
@@ -148,7 +168,7 @@
         </div>
 
         <!-- route config nav -->
-        <div style="position: absolute; top: 0px; left: calc(4em + 200px); right: 5px; height: 3em;">
+        <div class="slide-part" style="position: absolute; top: 0px; left: calc(4em + 200px); right: 5px; height: 3em;">
             <div style="padding-top: 10px; display: flex; flex-flow: row nowrap; align-items: center; width: 150em;">
                 <div class="btn-group" role="group" style="padding: 0px; margin: 0px 0px 0px 0.5em;">
                     <button class="btn btn-default btn-xs" title="Delete current page"><span class="fa fa-trash-o"></span></button>
@@ -193,7 +213,7 @@
 
 
         <!-- new component config panel -->
-        <div style="position: absolute; top: 3em; left: calc(4em + 200px); right: 5px; height: 3em;">
+        <div class="slide-part" style="position: absolute; top: 3em; left: calc(4em + 200px); right: 5px; height: 3em;">
             <div style="margin-top: 0.2em; display: flex; flex-flow: row nowrap; align-items: center; width: 150em;">
                 <div class="btn-group" role="group" style="padding: 0px; margin: 0px 0px 0px 0.5em;">
                     <button class="btn btn-default btn-xs" disabled="" title="Undo the last action"><span class="fa fa-undo" style="margin: 0px 0.5em;"></span></button>
@@ -248,7 +268,7 @@
         </div>
 
         <!--work satation panel-->
-        <div style="position: absolute; top: 6em; left: calc(4em + 200px); bottom: 0px; overflow: hidden; right: 5px;">
+        <div class="slide-part" style="position: absolute; top: 6em; left: calc(4em + 200px); bottom: 0px; overflow: hidden; right: 5px;">
             <div style="height:100%" id="desktop-page">
                 <iframe src="/get_render_page.do"
                         style="height:100%;width:100%;min-width:320px;margin:0px;padding:0px;border:1px solid rgb(0,0,0)"/>

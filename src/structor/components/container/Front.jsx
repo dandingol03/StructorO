@@ -15,6 +15,10 @@ var SyncActions = require('../../../../framework/AppReact/flux/actions/SyncActio
 
 
 var Front=React.createClass({
+    _onClipboardRender:function(data){
+        var ob=data.detail;
+        this.renderClipboard(ob.component);
+    },
     backClick:function(){
         $("#preview").fadeOut();
     },
@@ -70,13 +74,12 @@ var Front=React.createClass({
             </div>);
     },
     componentDidMount:function(){
-        var instance=this;
         var dom_node=$("#clipboard")[0];
-        dom_node.addEventListener("clipboardRender",function(data){
-            var ob=data.detail;
-            instance.renderClipboard(ob.component);
-        });
-
+        dom_node.addEventListener("clipboardRender",this._onClipboardRender);
+    },
+    componentWillUnmount:function(){
+        var dom_node=$("#clipboard")[0];
+        dom_node.removeEventListener("clipboardRender",this._onClipboardRender);
     }
 
 });

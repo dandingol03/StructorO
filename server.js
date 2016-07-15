@@ -18,7 +18,7 @@ var ulr = require('url');
 var compiler = webpack(config);
 var fs=require('fs');
 var colors=require('colors');
-
+var _ = require('lodash');
 
 
 
@@ -85,6 +85,65 @@ app.post('/save_css.do',function(req,res) {
     {
         console.error("error====\r\n"+e);
         res.send({re: -1, content: "encounter error"});
+    }
+});
+
+app.post('/do_export.do',function(req,res) {
+    var _tree=null;
+    if(req.body._tree!==undefined&&req.body._tree!==null)
+    {
+        if(Object.prototype.toString.call(req.body._tree)=='[object String]')
+            _tree = JSON.parse(req.body._tree);
+        else
+            _tree=req.body._tree;
+    }
+    _tree.ob=new Object();
+    _tree.ob.type='div';
+    var framework=req.body.framework;
+    try{
+        var nesting=function(in$param){
+            var out$param='';
+            out$param+='\<'+in$param.ob.type+' ';
+            if(in$param.ob.data!==undefined&&in$param.ob.data!==null)
+            {
+                for(var field in in$param.ob.data)
+                {
+                    out$param+=field+'={'+JSON.stringify(in$param.ob.data[field])+'}';
+                    out$param+=' ';
+                }
+            }
+            out$param+=' \>\n';
+            var isLeaf=false;
+            for(var index in in$param)
+            {
+                if(isNaN(parseInt(index)))
+                    continue;
+                isLeaf=true;
+                out$param+=nesting(in$param[index],out$param);
+            }
+            if(isLeaf==false)
+            {
+                return out$param.substring(0,out$param.length-2)+'/\>\n';
+            }else{
+                out$param+='\</'+in$param.ob.type+'\>\n';
+                return out$param;
+            }
+        }
+        var before_compile=new Object();
+        before_compile.content='';
+        before_compile.content=nesting(_tree);
+        var dependencies= fs.readFileSync('framework/' + framework + '/dependencies.json','utf-8');
+        if(dependencies!==null&&dependencies!==undefined)
+            dependencies=JSON.parse(dependencies);
+        var  content=fs.readFileSync('./src/structor/template/main.tpl','utf-8');
+        var  se = _.template(content);
+        var compiled=se({'dependencies':dependencies,'content':before_compile.content},{escape:'<'});
+        fs.writeFileSync('./src/client/gen/index.js',compiled,'utf-8');
+        res.send({re: 1, content: 'document has been generated successfully'});
+    }catch(e)
+    {
+        console.error(e.toString());
+        res.send({re: -1});
     }
 });
 

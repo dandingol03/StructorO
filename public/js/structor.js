@@ -37,3 +37,17 @@ window.Structor.dispatchClipboardRenderEvent=function(component)
     obj.dispatchEvent(event);
 
 }
+
+/**
+ * @description,this event bind to the export action in iframe
+ *
+ */
+window.Structor.dispatchExportEvent=function(){
+    var iframe=$("#desktop-page").children("iframe")[0];
+    var document=iframe.contentDocument;
+    var obj=document.getElementById("export");
+    //fit to advance web-browser such as firefox,chrome
+    var event=document.createEvent('CustomEvent');
+    event.initCustomEvent('export',false,true,{export:true});
+    obj.dispatchEvent(event);
+}

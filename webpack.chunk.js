@@ -12,7 +12,9 @@ module.exports = {
         },
     output: {
         path: path.resolve(__dirname, 'shardding'),
-        filename: "[name].js"
+        filename: "[name].js",
+        chunkFilename: '[id].chunk.js',
+        publicPath: '/StructorO/shardding/'
     },
     resolve: {
         extensions: ['', '.js', '.jsx']

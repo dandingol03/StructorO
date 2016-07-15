@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>bootstrap template</title>
+    <link href="../public/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../public/font-awesome-4.5.0/css/font-awesome.css" rel="stylesheet">
+    <style>
+        table.center > tbody > tr > th {
+            text-align: center border : 1 px solid #336699;
+        }
+        .icon-switcher {
+            background: #F9F7F6;
+            margin-left: 0px;
+            margin-top: -5px;
+            padding: 12px 12px;
+            position: absolute;
+            font-size: 22px;
+        }
+        .icon-switcher {
+            color: #3B5998 !important;
+        }
+    </style>
+    <!-- ע��:Respond.js��֧��file:// ��ʽ�ķ��� -->
+    <script type="text/javascript" src="../public/js/ie-hack.js"></script>
+    <!--[if lt IE 9]>
+    <![endif]-->
+    <script type="text/javascript" src="../public/js/jquery-latest.js"></script>
+    <script type="text/javascript" src="../public/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+</head>
+<body style="line-height: 2;height:100%">
+<div class="modal fade" id="root_modal" style="display:none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="loading"></div>
+<div id="root" style="height:100%"></div>
+
+<script src="bundle.js"></script>
+
+
+</body>
+</html>

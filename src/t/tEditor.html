@@ -25,6 +25,7 @@
             min-height: 400px;
             color:transparent;
             background: transparent;
+            background-color: transparent;
             z-index:1010;
         }
             
@@ -99,7 +100,7 @@
     <script>
 
         /**
-         * todo:完成自动补齐
+         * todo:针对选中屏蔽开放普通键的输入和删除.
          *
         */
         function indentChar(len,ch){
@@ -151,7 +152,11 @@
         var ENTER=13;
         var DELETE=8;
         var TAB=9;
+        var SHIFT=16;
+        var COMMAND=91;
         var CURSOR='<div style="display:inline-block;background:#00f;width:2px;height:16px;"></div>';
+
+
 
         document.onkeydown = function() {
             switch(event.keyCode)
@@ -181,6 +186,44 @@
                         else
                             props.children('li').first().addClass('selected');
                     }
+                    break;
+                case LEFT:
+                        if(event.metaKey==true&&event.shiftKey==true)//command+shift+<-
+                        {
+                            let inner=$('#editor')[0].innerHTML;
+                            let start=inner.indexOf('<div style="display:inline-block;background:#00f;width:2px;height:16px;"></div>');
+                            let index=event.target.value.split('\n').length-1;
+                            let k=0;
+                            let selectionStart=0;
+                            var getAnchor=function(in$param,index){
+                                var  j=0;
+                                let lines = in$param.split('\n');
+                                for(let i=0;i<lines.length;i++)
+                                {
+                                    if(i!=index)
+                                        j+=lines[i].length+1;
+                                    else
+                                        break;
+                                }
+                                return j;
+                            }
+
+                            k=getAnchor(inner,index);
+                            selectionStart=getAnchor(event.target.value,index);
+                            let previous = inner.substring(0, k);
+                            let suffix = inner.substring(start, inner.length);
+                            let highline=inner.substring(k,start);
+                            console.log('previous ====\r\n' + previous);
+                            console.log('highline====\r\n' + highline);
+                            console.log('highline=====\r\n' + highline);
+                            let newline=previous+'<div style="display: inline-block;background:#bdd1ff">'+highline+'</div>'+suffix;
+                            $('#editor')[0].innerHTML=newline;
+                            $('#editor').attr('data-selected',true);
+                            $('#editor').attr('selectionStart',selectionStart);
+                            $('#editor').attr('selectionEnd',event.target.selectionStart);
+                            return false;
+                        }
+
                     break;
                 case TAB:
                     return false;
@@ -224,6 +267,31 @@
             let arr='';
 
             cursor=start;
+
+            if($('#editor').attr('data-selected')=='true'&&(event.keyCode==COMMAND||event.keyCode==SHIFT))
+                return true;
+            if($('#editor')[0].hasAttribute('data-selected'))
+            {
+                switch (event.keyCode) {
+                    case ENTER: LEFT: RIGHT: UP: DOWN:
+                            $('#editor')[0].removeAttribute('selectionStart');
+                            $('#editor')[0].removeAttribute('selectionEnd');
+                            $('#editor')[0].removeAttribute('data-selected');
+                            break;
+                    case DELETE:
+
+                        break;
+                    default:
+                        //针对选中状态下的普通按键
+                        break;
+
+                }
+            }
+
+
+
+
+
 
             if(DIRECTIONS[event.keyCode]!==null&&DIRECTIONS[event.keyCode]!==undefined)//如果用户按的是方向键
             {}
@@ -418,9 +486,21 @@
 
         function keyDownCb()
         {
-            var event=window.event;
-            if(event.keyCode==TAB)//tab键捕捉
+            let event=window.event;
+            switch(event.keyCode)
             {
+                case DELETE:
+                    if($('#editor').attr('data-selected')=='true')
+                    {
+                        let start=$('#editor').attr('selectionStart');
+                        let end=$('#editor').attr('selectionEnd');
+                        $('#editor')[0].removeAttribute('data-selected');
+                        $('#editor')[0].removeAttribute('selectionStart');
+                        $('#editor')[0].removeAttribute('selectionEnd');
+                        event.target.selectionStart=start;
+                        event.target.selecitonEnd=end;
+                    }
+                    break;
             }
         }
         function inputCb(event)

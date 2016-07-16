@@ -101,9 +101,10 @@ app.post('/do_export.do',function(req,res) {
     _tree.ob.type='div';
     var framework=req.body.framework;
     try{
+        var indent='        ';
         var nesting=function(in$param){
             var out$param='';
-            out$param+='\<'+in$param.ob.type+' ';
+            out$param+=indent+'\<'+in$param.ob.type+' ';
             if(in$param.ob.data!==undefined&&in$param.ob.data!==null)
             {
                 for(var field in in$param.ob.data)
@@ -125,7 +126,7 @@ app.post('/do_export.do',function(req,res) {
             {
                 return out$param.substring(0,out$param.length-2)+'/\>\n';
             }else{
-                out$param+='\</'+in$param.ob.type+'\>\n';
+                out$param+=indent+'\</'+in$param.ob.type+'\>\n';
                 return out$param;
             }
         }
@@ -137,7 +138,7 @@ app.post('/do_export.do',function(req,res) {
             dependencies=JSON.parse(dependencies);
         var  content=fs.readFileSync('./src/structor/template/main.tpl','utf-8');
         var  se = _.template(content);
-        var compiled=se({'dependencies':dependencies,'content':before_compile.content},{escape:'<'});
+        var compiled=se({'dependencies':dependencies,'content':'\n'+before_compile.content},{escape:'<'});
         fs.writeFileSync('./src/client/gen/index.js',compiled,'utf-8');
         res.send({re: 1, content: 'document has been generated successfully'});
     }catch(e)

@@ -11,6 +11,8 @@ module.exports = {
         path.resolve(__dirname,
             'src/structor/index.jsx'),
         path.resolve(__dirname,
+            'src/structor/dragged.jsx'),
+        path.resolve(__dirname,
             'src/structor/preview.jsx')
     ],
     output: {

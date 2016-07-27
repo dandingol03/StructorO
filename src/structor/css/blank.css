@@ -1,0 +1,38 @@
+.blank{
+    position: relative;
+}
+
+.prefix{
+    width:100%;
+    min-height:50px;
+    border:1px solid #22A599;
+}
+.prefix.highLight{
+    min-height:200px;
+    border:5px dashed  #A52C5D;
+}
+.suffix{
+    min-height:50px;
+    width:100%;
+    border:1px solid #22A599;
+}
+.suffix.highLight{
+    min-height:200px;
+    border:1px dashed #2c5aa5;
+}
+
+.border-ctrl{
+    display: flex;
+    flexDirection: row;
+    position: absolute;
+    left: 2px;
+    bottom: 2px;
+}
+
+.border-ctrl .selected-overlay-button-edit:hover{
+    color: #33aa52;
+}
+
+.border-ctrl .selected-overlay-button-copy-paste:hover{
+    color:#33aa52;
+}

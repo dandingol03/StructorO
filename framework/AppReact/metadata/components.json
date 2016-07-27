@@ -1,6 +1,4 @@
 {
-
-
   "Radio":
   {
     "ctrlName":"出行方式",
@@ -24,15 +22,11 @@
       "data":["danding","dante","vergile"]
         },
   "Table":{
-    "query":
-    {
-      "url":"/serviceHall/bsuims/reactPageDataRequest.do",
-      "params":
-      {
-        "reactPageName":"cultivateTutorPage",
-        "reactActionName":"personIntroductionShow"
-      }
-    },
+    "data":
+    [
+      {"email":"1291248710@qq.com","perName":"wjj","perNum":1142051104,"perIdCard":460},
+      {"email":"9046001@qq.com","perName":"danding","perNum":1142051102,"perIdCard":101}
+    ],
     "auto":true,
     "filterField":["email","perName","perNum","perIdCard"]
   }

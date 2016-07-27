@@ -8,8 +8,6 @@ var static = require("express-static");
 var bodyParser=require('body-parser');
 var httpProxy = require("http-proxy");
 var proxy = httpProxy.createProxyServer({});
-
-
 var webpack =require( 'webpack');
 var webpackMiddleware = require('webpack-dev-middleware');
 var webpackHotMiddleware = require('webpack-hot-middleware');
@@ -19,8 +17,6 @@ var compiler = webpack(config);
 var fs=require('fs');
 var colors=require('colors');
 var _ = require('lodash');
-
-
 
 app.enable('trust proxy');
 
@@ -129,7 +125,7 @@ app.post('/do_export.do',function(req,res) {
                 out$param+=indent+'\</'+in$param.ob.type+'\>\n';
                 return out$param;
             }
-        }
+        };
         var before_compile=new Object();
         before_compile.content='';
         before_compile.content=nesting(_tree);
@@ -150,6 +146,31 @@ app.post('/do_export.do',function(req,res) {
 
 app.get('/get_render_page.do',function(req,res) {
     res.sendfile('build/index.html');
+});
+
+app.post('/get_metadata.do',function(req,res) {
+    try{
+        var frameworks = fs.readdirSync('./framework');
+
+        frameworks.map(function(framework,i) {
+            var path='';
+            path+='./framework'+'/'+framework;
+            var exist = fs.existsSync(path + '/' + 'metadata');
+            if(exist) {
+                exist = fs.existsSync(path + '/' + 'metadata' + '/' + 'components.json');
+                if(exist) {
+                    var content = fs.readFileSync(path + '/' + 'metadata' + '/' + 'components.json', 'utf-8');
+                    if(Object.prototype.toString.call(content)=='[object String]')
+                        content = eval('(' + content + ')');
+                    res.send({data: content});
+                }
+            }
+        });
+    }catch(e)
+    {
+        console.error(e.toString());
+        res.send({re: -1});
+    }
 });
 
 app.get('/bundle.js',function(req,res) {

@@ -1,0 +1,11 @@
+.dragged{
+    padding-top:20px;
+    background: #fff;
+    border:1px solid #518A9E;
+    min-height: 400px;
+    position:absolute;
+    overflow-x: hidden;
+}
+.dragged.hide-in-left{
+
+}

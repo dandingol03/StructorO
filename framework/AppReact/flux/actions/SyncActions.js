@@ -58,6 +58,22 @@ var SyncActions = {
             type: SyncConstants.PASTE,
             ob:ob
         });
+    },
+
+    drop:function(vector,ob,callback) {
+        AppDispatcher.dispatch({
+            type:SyncConstants.DROP,
+            vector:vector,
+            ob:ob,
+            callback:callback
+        });
+    },
+
+    folding:function()
+    {
+        AppDispatcher.dispatch({
+           type:SyncConstants.FOLDING
+        });
     }
 
 };

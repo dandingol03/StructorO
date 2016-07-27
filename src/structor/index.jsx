@@ -6,6 +6,7 @@ import {render} from 'react-dom';
 import  './css/app.css';
 import Container from './components/container/Container.jsx';
 import Wrapper from './components/wrapper/Wrapper.jsx';
+import Blank from './components/wrapper/Blank.jsx';
 import Table from '../../framework/AppReact/components/basic/Table.jsx';
 import Modal from './components/modal/Modal.jsx';
 import Format from './components/format/Format.jsx';
@@ -23,10 +24,8 @@ function Boot(){
 
     render(
         <Container>
-            <Wrapper>
-            </Wrapper>
-            <Modal/>
-            <Css/>
+            <Blank data={{type:'Basic'}}>
+            </Blank>
         </Container>
 
         , document.getElementById('root'));

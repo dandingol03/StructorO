@@ -54,10 +54,16 @@
 
 <div id="loading"></div>
 <div id="clipboard"></div>
+<div id="drag"></div>
 <div id="export"></div>
-<div class="container" style="padding-top:15px">
-    <div id="root"></div>
-
+<div class="container" style="padding-top:15px;padding-left:1px;margin-left:0px;margin-right:0px;width:100%">
+    <!-- 侧边栏组件选择 -->
+    <div style="min-height:400px;top:0px;left:0px;position:absolute;z-index:1011;">
+        <div id="Dragged"></div>
+    </div>
+    <div style="float:right;width:85%;height:470px;overflow: scroll;overflow-x: hidden">
+        <div id="root" ></div>
+    </div>
 </div>
 <div style="width:100%;min-height:728px;position:absolute;left:0px;top:0px;display:none" id="preview" >
     <div style="position:absolute;left: 0px;top:0px;width:100%;height:100%">
@@ -67,6 +73,9 @@
         </div>
     </div>
 </div>
+
+
+
 <script src="/bundle.js"></script>
 </body>
 </html>

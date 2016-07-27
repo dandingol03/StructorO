@@ -6,7 +6,10 @@ var SyncActions = require('../../flux/actions/SyncActions');
 
 
 var Panel=React.createClass({
-
+    dropEnable:function()
+    {
+        return true;
+    },
     render:function(){
         return (
             <div className="panel">

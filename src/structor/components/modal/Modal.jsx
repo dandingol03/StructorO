@@ -38,7 +38,7 @@ var Modal=React.createClass({
     },
     render:function(){
 
-        var properties=null;
+        var properties='';
         if(this.state.properties!==undefined&&this.state.properties!==null)
             properties=this.state.properties;
 

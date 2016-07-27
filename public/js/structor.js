@@ -39,6 +39,19 @@ window.Structor.dispatchClipboardRenderEvent=function(component)
 }
 
 /**
+ * @description,this action notify the Dragged.jsx to render the dragged component
+ */
+window.Structor.dispatchRenderDraggedEvent=function(ob) {
+    var iframe=$("#desktop-page").children("iframe")[0];
+    var document=iframe.contentDocument;
+    var obj=document.getElementById("drag");
+    //fit to advance web-browser such as firefox,chrome
+    var event=document.createEvent('CustomEvent');
+    event.initCustomEvent('draggedRender',false,true,ob);
+    obj.dispatchEvent(event);
+};
+
+/**
  * @description,this event bind to the export action in iframe
  *
  */

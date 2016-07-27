@@ -10,6 +10,7 @@
  *        1.ob:{组件名称,组件数据}
  *        2.count:该结点对应的子结点
  *        3.vector
+ *        4.本库依赖jquery
  *
  *
  *                                  
@@ -25,6 +26,7 @@ var CHANGE_EVENT = 'change';
 var EDIT_EVENT='edit';
 var CSS_EVENT='css';
 var FORMAT_EVENT = 'format';
+var FOLDING_EVENT = 'folding';
 
 /**
  *  1._comp,预览后的组件数据
@@ -92,21 +94,32 @@ function remove(vector,callback)
         try{
             var command='_tree';
             if(vector.length==1) //比如删除container->panel，vector=1
-            {
-                _tree.count=_tree.count-1;
                 parent=_tree;
-            }
 
             vector.map(function(p,i) {
                 command+='['+p+']';
                 if(i==vector.length-2)
                 {
                     parent = eval(command);
-                    parent.count=parent.count-1;
                 }
             });
-            eval('delete '+command);
-            //回调在被删除结点的父结点上进行响应,重新塞入数据
+            //eval('delete '+command);
+            //重新调整同步数据
+            let pos=vector[vector.length-1];
+            if(pos==parent.length-1)
+            {}
+            else{
+                parent[pos]={};
+                for(let i=parseInt(pos);i<parent.count-1;i++)
+                {
+                    $.extend(true,parent[pos],parent[i+1]);
+                    parent[pos].vector=parent[pos].vector.splice(parent[pos].vector.length-1,1,i);
+                    pos++;
+                }
+            }
+            if(parent.count>0)
+                delete parent[parent.count-1];
+            parent.count=parent.count-1;
             if(callback!==undefined&&callback!==null&&Object.prototype.toString.call(callback)=='[object Function]')
                 callback(parent);
         }catch(e)
@@ -129,6 +142,60 @@ function format(ob)
 {
     _format=ob;
 }
+
+
+function drop(vector,ob,callback) {
+    var parent=null;
+    //对应第一层组件
+    if(vector==null||vector==undefined)
+    {
+        parent=_tree;
+        if(ob.index!==undefined&&ob.index!==null&&!isNaN(parseInt(ob.index))&&Object.prototype.toString.call(parent[ob.index])=='[object Object]')
+        {
+            parent.count++;
+            parent[parent.count-1]={};
+            for(let i=parent.count-1;i>ob.index;i--) {
+                $.extend(true,parent[i],parent[i-1]);
+                parent[i].vector.splice(parent[i].vector.length-1,1,i);
+            }
+            let pos=ob.index;
+            parent[pos].data=ob.data;
+            parent[pos].type=ob.type;
+        }else{
+            parent[parent.count]=new Object();
+            parent[parent.count].type=ob.type;
+            parent[parent.count].data=ob.data;
+            parent[parent.count].count=0;
+            var arr=new Array();
+            arr.push(parent.count);
+            parent[parent.count].vector=arr;
+            parent.count++;
+        }
+        callback(parent);
+    }else{//对应子层组件
+        var command="_tree";
+        vector.map(function(p,i) {
+            command+="["+p+"]";
+        });
+        try{
+            var parent=eval(command);
+            //初始化当前结点
+            parent[parent.count]=new Object();
+            parent[parent.count].type=ob.type;
+            parent[parent.count].data=ob.data;
+            parent[parent.count].count=0;
+            parent[parent.count].vector=parent.vector.concat(parent.count);
+            callback(parent);
+            parent.count++;
+        }catch(e)
+        {
+            alert("node create encount error=========\r\n"+e);
+        }
+
+    }
+}
+
+
 
 
 function cleanAll() {
@@ -194,6 +261,10 @@ var SyncStore = assign({}, EventEmitter.prototype, {
         this.emit(FORMAT_EVENT);
     },
 
+    emitFolding:function(){
+        this.emit(FOLDING_EVENT);
+    },
+
     /**
      * @param {function} callback
      */
@@ -232,6 +303,14 @@ var SyncStore = assign({}, EventEmitter.prototype, {
 
     removeFormatListener:function(callback) {
         this.removeListener(FORMAT_EVENT, callback);
+    },
+
+    addFoldingListener:function(callback) {
+        this.on(FOLDING_EVENT, callback);
+    },
+
+    removeFoldingListener:function(callback) {
+        this.removeListener(FOLDING_EVENT, callback);
     }
 });
 
@@ -271,6 +350,12 @@ AppDispatcher.register(function (action) {
         case SyncConstants.CLEAN_ALL:
             cleanAll();
             SyncStore.emitChange();
+            break;
+        case SyncConstants.DROP:
+            drop(action.vector, action.ob, action.callback);
+            break;
+        case SyncConstants.FOLDING:
+            SyncStore.emitFolding();
             break;
         default:
         // no op

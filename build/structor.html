@@ -26,23 +26,13 @@
                 $(".slide-part").css("left"," calc(4em + 0px)");
             }else{
                 $(".framework").css("display", "block");
-                $(".slide-part").css("left"," calc(4em + 200px)");
+                $(".slide-part").css("left"," calc(4em + 130px)");
             }
         }
         function doExport(){
 
         }
         $(document).ready(function(){
-            var as=$(".panel.panel-default").find(".list-group-item");
-            as.map(function(i,a) {
-                var $a=$(a);
-
-                $a.find("span:first").click(function(){
-                    var component=$a.find("span:last").attr("data-component");
-                    Structor.dispatchClipboardRenderEvent(component);
-                });
-            });
-
             $("#render")[0].addEventListener("render",function(data) {
                 var ob=data.detail;
                 var str="";
@@ -51,6 +41,33 @@
                     str+=field+":"+ob[field];
                 }
                 alert("data receive:====\r\n"+str);
+            });
+
+            //初始化主题选择
+            window.Structor.queryHandle(null,'/get_metadata.do',null,null,function(response)
+            {
+                let data=response.data;
+                let group=$('#AppReact').children('.list-group');
+                group.find('a').remove();
+                for(let component in data) {
+                    let ctrl = document.createElement('a');
+                    ctrl.setAttribute('href', '#');
+                    ctrl.setAttribute('title', component);
+                    ctrl.setAttribute('data-component', component);
+                    ctrl.setAttribute('data-metadata', JSON.stringify(data[component]));
+                    ctrl.className = 'list-group-item';
+                    ctrl.innerHTML='<span>'+component+'</span>\n' +
+                            '<span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component=\"'+component+'\">\n'+
+                            '<i class="fa fa-clipboard"></i>\n'+
+                            '</span>\n';
+                    $(ctrl).click(function(){
+                        let mes={};
+                        mes.type=$(ctrl).find("span:last").attr("data-component");
+                        mes.data=eval('('+$(ctrl).attr("data-metadata")+')');
+                        Structor.dispatchRenderDraggedEvent(mes);
+                    });
+                    group.append(ctrl);
+                }
             });
 
         });
@@ -113,54 +130,28 @@
 
 
         <!--framework list-->
-        <div class="framework" style="position: absolute; top: 0px; left: 4em; bottom: 0px; width: 200px; padding-right: 5px; overflow: auto;">
+        <div class="framework" style="position: absolute; top: 0px; left: 4em; bottom: 0px; width: 130px; padding-right: 5px; overflow: auto;">
             <div style="padding-top: 5px;">
                 <div class="input-group input-group-sm"><input type="text" class="form-control" placeholder="Filter..."><span class="input-group-btn"><button class="btn btn-default" type="button"><span class="fa fa-times"></span></button></span></div>
                 <div style="position: relative; width: 100%; margin-top: 5px;">
                     <!-- 主题选择 -->
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        <!-- Bootstrap 主题  -->
+                        <!-- AppReact 主题  -->
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingOne">
-                                <a role="button" data-toggle="collapse" href="#groupBootstrap4" aria-expanded="true" aria-controls="groupBootstrap4" style="outline: 0px;">
-                                    Bootstrap
+                                <a role="button" data-toggle="collapse" href="#AppReact" aria-expanded="true" aria-controls="AppReact" style="outline: 0px;">
+                                    AppReact
                                 </a>
                             </div>
 
-                            <div id="groupBootstrap4" class="panel-collapse collapse " role="tabpanel" aria-labelledby="groupBootstrap4">
+                            <div id="AppReact" class="panel-collapse collapse " role="tabpanel" aria-labelledby="AppReact">
                                 <div class="list-group">
-                                    <a class="list-group-item" href="#" title="Grid" data-component="Grid">
-                                        <span>Grid</span>
-                                        <span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Grid">
-                                            <i class="fa fa-clipboard"></i>
-                                        </span>
-                                    </a>
-                                    <a class="list-group-item" href="#" title="Radio" data-component="Radio">
-                                        <span>Radio</span>
-                                        <span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Radio">
-                                            <i class="fa fa-clipboard"></i>
-                                        </span>
-                                    </a>
-                                    <a class="list-group-item" href="#" title="Panel" data-component="Panel">
-                                        <span>Panel</span>
-                                        <span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="Panel">
-                                            <i class="fa fa-clipboard"></i>
-                                        </span>
-                                    </a>
-
                                 </div>
                                 <div style="height: 0px;"></div>
                             </div>
                         </div>
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingOne"><a role="button" data-toggle="collapse" href="#groupTest30" aria-expanded="true" aria-controls="groupTest30" style="outline: 0px;">Test</a>
-                            </div>
-                            <div id="groupTest30" class="panel-collapse collapse " role="tabpanel" aria-labelledby="groupTest30">
-                                <div class="list-group"><a class="list-group-item" href="#" title="TestPanel" data-component="TestPanel"><span>TestPanel</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="TestPanel"><i class="fa fa-clipboard"></i></span></a><a class="list-group-item" href="#" title="TestPanelWithButton" data-component="TestPanelWithButton"><span>TestPanelWithButton</span><span class="badge library-panel-quick-copy-to-clipboard" title="Copy to clipboard" data-component="TestPanelWithButton"><i class="fa fa-clipboard"></i></span></a></div>
-                                <div style="height: 0px;"></div>
-                            </div>
-                        </div>
+
 
                     </div>
                 </div>
@@ -168,7 +159,7 @@
         </div>
 
         <!-- route config nav -->
-        <div class="slide-part" style="position: absolute; top: 0px; left: calc(4em + 200px); right: 5px; height: 3em;">
+        <div class="slide-part" style="position: absolute; top: 0px; left: calc(4em + 130px); right: 5px; height: 3em;">
             <div style="padding-top: 10px; display: flex; flex-flow: row nowrap; align-items: center; width: 150em;">
                 <div class="btn-group" role="group" style="padding: 0px; margin: 0px 0px 0px 0.5em;">
                     <button class="btn btn-default btn-xs" title="Delete current page"><span class="fa fa-trash-o"></span></button>
@@ -213,7 +204,7 @@
 
 
         <!-- new component config panel -->
-        <div class="slide-part" style="position: absolute; top: 3em; left: calc(4em + 200px); right: 5px; height: 3em;">
+        <div class="slide-part" style="position: absolute; top: 3em; left: calc(4em + 130px); right: 5px; height: 3em;">
             <div style="margin-top: 0.2em; display: flex; flex-flow: row nowrap; align-items: center; width: 150em;">
                 <div class="btn-group" role="group" style="padding: 0px; margin: 0px 0px 0px 0.5em;">
                     <button class="btn btn-default btn-xs" disabled="" title="Undo the last action"><span class="fa fa-undo" style="margin: 0px 0.5em;"></span></button>
@@ -268,7 +259,7 @@
         </div>
 
         <!--work satation panel-->
-        <div class="slide-part" style="position: absolute; top: 6em; left: calc(4em + 200px); bottom: 0px; overflow: hidden; right: 5px;">
+        <div class="slide-part" style="position: absolute; top: 6em; left: calc(4em + 130px); bottom: 0px; overflow: hidden; right: 5px;">
             <div style="height:100%" id="desktop-page">
                 <iframe src="/get_render_page.do"
                         style="height:100%;width:100%;min-width:320px;margin:0px;padding:0px;border:1px solid rgb(0,0,0)"/>

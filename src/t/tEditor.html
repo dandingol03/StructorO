@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>editing ........</title>
     <link rel="stylesheet" href="../../public/bootstrap-3.3.5-dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="../../public/font-awesome-4.5.0/css/font-awesome.css"/>
     <style>
 
         body{
@@ -90,19 +91,88 @@
             color: #999;
             white-space: nowrap;
         }
+
+        .codeMirror-linenumber .error{
+            color:crimson;
+        }
+
         .linenumber-box{
             float:left;
+        }
+
+        .errors{
+            width:400px;
+            float:left;
+            padding-left:20px;
+        }
+
+        .errors ul{
+            list-style: none;
         }
 
     </style>
     <script src="../../public/js/jquery-latest.js"></script>
     <script src="../../public/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
+    <script src="../../node_modules/jshint/dist/jshint.js"></script>
     <script>
-
         /**
          * todo:针对选中屏蔽开放普通键的输入和删除.
          *
-        */
+         */
+
+        window.Editor = {};
+        window.Editor.check=function(ob,log$){
+            let motivate=function(){
+                JSHINT(ob.value);
+                let errors=JSHINT.data().errors;
+                if(errors!==undefined&&errors!==null)
+                {
+                    console.log(errors);
+                    let lines = ob.value.split('\n');
+                    let line_numbers='';
+                    let lis_error='';
+                    lines.map(function(line,i) {
+                        let catched=[];
+                        for(let j=0;j<errors.length;j++)
+                        {
+                            let error = errors[j];
+                            if(error.line==(i+1))
+                            {
+                                catched.push({reason: error.reason, line: error.line});
+                            }
+                        }
+                        if(catched.length>0)
+                        {
+                            line_numbers+='<div class="codeMirror-gutter-background codeMirror-activeline-gutter" >'+
+                                    '<div class="codeMirror-linenumber codeMirror-gutter">'+
+                                    '<span class="fa fa-chevron-right error"></span>'+
+                                     i+
+                                    '</div>'+
+                                    '</div>';
+                            catched.map(function(item,j) {
+                                lis_error+='<li><a href="javascript:void(0)">'+'line:'+(item.line-1)+'->   '+item.reason+'</a></li>';
+                            });
+                        }else{
+                            line_numbers+='<div class="codeMirror-gutter-background codeMirror-activeline-gutter" >'+
+                                    '<div class="codeMirror-linenumber codeMirror-gutter">'+i+'</div>'+
+                                    '</div>';
+                        }
+                    });
+                    $(log$)[0].innerHTML=line_numbers;
+                    $('.errors').find('.cate').children('ul')[0].innerHTML=lis_error;
+
+                }
+            }
+            if(window.Editor.checkInstance.length>0) {
+                window.Editor.checkInstance.map(function(instance,i) {
+                    clearTimeout(instance);
+                });
+            }
+            window.Editor.checkInstance.push(setTimeout(motivate, 2000));
+        };
+        window.Editor.checkInstance=[];
+
+
         function indentChar(len,ch){
             let i='';
             for(let j=0;j<len;j++) {
@@ -192,7 +262,7 @@
                         {
                             let inner=$('#editor')[0].innerHTML;
                             let start=inner.indexOf('<div style="display:inline-block;background:#00f;width:2px;height:16px;"></div>');
-                            let index=event.target.value.split('\n').length-1;
+                            let index=event.target.value.substring(0,event.target.selectionStart).split('\n').length-1;
                             let k=0;
                             let selectionStart=0;
                             var getAnchor=function(in$param,index){
@@ -226,6 +296,19 @@
 
                     break;
                 case TAB:
+                    if(!$('textarea').is(':focus'))
+                    {
+                        var props=$('#editor').find('.proposal-list');
+                        var selected=props.children('.selected');
+                        let item;
+                        if(selected.children('span').length>0)
+                            item=selected.find('span')[0].innerHTML;
+                        else
+                            item=selected[0].innerHTML;
+                        $('textarea').attr('data-assoc',item);
+                        $('textarea').focus();
+                        $('textarea').trigger('keyUp');
+                    }
                     return false;
                     break;
                 case ENTER:
@@ -260,8 +343,13 @@
         function keyUpCb(){
             var event=window.event;
             let target=event.target;
-            var value=target.value;
-            let start=target.selectionStart;
+            var value=null;
+            let start=null;
+
+            value = target.value;
+            start=target.selectionStart;
+
+
             let lines=target.value.substring(0,start).split('\n');
             let index=lines.length-1;
             let arr='';
@@ -288,9 +376,7 @@
                 }
             }
 
-
-
-
+            window.Editor.check(event.target,'.linenumber-box');
 
 
             if(DIRECTIONS[event.keyCode]!==null&&DIRECTIONS[event.keyCode]!==undefined)//如果用户按的是方向键
@@ -310,7 +396,6 @@
                             event.target.getAttribute('data-assoc')+suffix;
                     event.target.selectionStart=previous.length-wo[1].length+event.target.getAttribute('data-assoc').length;
                     event.target.selectionEnd=event.target.selectionStart;
-
 
                 }
                 else if(/(\{)$/.exec(previousLine))
@@ -380,6 +465,24 @@
                         cursor=event.target.selectionStart;
                         value=event.target.value;
                     }
+                }
+            }
+            else if(event.keyCode==TAB)//TAB
+            {
+                start=target.selectionStart;
+                value=target.value;
+                if($(target)[0].hasAttribute('data-assoc'))
+                {
+                    let re=/.*(\w)$/.exec(value.substring(0,start));
+                    value=value.substring(0,start-re[1].length)+
+                            $(target).attr('data-assoc')+
+                            value.substring(start+re[1].length,value.length);
+
+                    target.value=value;
+                    target.selectionStart = start - re[1].length + $(target).attr('data-assoc').length;
+                    target.selectionEnd=target.selectionStart;
+                    cursor=target.selectionStart;
+                    $(target)[0].removeAttribute('data-assoc'); 
                 }
             }
             else//普通按键,开启联想功能
@@ -508,6 +611,7 @@
 
         }
     </script>
+
 </head>
 <body>
 <div class="container">
@@ -521,6 +625,13 @@
                 <div style="display:inline-block" id="editor">
                 </div>
             </pre>
+            </div>
+        </div>
+        <div class="errors">
+            <div class="cate">
+                <h2>Errors</h2>
+                <ul>
+                </ul>
             </div>
         </div>
     </div>

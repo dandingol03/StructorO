@@ -61,16 +61,17 @@ var Table=React.createClass({
             var trs=new Array();
             var k=0;
             var state=this.state;
-            this.props.filterField.map(function(field,i) {
-                if(state.data[field]!==undefined&&state.data[field]!==null)
-                {
-                    trs.push(
-                        <tr key={i}>
-                            <td key={0}>{field}</td>
-                            <td key={1}>{state.data[field]}</td>
-                        </tr>);
-                }
+            var props=this.props;
+            this.state.data.map(function(row,i) {
+                let tds=[];
+               props.filterField.map(function(field,j) {
+                  if(row[field]!==undefined&&row[field]!==null) {
+                     tds.push(<td key={j}>{row[field]}</td>);
+                  }
+               });
+                trs.push(<tr key={i}>{tds}</tr>);
             });
+
 
             return(
                 <table className="table table-bordered center ordinaryTable" style={{marginBottom:"0px"}}>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../../../public/font-awesome-4.5.0/css/font-awesome.css"/>
+    <link rel="stylesheet" href="../../../node_modules/mermaid/dist/mermaid.forest.css"/>
+    <script src="../../../public/js/jquery-latest.js"></script>
+    <script src="../../../node_modules/mermaid/dist/mermaid.js"></script>
+    <script>
+
+        $(document).ready(function(){
+            mermaid.initialize({startOnLoad:true});
+
+        });
+    </script>
+
+</head>
+<body>
+<div class="mermaid">
+    sequenceDiagram
+    participant John
+    Note left of  John: a participant
+    Alice->>+John: Hello John, how are you?
+    Alice->>+John: John, can yoy hear me?
+    John-->>-Alice: Hi Alice, I can hear you!
+    John-->>-Alice: I feel great!
+</div>
+
+</body>
+</html>

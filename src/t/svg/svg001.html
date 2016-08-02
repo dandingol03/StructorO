@@ -1,0 +1,171 @@
+<html>
+<head>
+    <title>bootstrap</title>
+    <style>
+
+
+        .container .group ul{
+            list-style: none;
+            border: 1px dashed darkcyan;
+            padding:10px 4px;
+        }
+
+        .container .group ul li{
+            margin-bottom: 50px;
+            cursor: pointer;
+            display: block;
+            width: 200px;
+        }
+
+    </style>
+    <script src="../../../public/js/jquery-latest.js"></script>
+    <script>
+
+        function insetInLine(dragged,rect,container)
+        {
+            let prect=container.getBoundingClientRect();
+            if(rect.left<(dragged.point.x-dragged.offset.x+dragged.width/2)&&
+                    rect.right>(dragged.point.x-dragged.offset.x+dragged.width/2))
+            {
+                if(rect.top>prect.top&&rect.bottom<dragged.point.y-dragged.offset.y)
+                {
+                    return rect.bottom;
+                }
+            }
+        }
+
+        function nodesToArray(nodes) {
+            return Array.prototype.slice.call(nodes, 0);
+        }
+
+        function collisionInTop(dragged,lis,container)
+        {
+            let max=0;
+            for(let i=0;i<lis.length;i++)
+            {
+                let li = lis[i];
+                if(li.nodeType!=1)
+                    continue;
+                if(max==0)
+                {
+                    max = insetInLine(dragged, li.getBoundingClientRect(), container);
+                }else{
+                    if(insetInLine(dragged, li.getBoundingClientRect(), container)>max)
+                        max=insetInLine(dragged, li.getBoundingClientRect(), container);
+                }
+            }
+            return max>0?max:undefined;
+        }
+
+        function _dragStart(target) {
+            let event=window.event;
+            let dragged={};
+            dragged.point={x:event.clientX, y:event.clientY};
+            let rect=target.getBoundingClientRect();
+            dragged.width=rect.width;
+            dragged.height=rect.height;
+            dragged.rect=rect;
+            dragged.offset={x:event.clientX-rect.left,y:event.clientY-rect.top};
+            window.dragged=dragged;
+            event.dataTransfer.setData('li',JSON.stringify({label:'fitst group'}));
+
+            let li = $('.group-container').children('li');
+            var re=function(){
+                $('.group-container')[0].removeChild(li[0]);
+            }
+            setTimeout(re, 300);
+        }
+
+        function _mouseup(){
+            let line=$('.line')[0];
+            let svg = $('#cluster')[0];
+            svg.removeChild(line);
+        }
+
+        function _dragEnd(target)
+        {
+            let line=$('.line')[0];
+            let svg = $('#cluster')[0];
+            svg.removeChild(line);
+        }
+
+        function _dragging(target) {
+
+            let dragged=window.dragged;
+            let event=window.event;
+            dragged.point.x=event.clientX;
+            dragged.point.y=event.clientY;
+
+        }
+
+        function _dragOver(ev)
+        {
+            ev.preventDefault();
+        }
+
+        function drop(ev)
+        {
+
+            let type = ev.dataTransfer.types[0];
+            let data =JSON.parse(ev.dataTransfer.getData(type));
+            var li = document.createElement('li');
+            li.innerText=data.label;
+            let dragged=window.dragged;
+            $(li).css('left', dragged.point.x - dragged.offset.x);
+            $(li).css('top', dragged.point.y - dragged.offset.y);
+            $(li).css('position', 'absolute');
+            li.setAttribute('draggable', true);
+            li.setAttribute('ondragstart','_dragStart(this)');
+            li.setAttribute('ondrag','_dragging(this)');
+            $('.group-container')[0].appendChild(li);
+        }
+
+
+        function repaint(dragged){
+            $('.line')[0].setAttribute('x2', dragged.x);
+            $('.line')[0].setAttribute('y2', dragged.y);
+        }
+        $(document).ready(function(){
+
+            window.flag=0x00;
+            window.dragged={};
+
+            var cb=function(event){
+                dragged.x=event.clientX;
+                dragged.y=event.clientY;
+                repaint(dragged);
+            }
+
+//
+//            document.addEventListener('mousedown',function(event){
+//                document.addEventListener('mousemove',cb);
+//            });
+//
+//            document.addEventListener('mouseup',function(event){
+//                document.removeEventListener('mousemove', cb);
+//            });
+
+
+
+
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="container">
+
+
+    <svg style="position: absolute;width:300px;height: 300px;z-index: -1" id="cluster" >
+
+    </svg>
+    <div class="group" >
+        <ul class="group-container" style="position: relative;min-height: 400px;" ondragover="_dragOver(event)" onDrop="drop(event)">
+            <li draggable="true" style="position: absolute" ondragstart="_dragStart(this)" ondrag="_dragging(this)">first group</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

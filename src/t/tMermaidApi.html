@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../../public/font-awesome-4.5.0/css/font-awesome.css"/>
+    <link rel="stylesheet" href="../../node_modules/mermaid/dist/mermaid.forest.css"/>
+    <script src="../../public/js/jquery-latest.js"></script>
+    <script src="../../node_modules/mermaid/dist/mermaidAPI.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            mermaidAPI.initialize({startOnLoad:false});
+
+            var element = document.querySelector("#graphDiv");
+
+            var insertSvg = function(svgCode, bindFunctions){
+                element.innerHTML = svgCode;
+            };
+
+            var graphDefinition = 'graph TB\na-->b';
+            var graph = mermaidAPI.render('graphDiv', graphDefinition, insertSvg);
+
+        });
+    </script>
+
+</head>
+<body>
+<div id="graphDiv">
+</div>
+</body>
+</html>

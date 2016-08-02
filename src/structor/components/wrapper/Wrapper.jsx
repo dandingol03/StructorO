@@ -2,7 +2,7 @@ import React from 'react';
 import {render} from 'react-dom';
 import '../../css/wrapper.css';
 import Grid from '../../../../framework/AppReact/components/basic/Grid.jsx';
-import Panel from '../../../../framework/AppReact/components/basic/Panel.jsx';
+import CPanel from '../../../../framework/AppReact/components/basic/CPanel.jsx';
 import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
 import Radio from '../../../../framework/AppReact/components/basic/Radio.jsx';
 
@@ -200,10 +200,10 @@ var Wrapper=React.createClass({
                         {nodes}
                     </Grid>;
                     break;
-                case 'Panel':
-                    me=<Panel {...this.state.ob.data}>
+                case 'CPanel':
+                    me=<CPanel {...this.state.ob.data}>
                         {nodes}
-                    </Panel>;
+                    </CPanel>;
                     break;
                 case 'Radio':
                     me=<Radio {...this.state.ob.data}>

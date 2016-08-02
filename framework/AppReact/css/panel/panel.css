@@ -1,0 +1,123 @@
+form.panel
+{
+    padding:2px;
+    box-shadow: none;
+}
+
+.table {
+    border:none;
+    margin-bottom: 0px;
+    margin-top: 20px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 24px;
+    border-collapse: collapse;
+}
+.table.table-bordered.panel
+{
+    background-color: transparent;
+}
+
+
+.table.table-bordered.panel> thead:first-child > tr:first-child > th{
+    border: 1px solid #ddd;
+}
+
+.table.table-bordered.center.panel thead:first-child tr th {
+    text-align:center;
+    font-family: lucida, verdana, arial, sans-serif;
+    font-size:1.2em;
+
+}
+
+
+.table.table-bordered.center.panel td
+{
+    text-align:center;
+    vertical-align: inherit;
+}
+.table.table-bordered.center.panel td span{
+margin-right:5%;
+}
+.table.table-bordered.center.panel td button
+{
+    align:center;
+}
+.form.panel{
+    background-color: transparent;
+}
+
+.form.panel.highLight {
+    box-sizing: border-box;
+    background-color: #edf7ff;
+}
+
+.form.panel.highLight table tr td {
+    border: 1px solid #6EA0FF;
+}
+
+.form.panel.highLight table.table-bordered.panel thead tr:first-child td,
+.form.panel.highLight table.table-bordered.panel thead tr:first-child th {
+    border: 1px solid #6EA0FF;
+    color: #6EA0FF;
+}
+
+.form.panel.gradient{
+    background: linear-gradient(to top, rgba(0, 102, 179,0.5), rgba(196, 227, 248,0))
+}
+
+.form.panel.default table tr td {
+    border: 1px solid #0066b3;
+}
+
+.form.panel.default table.table-bordered.panel thead tr:first-child td,
+.form.panel.default table.table-bordered.panel thead tr:first-child th {
+    border: 1px solid #0066b3;
+    color: #0066b3;
+    padding:2px;
+    text-align: center;
+}
+
+.form.panel.default table.table-bordered.panel thead tr:first-child td.left,
+.form.panel.default table.table-bordered.panel thead tr:first-child th.left {
+    text-align: left;
+}
+
+.form.panel.default table.table-bordered.panel thead tr:first-child td.right,
+.form.panel.default table.table-bordered.panel thead tr:first-child th.right {
+    text-align: right;
+}
+
+.form.panel.default table.table-bordered.panel  tr td.w20,
+.form.panel.default table.table-bordered.panel  tr th.w20 {
+    width:20%;
+}
+
+.form.panel button[name='queryButton-smallest']
+{
+    width:20%;
+}
+
+.form.panel button[name='queryButton']{
+    width:80%;
+}
+
+.form.panel button[name='queryButton-bigger']
+{
+    width:90%;
+}
+
+.form.panel textarea{
+    width:100%;
+}
+
+.form.panel .dangerous{
+    text-align: left;
+}
+
+.form.panel .dangerous.scrolling{
+    text-align:left;
+    height:200px;
+    overflow:scroll;
+    overflowX:hidden;
+}

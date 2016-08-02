@@ -29,6 +29,59 @@
     ],
     "auto":true,
     "filterField":["email","perName","perNum","perIdCard"]
+  },
+  "Calendar":
+  {
+    "data":"2015-05-12",
+    "ctrlName":"example-calendar"
+  },
+  "Upload":
+  {
+    "ctrlName":"example-upload"
+  },
+  "Select":
+  {
+    "ctrlName":"example-select",
+    "label":"年级选择",
+    "data":
+    [
+      {
+        "label":"dnding","value":"dnding"
+      },
+      {
+        "label":"vergile","value":"vergile"
+      },
+      {
+        "label":"fantastin","value":"fantastin"
+      }
+    ]
+  },
+  "Panel":
+  {
+    "data":
+    [
+      {"row":["stuType|span|1142051104"]},
+      {"row":["perIdCard|input|true"]},
+      {"row":["anyway|query"]}
+    ],
+    "autoComplete":true,
+    "auto":true,
+    "query":
+    {
+      "url":"/gradms/bsuims/reactPageDataRequest.do",
+      "params":
+      {
+        "reactPageName":"fuckThesis",
+        "reactActionName":"deegreeThesisReviewResult"
+      }
+    },
+    "rowsEditable":true
+  },
+  "Input":
+  {
+    "ctrlName":"stuType",
+    "label":"学生类型",
+    "defaultValue":"danding"
   }
 
 }

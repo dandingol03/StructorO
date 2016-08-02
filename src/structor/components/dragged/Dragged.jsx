@@ -1,14 +1,26 @@
 import React from 'react';
 import {render} from 'react-dom';
 import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
-import Panel from '../../../../framework/AppReact/components/basic/Panel.jsx';
+import CPanel from '../../../../framework/AppReact/components/basic/CPanel.jsx';
 import Grid from '../../../../framework/AppReact/components/basic/Grid.jsx';
 import Radio from '../../../../framework/AppReact/components/basic/Radio.jsx';
+import Attention from '../../../../framework/AppReact/components/basic/Attention.jsx';
+import Calendar from '../../../../framework/AppReact/components/basic/Calendar.jsx';
+import Upload from '../../../../framework/AppReact/components/basic/Upload.jsx';
+import Download from '../../../../framework/AppReact/components/basic/Download.jsx';
+import Select from '../../../../framework/AppReact/components/basic/Select.jsx';
+import Panel from '../../../../framework/AppReact/components/panel/Panel.jsx';
+import Input from '../../../../framework/AppReact/components/basic/Input.jsx';
 import '../../css/dragged.css';
 
-var SyncStore=require('../../../../framework/AppReact/flux/stores/SyncStore');
+var SyncStore=require('../flux/stores/SyncStore');
+var SyncActions = require('../flux/actions/SyncActions');
+
 
 var Dragged=React.createClass({
+    dragging:function(event){
+        SyncActions.move(event.clientX, event.clientY);
+    },
     _onDraggedRender:function(mes){
         let ob=mes.detail;
         console.log('....');
@@ -18,6 +30,7 @@ var Dragged=React.createClass({
 
     },
     _dragStart:function(event){
+
         if(this.state.type!==undefined&&this.state.type!==null) {
             event.dataTransfer.setData(this.state.type,
             JSON.stringify(
@@ -34,6 +47,22 @@ var Dragged=React.createClass({
             $(dragged).animate({left: -rect.width}, "slow");
             $(dragged).addClass("hide-in-left");
         }.bind(this),300);
+
+        let rect=event.currentTarget.getBoundingClientRect();
+        let dragged=
+        {
+            point:{x:event.clientX,y:event.clientY},
+            offset:{x:event.clientX-rect.left,y:event.clientY-rect.top},
+            width:rect.width,
+            height:rect.height
+        };
+        SyncStore.setDragged(dragged);
+
+    },
+    _dragEnd:function(event){
+        console.log('..end');
+        let dom=this.refs.Dragged;
+        
     },
     _onFolding:function(){
         if(this.state.data!==undefined&&this.state.data!==null) {
@@ -57,26 +86,62 @@ var Dragged=React.createClass({
             switch (this.state.type) {
                 case 'Table':
                     ctrl=
-                        <div draggable={true} onDragStart={this._dragStart}>
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
                             <Table {...ob}/>
                         </div>;
                     break;
-                case 'Panel':
+                case 'CPanel':
                     ctrl=
-                        <div draggable={true} onDragStart={this._dragStart}>
-                            <Panel {...ob}/>
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <CPanel {...ob}/>
                         </div>;
                     break;
                 case 'Grid':
                     ctrl=
-                        <div draggable={true} onDragStart={this._dragStart}>
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
                             <Grid {...ob}/>
                         </div>;
                     break;
                 case 'Radio':
                     ctrl=
-                        <div draggable={true} onDragStart={this._dragStart}>
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
                             <Radio {...ob}/>
+                        </div>;
+                    break;
+                case 'Attention':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <Attention {...ob}/>
+                        </div>;
+                    break;
+                case 'Calendar':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <Calendar {...ob}/>
+                        </div>;
+                    break;
+                case 'Upload':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <Upload {...ob}/>
+                        </div>;
+                    break;
+                case 'Select':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <Select {...ob}/>
+                        </div>;
+                    break;
+                case 'Panel':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <Panel {...ob}/>
+                        </div>;
+                    break;
+                case 'Input':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <Input {...ob}/>
                         </div>;
                     break;
                 default:

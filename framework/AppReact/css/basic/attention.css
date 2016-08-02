@@ -5,6 +5,7 @@ ul.popular-in {
 ul {
     padding: 0;
     margin: 0;
+    min-width:140px;
 }
 
 ul.popular-in li {

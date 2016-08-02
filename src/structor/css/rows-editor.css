@@ -1,0 +1,56 @@
+.hide{
+    display: none;
+}
+
+.rows-editor{
+    position:relative;
+}
+
+.rows-editor ul{
+    float:left;
+}
+
+.rows-editor .delete-row{
+    float: left;
+}
+
+.rows-editor .delete-row span{
+    font-size: 1.4em;
+    margin-left:10px;
+    margin-top:10px;
+}
+
+.rows-editor .delete-row span:hover{
+    color:#006600;
+    cursor: pointer;
+}
+
+.rows-editor .plus-row{
+    float:left;
+}
+
+.rows-editor .plus-row span{
+    font-size: 1.4em;
+    margin-left:10px;
+    margin-top:10px;
+}
+
+.rows-editor .plus-row span:hover{
+    color:#006600;
+    cursor: pointer;
+}
+
+.rows-editor .save-all{
+    float:left;
+}
+
+.rows-editor .save-all span{
+    font-size: 1.4em;
+    margin-left:10px;
+    margin-top:10px;
+}
+
+.rows-editor .save-all span:hover{
+    color:#006600;
+    cursor: pointer;
+}

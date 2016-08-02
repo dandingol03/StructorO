@@ -1,7 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
-import Panel from '../../../../framework/AppReact/components/basic/Panel.jsx';
+import CPanel from '../../../../framework/AppReact/components/basic/CPanel.jsx';
 import Grid from '../../../../framework/AppReact/components/basic/Grid.jsx';
 import Radio from '../../../../framework/AppReact/components/basic/Radio.jsx';
 import '../../css/front.css';
@@ -45,8 +45,8 @@ var Front=React.createClass({
                 case 'Table':
                     ctrl=<Table {...Components.Table}/>;
                     break;
-                case 'Panel':
-                    ctrl=<Panel {...Components.Panel}/>;
+                case 'CPanel':
+                    ctrl=<CPanel {...Components.CPanel}/>;
                     break;
                 case 'Grid':
                     ctrl=<Grid {...Components.Grid}/>;

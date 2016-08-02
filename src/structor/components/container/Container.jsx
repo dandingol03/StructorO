@@ -1,7 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
-var SyncStore=require('../../../../framework/AppReact/flux/stores/SyncStore');
-var ProxyQ=require('../../../../framework/AppReact/components/proxy/ProxyQ');
+var SyncStore=require('../flux/stores/SyncStore');
+var ProxyQ=require('../proxy/ProxyQ');
 var Container=React.createClass({
     _onExport:function(data){
         console.log('....');

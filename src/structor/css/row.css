@@ -1,0 +1,28 @@
+li.row {
+    margin-left:0px;
+    margin-right: 0px;
+    padding-left:15px;
+    padding-right: 15px;
+    padding-top:5px;
+    padding-bottom: 5px;
+}
+
+li.row.default{
+    line-height: 0px;
+    height: auto ;
+    min-height: 20px;
+    border:1px dashed #336699;
+}
+
+li.row.highLight{
+    min-height: 38px;
+    line-height: 0px;
+    height: auto;
+    border:1px dashed #f54747;
+}
+
+li.row .drag-wrapper{
+    display: inline-block;
+    margin-right:20px;
+    margin-left:20px;
+}

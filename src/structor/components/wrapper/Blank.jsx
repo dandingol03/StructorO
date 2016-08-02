@@ -2,15 +2,21 @@ import React from 'react';
 import {render} from 'react-dom';
 import '../../css/blank.css';
 import Grid from '../../../../framework/AppReact/components/basic/Grid.jsx';
-import Panel from '../../../../framework/AppReact/components/basic/Panel.jsx';
+import CPanel from '../../../../framework/AppReact/components/basic/CPanel.jsx';
 import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
 import Radio from '../../../../framework/AppReact/components/basic/Radio.jsx';
+import Attention from '../../../../framework/AppReact/components/basic/Attention.jsx';
+import Calendar from '../../../../framework/AppReact/components/basic/Calendar.jsx';
+import Upload from '../../../../framework/AppReact/components/basic/Upload.jsx';
+import Download from '../../../../framework/AppReact/components/basic/Download.jsx';
+import Panel from '../../../../framework/AppReact/components/panel/Panel.jsx';
+
 import Basic from '../container/Basic.jsx';
+import RowsEditor from '../editor/RowsEditor.jsx';
 
-
-var SyncStore=require('../../../../framework/AppReact/flux/stores/SyncStore');
-var SyncActions = require('../../../../framework/AppReact/flux/actions/SyncActions');
-var ProxyQ=require('../../../../framework/AppReact/components/proxy/ProxyQ');
+var SyncStore=require('../flux/stores/SyncStore');
+var SyncActions = require('../flux/actions/SyncActions');
+var ProxyQ=require('../proxy/ProxyQ');
 
 
 //同步所有组件的可放置状态
@@ -58,6 +64,27 @@ var Blank=React.createClass({
     },
     editCb:function(event) {
 
+    },
+    rowCb:function(event) {
+        if(this.state.rowsEditable==true)
+            this.setState({rowsEditable: false});
+        else
+            this.setState({rowsEditable: true});
+    },
+    saveRowsCb:function(ob){
+        if(Object.prototype.toString.call(ob)=='[object Array]'&&ob.length>0) {
+            let metadata={};
+            $.extend(true, metadata, this.state.data);
+            metadata.data.data=null;
+            if(Object.prototype.toString.call(ob)=='[object Array]')
+            {
+                metadata.data.bean = JSON.stringify(ob);
+            }
+            else
+                metadata.data.bean=ob;
+
+            this.setState({data: metadata,rowsEditable:false});//clicked=false,收起RowsEditor的配置面板
+        }
     },
     syncWithStore:function(vector,type,ob,callback){
         if(type!==undefined&&type!==null)
@@ -219,6 +246,7 @@ var Blank=React.createClass({
         let suffix=null;
         let nodes=null;
         let borderCtrl=null;
+        let rowsEditor=null;
 
         if(this.state.dragged==true&&this.props.dropHandle!==undefined&&this.props.dropHandle!==null)
         {
@@ -253,29 +281,55 @@ var Blank=React.createClass({
         }
 
         if(this.state.clicked==true) {
+            let helps=[];
+            helps.push(
+                <div className="selected-overlay-button selected-overlay-button-edit" key={0}>
+                    <span className="fa fa-pencil" onClick={this.editCb}></span>
+                </div>);
+
+            helps.push(
+                <div className="selected-overlay-button selected-overlay-button-copy-paste" key={1}>
+                    <span className="fa fa-scissors" onClick={this.removeCb}></span>
+                </div>
+            );
+
+            //加入row的拖拽模式
+            if(this.state.data.data!==undefined&&this.state.data.data!==null)
+                if(this.state.data.data.rowsEditable==true)
+                {
+                    helps.push(
+                        <div className="selected-overlay-button selected-overlay-button-rows-edit" key={2}>
+                            <span className="fa fa-list-ul" onClick={this.rowCb}></span>
+                        </div>
+                    );
+                }
+
             borderCtrl=
                 <div className="border-ctrl">
-                    <div className="selected-overlay-button selected-overlay-button-edit">
-                        <span className="fa fa-pencil" onClick={this.editCb}></span>
-                    </div>
-                    <div className="selected-overlay-button selected-overlay-button-copy-paste">
-                        <span className="fa fa-scissors" onClick={this.removeCb}></span>
-                    </div>
+                    {helps}
+                </div>;
+
+        }
+
+        if(this.state.rowsEditable==true) {
+            rowsEditor=
+                <div className="rows-editor-wrapper">
+                   <RowsEditor saveRowsCb={this.saveRowsCb}/>
                 </div>;
         }
 
         let self=null;
         if(this.state.data!==null&&this.state.data!==undefined) {
             switch (this.state.data.type) {
-                case 'Panel':
-                    let inst=<Panel/>;
+                case 'CPanel':
+                    let inst=<CPanel/>;
                     if(Object.prototype.toString.call(inst.type.prototype.dropEnable)=='[object Function]'&&inst.type.prototype.dropEnable()==true)
                     {
                         self=
                             <div className="drop-wrapper" onDragOver={this.dragOver} onDrop={this.drop}>
-                                <Panel>
+                                <CPanel>
                                     {nodes}
-                                </Panel>
+                                </CPanel>
                             </div>;
                     }
                     break;
@@ -297,6 +351,21 @@ var Blank=React.createClass({
                 case 'Table':
                     self=<Table {...this.state.data.data}/>;
                     break;
+                case 'Attention':
+                    self=<Attention {...this.state.data.data}/>;
+                    break;
+                case 'Calendar':
+                    self=<Calendar {...this.state.data.data}/>;
+                    break;
+                case 'Upload':
+                    self=<Upload {...this.state.data.data}/>;
+                    break;
+                case 'Download':
+                    self=<Download {...this.state.data.data}/>;
+                    break;
+                case 'Panel':
+                    self=<Panel {...this.state.data.data}/>;
+                    break;
                 default:
                     break;
             }
@@ -307,6 +376,7 @@ var Blank=React.createClass({
                 {prefix}
                 {self}
                 {borderCtrl}
+                {rowsEditor}
                 {suffix}
                 <span style={{display:"block",height:"20px"}}></span>
             </div>
@@ -316,6 +386,8 @@ var Blank=React.createClass({
         document.addEventListener('keydown',this.onKeyDown);
         let dom=this.refs.blank;
         dom.addEventListener('mousedown', this.onMouseDown);
+    },
+    componentDidUpdate:function(){
     },
     componentWillUnmount:function(){
         let dom=this.refs.blank;

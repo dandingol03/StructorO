@@ -36,3 +36,10 @@
 .border-ctrl .selected-overlay-button-copy-paste:hover{
     color:#33aa52;
 }
+
+.rows-editor-wrapper{
+    position: absolute;
+    bottom:-100px;
+    left:2px;
+    padding: 5px;
+}

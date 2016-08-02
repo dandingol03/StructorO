@@ -1,0 +1,9 @@
+.select{
+    min-width:100px;
+    display:inline-block;
+    margin-bottom:10px;
+}
+
+.select.no-drag{
+    margin-bottom:0px;
+}

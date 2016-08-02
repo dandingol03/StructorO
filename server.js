@@ -177,6 +177,23 @@ app.get('/bundle.js',function(req,res) {
    res.sendfile('build/bundle.js');
 });
 
+app.get('/get/AppReact/*',function(req,res) {
+    var path=null;
+    if(Object.prototype.toString.call(req.params)=='[object Object]')
+    {
+        path=req.params[0];
+        console.log('path==' + path);
+        path='./framework/AppReact/'+path;
+        try{
+            var content=fs.readFileSync(path,'utf-8');
+            res.send(content);
+        }catch(e)
+        {
+            console.error('error=' + e.toString());
+        }
+    }
+});
+
 app.post('/app/changeType',function(req,res) {
     var type=req.body.type;
     console.log("type====" + type);

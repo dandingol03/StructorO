@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import {render} from 'react-dom';
-var Dragged = require('./components/container/Dragged.jsx');
+var Dragged = require('./components/dragged/Dragged.jsx');
 Boot();
 
 function Boot(){

@@ -1,22 +1,22 @@
 import React from 'react';
 import {render} from 'react-dom';
-import '../../css/basic/panel.css';
+import '../../css/basic/cpanel.css';
 var SyncStore=require('../../flux/stores/SyncStore');
 var SyncActions = require('../../flux/actions/SyncActions');
 
 
-var Panel=React.createClass({
+var CPanel=React.createClass({
     dropEnable:function()
     {
         return true;
     },
     render:function(){
         return (
-            <div className="panel">
+            <div className="cPanel">
                 <span>Panel</span>
                 {this.props.children}
             </div>
         );
     }
 });
-module.exports=Panel;
+module.exports=CPanel;

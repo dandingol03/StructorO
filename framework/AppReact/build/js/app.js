@@ -54,3 +54,18 @@ window.App.unSwing = function (ob) {
     }
 
 }
+
+
+window.App.remodal=new Object();
+window.App.remodal.inst=$('[data-remodal-id="re-modal"]').remodal({
+});
+window.App.remodal.content=function(content){
+
+}
+window.App.remodal.show=function(){
+    window.App.remodal.inst.open();
+}
+window.App.remodal.hide=function(){
+    window.App.remodal.inst.close();
+}
+

@@ -64,7 +64,7 @@ var RowsEditor=React.createClass({
 
 
         return (
-            <div className="rows-editor hide" ref="rows-editor">
+            <div className="rows-editor" ref="rows-editor">
                 <ul>
                     {rows}
                 </ul>
@@ -76,13 +76,7 @@ var RowsEditor=React.createClass({
     },
     componentDidMount:function(){
 
-        let dom = this.refs["rows-editor"];
-        if($(dom).hasClass("hide"))
-        {
-            $(dom).removeClass("hide");
-            $(dom).css("display", "none");
-            $(dom).slideDown();
-        }
+
     }
 });
 module.exports=RowsEditor;

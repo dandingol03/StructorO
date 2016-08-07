@@ -37,6 +37,16 @@ var ProxyQ=require('../proxy/ProxyQ');
 
 var QUOTE=222;
 var Blank=React.createClass({
+    _beanCallback:function(mes){
+        let ob=mes.detail;
+        console.log('.....ob is back');
+        let old={};
+        $.extend(true, old, this.state.data);
+        old.data.bean=ob;
+        this.setState({data: old});
+        var _config=$("#_config")[0];
+        _config.removeEventListener("config",this._beanCallback);
+    },
     onKeyDown:function(event){
         switch (event.keyCode)
         {
@@ -67,9 +77,31 @@ var Blank=React.createClass({
     },
     rowCb:function(event) {
         if(this.state.rowsEditable==true)
+        {
             this.setState({rowsEditable: false});
+        }
         else
+        {
             this.setState({rowsEditable: true});
+
+            let showEditor=function(){
+                let blank=this.refs.blank;
+                let editor=$(blank).find('.rows-editor-wrapper');
+                if(editor.css("display")=="none")
+                {
+                    editor.slideDown();
+                }
+            }.bind(this);
+
+            setTimeout(showEditor, 120);
+
+        }
+    },
+    beanCb:function(event)
+    {
+        window.App.remodal.show();
+        var _config=$("#_config")[0];
+        _config.addEventListener("config",this._beanCallback);
     },
     saveRowsCb:function(ob){
         if(Object.prototype.toString.call(ob)=='[object Array]'&&ob.length>0) {
@@ -302,6 +334,11 @@ var Blank=React.createClass({
                             <span className="fa fa-list-ul" onClick={this.rowCb}></span>
                         </div>
                     );
+                    helps.push(
+                        <div className="selected-overlay-button selected-overlay-button-bean-edit" key={3}>
+                            <span className="fa fa-exchange" onClick={this.beanCb}></span>
+                        </div>
+                    );
                 }
 
             borderCtrl=
@@ -388,6 +425,7 @@ var Blank=React.createClass({
         dom.addEventListener('mousedown', this.onMouseDown);
     },
     componentDidUpdate:function(){
+
     },
     componentWillUnmount:function(){
         let dom=this.refs.blank;

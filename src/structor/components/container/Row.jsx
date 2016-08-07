@@ -17,6 +17,22 @@ var nonCollisionP=/(^|\s)(shadow)($|\s)/;
  */
 
 var Row=React.createClass({
+    _propertyCallback:function(mes){
+        let ob=mes.detail;
+        let _config=$("#_config")[0];
+        _config.removeEventListener("config",this._propertyCallback);
+    },
+    propertyCb:function(index){
+        console.log('index=' + index);
+        if(index!==undefined&&index!==null&&!isNaN(parseInt(index)))
+        {
+            let node={};
+            $.extend(true,node,this.state._nodes[index]);
+            window.App.remodal.show({ctrlName:'stuType',label:'学生类型'});
+            let _config=$("#_config")[0];
+            _config.addEventListener("config",this._propertyCallback);
+        }
+    },
     getShadowInX:function(rect,dragged)
     {
         if(dragged.point.x>rect.left&&dragged.point.x<=((rect.left+rect.right)/2))
@@ -231,6 +247,7 @@ var Row=React.createClass({
                             <div key={i} className="drag-wrapper" draggable={true} onDragStart={that._dragStart} >
                                 <span>{node.data.label}</span>
                                 <Select {...node.data} className="no-drag"/>
+                                <span className="properties fa fa-cog" onClick={that.propertyCb.bind(that,i)}></span>
                             </div>;
                         break;
                     case 'Input':

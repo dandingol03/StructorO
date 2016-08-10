@@ -12,6 +12,7 @@ li.row.default{
     height: auto ;
     min-height: 20px;
     border:1px dashed #336699;
+    text-align: center;
 }
 
 li.row.highLight{

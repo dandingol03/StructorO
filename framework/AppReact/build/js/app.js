@@ -9,7 +9,7 @@ window.Deploy = new Object();
 window.App._instances = new Object();
 
 window.App.getModel = function () {
-    return "x";
+    return "debug";
 }
 window.App.getLoadModel = function () {
     return "true";

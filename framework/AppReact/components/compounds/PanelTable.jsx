@@ -3,18 +3,33 @@ import {render} from 'react-dom';
 import Panel from '../panel/Panel.jsx';
 import OrdinaryTable from '../forms/OrdinaryTable.jsx';
 import Pagination from '../../components/basic/Pagination.jsx';
+
+import '../../css/compounds/panelTable.css';
+
 var ProxyQ=require('../proxy/ProxyQ');
 
 var PanelTable=React.createClass({
     clickHandle:function(ob){
-        if(this.props.query!==undefined&&this.props.query!==null)
+        if((this.props.query!==undefined&&this.props.query!==null)||
+            (ob.query!==undefined&&ob.query!==null))
         {
+            let query=null;
+            if(this.props.query!==undefined&&this.props.query!==null)
+                query=this.props.query;
+            else
+                query=ob.query;
             var params;
-            params=Object.assign(this.props.query.params!==null&&this.props.query.params!==undefined?this.props.query.params:'',
-                ob!==undefined&&ob!==null?ob:'');
+            let additional={};
+            for(var field in ob)
+            {
+                if(field!=='query')
+                    additional[field]=ob[field];
+            }
+            params=Object.assign(query.params!==null&&query.params!==undefined?query.params:'',
+                additional!==undefined&&additional!==null?additional:'');
             ProxyQ.queryHandle(
-                null,
-                this.props.query.url,
+                'GET',
+                query.url,
                 params,
                 null,
                 function(response){
@@ -104,7 +119,12 @@ var PanelTable=React.createClass({
     componentWillReceiveProps:function(props)
     {
         //TODO:
-        //this.setState(props);
+        let ob={};
+        if(this.state.bean!==props.bean)
+            ob.bean=props.bean;
+        if(this.state.query!==props.query)
+            ob.query=props.query;
+        this.setState(ob);
     },
     render:function(){
         var data;
@@ -116,17 +136,32 @@ var PanelTable=React.createClass({
         else
             data=this.state.data;
 
+        let panel=null;
+        if(this.state.bean!==undefined&&this.state.bean!==null&&
+            this.state.bean.rows!==undefined&&this.state.bean.rows!==null&&
+            this.state.bean.params!==undefined&&this.state.bean.params!==null)
+        {
+            panel= <Panel
+                data={this.state.comps}
+                bean={this.state.bean}
+                auto={true}
+                autoComplete={true}
+                query={this.props.query}
+                clickHandle={this.clickHandle}
+                />;
+        }
+        else{
+            panel=<Panel
+                data={[{row:['edit panel bean']}]}
+                auto={false}
+                autoComplete={true}
+                />;
+        }
+
         return (
-            <div className="row">
+            <div className="row panelTable">
                 <div className="col-sm-12 col-md-12" style={{paddingLeft:"0px",paddingRight:"0px",paddingTop:"30px"}}>
-                    <Panel
-                        data={this.state.comps}
-                        bean={this.state.bean}
-                        auto={true}
-                        autoComplete={true}
-                        query={this.props.query}
-                        clickHandle={this.clickHandle}
-                        />
+                    {panel}
                     <OrdinaryTable
                         autoFetch={false}
                         data={data}

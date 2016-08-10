@@ -10,7 +10,10 @@ import Upload from '../../../../framework/AppReact/components/basic/Upload.jsx';
 import Download from '../../../../framework/AppReact/components/basic/Download.jsx';
 import Select from '../../../../framework/AppReact/components/basic/Select.jsx';
 import Panel from '../../../../framework/AppReact/components/panel/Panel.jsx';
+import OrdinaryTable from '../../../../framework/AppReact/components/forms/OrdinaryTable.jsx';
+import PanelTable from '../../../../framework/AppReact/components/compounds/PanelTable.jsx';
 import Input from '../../../../framework/AppReact/components/basic/Input.jsx';
+import Query from '../../../../framework/AppReact/components/basic/Query.jsx';
 import '../../css/dragged.css';
 
 var SyncStore=require('../flux/stores/SyncStore');
@@ -138,10 +141,29 @@ var Dragged=React.createClass({
                             <Panel {...ob}/>
                         </div>;
                     break;
+                case "OrdinaryTable":
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <OrdinaryTable {...ob}/>
+                        </div>;
+                    break;
+                case "PanelTable":
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <PanelTable {...ob}/>
+                        </div>;
+                    break;
+                    break;
                 case 'Input':
                     ctrl=
                         <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
                             <Input {...ob}/>
+                        </div>;
+                    break;
+                case 'Query':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <Query {...ob}/>
                         </div>;
                     break;
                 default:

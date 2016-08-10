@@ -1,0 +1,10 @@
+.query{
+    min-width: 140px;
+    text-align: center;
+    display: inline-block;
+}
+
+.query button{
+    min-width: 120px;
+    width: 100%;
+}

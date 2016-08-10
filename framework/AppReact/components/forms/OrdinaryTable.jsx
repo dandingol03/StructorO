@@ -1311,7 +1311,7 @@ var OrdinaryTable =React.createClass({
                         {sideDist}
                         {mainDist}
                     </div>
-                    <iframe ref="QueryA" methpd="post" style={{display:"none"}}/>
+                    <iframe ref="QueryA" method="post" style={{display:"none"}}/>
                 </div>
 
 

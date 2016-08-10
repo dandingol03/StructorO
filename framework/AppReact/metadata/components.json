@@ -2,10 +2,12 @@
   "Radio":
   {
     "ctrlName":"出行方式",
-    "data":[
+    "data":
+    [
       {"label":"火车","value":"01"},
       {"label":"飞机","value":"02"},
-      {"label":"渔船","value":"03"}]
+      {"label":"渔船","value":"03"}
+    ]
   }
   ,
   "Attention":
@@ -81,7 +83,52 @@
   {
     "ctrlName":"stuType",
     "label":"学生类型",
-    "defaultValue":"danding"
+    "defaultValue":""
+  },
+  "OrdinaryTable":
+  {
+    "title":"申请助教奖学金",
+    "data":
+    [
+      {"no":1,"sex":"m","stu":110},
+      {"no":1,"sex":"f","stu":112},
+      {"no":3,"sex":"m","stu":113},
+      {"no":1,"sex":"m","stu":114},
+      {"no":3,"sex":"f","stu":115},
+      {"no":2,"sex":"f","stu":116},
+      {"no":2,"sex":"f","stu":117}
+    ],
+    "group-field":
+    [
+      "no",
+      "sex"
+    ]
+  },
+  "PanelTable":{
+    "autoComplete":true,
+    "filterField":{
+                  "order":true,
+                  "courseNum":true,
+                  "courseName": true,
+                  "courseType":true,
+                  "credit":true,
+                  "classHour":true,
+                  "termCount":true,
+                  "examTypeName":true,
+                  "managerName":true,
+                  "link":true
+                  },
+    "rowsEditable":true
+  },
+  "Query":{
+    "ctrlName":"query",
+    "label":"查询",
+    "query": {
+      "params":{
+        "reactActionName":"allCourseQueryDoQuery",
+        "reactPageName":"newCultivateAllCourseQueryPage"
+      }
+    }
   }
 
 }

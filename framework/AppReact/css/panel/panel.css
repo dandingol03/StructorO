@@ -2,6 +2,7 @@ form.panel
 {
     padding:2px;
     box-shadow: none;
+    min-width: 200px;
 }
 
 .table {

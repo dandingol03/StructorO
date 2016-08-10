@@ -16,6 +16,15 @@
 
 }
 
+.ordinaryTable.highLight .table thead:first-child tr:first-child td {
+    border:1px solid #6EA0FF;
+}
+
+.ordinaryTable .table thead:first-child tr:first-child td {
+    border:1px solid #336699;
+}
+
+
 
 .ordinaryTable.gradient.center td{
     background: linear-gradient(to top, rgba(0, 102, 179,0.5), rgba(196, 227, 248,0));

@@ -91,6 +91,16 @@ window.Structor.remodal.show=function(ob){
         con.empty();
         for(var field in ob)
         {
+            if(field=="data-row")
+            {
+                remodal.attr("data-row",ob[field]);
+                continue;
+            }
+            if(field=="data-column")
+            {
+                remodal.attr("data-column",ob[field]);
+                continue;
+            }
             let div=document.createElement('div');
             div.setAttribute('style','margin-bottom: 5px');
             div.innerHTML=' <span style="width:100px;display: inline-block;">'+field+':</span>\n'+
@@ -110,6 +120,7 @@ window.Structor.dispatchConfigInPanelEvent=function(target){
     var obj=document.getElementById("_config");
     //fit to advance web-browser such as firefox,chrome
     var event=document.createEvent('CustomEvent');
+    let re_modal=$(target).parent('div');
     let con=$(target).parent('div').children('.modal-content');
     let ob={};
     let ctrls=con.find('input[name!=""]');
@@ -117,7 +128,7 @@ window.Structor.dispatchConfigInPanelEvent=function(target){
         let value='';
        if($(ctrl).val()=='')
        {
-           if($(ctrl).attr('plcaeholder')!==undefined&&$(ctrl).attr('placeholder')!==null)
+           if($(ctrl).attr('placeholder')!==undefined&&$(ctrl).attr('placeholder')!==null)
                value = $(ctrl).attr('placeholder');
        }
        else{
@@ -125,6 +136,17 @@ window.Structor.dispatchConfigInPanelEvent=function(target){
        }
         ob[$(ctrl).attr('name')]=value;
     });
+    if(re_modal.attr("data-row")!==undefined&&re_modal.attr("data-row")!==null)
+    {
+        ob["data-row"] = re_modal.attr("data-row");
+        re_modal.removeAttr("data-row");
+    }
+    if(re_modal.attr("data-column")!==undefined&&re_modal.attr("data-column")!==null)
+    {
+        ob["data-column"] = re_modal.attr("data-column");
+        re_modal.removeAttr("data-column");
+    }
+
     window.Structor.remodal.clear(con);
     event.initCustomEvent('config',false,true,ob);
     obj.dispatchEvent(event);

@@ -1,5 +1,5 @@
 .operation .add {
-    background-image: url("../../../icon/add_0.png");
+    background-image: url("../../build/images/add.png");
     background-repeat: no-repeat;
     height: 16px;
     width: 16px;
@@ -8,7 +8,7 @@
 }
 
 .operation .minus {
-    background-image: url("../../../icon/delete_0.png");
+    background-image: url("../../build/images/defult.png");
     background-repeat: no-repeat;
     height: 16px;
     width: 16px;

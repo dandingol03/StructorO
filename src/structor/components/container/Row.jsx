@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {render} from 'react-dom';
 import Select from '../../../../framework/AppReact/components/basic/Select.jsx';
 import Input from '../../../../framework/AppReact/components/basic/Input.jsx';
+import Query from '../../../../framework/AppReact/components/basic/Query.jsx';
 
 import Shadow from '../decorator/Shadow.jsx';
 import '../../css/row.css';
@@ -19,8 +20,29 @@ var nonCollisionP=/(^|\s)(shadow)($|\s)/;
 var Row=React.createClass({
     _propertyCallback:function(mes){
         let ob=mes.detail;
-        let _config=$("#_config")[0];
-        _config.removeEventListener("config",this._propertyCallback);
+        if(this.props["data-row"]!==parseInt(ob["data-row"]))
+        {
+            console.log('it is not yours');
+            return ;
+        }
+        let _nodes=[];
+        $.extend(true,_nodes,this.state._nodes);
+        let index=ob["data-column"];
+        _nodes[index].data.label=ob.label;
+        _nodes[index].data.ctrlName=ob.ctrlName;
+        if(_nodes[index].type=='Query')
+        {
+            _nodes[index].data.query={};
+            _nodes[index].data.query.url='/bsuims/reactPageDataRequest.do';
+            _nodes[index].data.query.params={
+                reactActionName:ob.reactActionName,
+                reactPageName:   ob.reactPageName
+            }
+        }
+        _nodes[index].data.data=null;
+        this.setState({_nodes: _nodes});
+        if(Object.prototype.toString.call(this.props.recall)=='[object Function]')
+            this.props.recall(_nodes);
     },
     propertyCb:function(index){
         console.log('index=' + index);
@@ -28,9 +50,30 @@ var Row=React.createClass({
         {
             let node={};
             $.extend(true,node,this.state._nodes[index]);
-            window.App.remodal.show({ctrlName:'stuType',label:'学生类型'});
-            let _config=$("#_config")[0];
-            _config.addEventListener("config",this._propertyCallback);
+            switch(this.state._nodes[index].type)
+            {
+                case "Query":
+                    window.App.remodal.show(
+                        {
+                            "data-row":this.props["data-row"],
+                            "data-column":index,
+                            ctrlName:node.data.ctrlName,
+                            label:node.data.label,
+                            reactActionName:node.data.reactActionName!==undefined&&node.data.reactActionName!==null?node.data.reactActionName:'',
+                            reactPageName:node.data.reactPageName!==undefined&&node.data.reactPageName!==null?node.data.reactPageName:''
+                        });
+                    break;
+                default:
+                    window.App.remodal.show(
+                        {
+                            "data-row":this.props["data-row"],
+                            "data-column":index,
+                            ctrlName:node.data.ctrlName,
+                            label:node.data.label
+                        });
+                    break;
+            }
+            this.state.dequeIndex=index;
         }
     },
     getShadowInX:function(rect,dragged)
@@ -240,6 +283,7 @@ var Row=React.createClass({
         if(this.state._nodes.length>0) {
             this.state._nodes.map(function(node,i) {
                 let ctrl=null;
+                let propertyCb=that.propertyCb;
                 switch (node.type) {
                     case 'Select':
 
@@ -247,7 +291,7 @@ var Row=React.createClass({
                             <div key={i} className="drag-wrapper" draggable={true} onDragStart={that._dragStart} >
                                 <span>{node.data.label}</span>
                                 <Select {...node.data} className="no-drag"/>
-                                <span className="properties fa fa-cog" onClick={that.propertyCb.bind(that,i)}></span>
+                                <span className="properties fa fa-cog" onClick={propertyCb.bind(that,i)}></span>
                             </div>;
                         break;
                     case 'Input':
@@ -255,6 +299,14 @@ var Row=React.createClass({
                             <div key={i} className="drag-wrapper" draggable={true} onDragStart={that._dragStart}>
                                 <span>{node.data.label}</span>
                                 <Input {...node.data} className="no-drag"/>
+                                <span className="properties fa fa-cog" onClick={propertyCb.bind(that,i)}></span>
+                            </div>;
+                        break;
+                    case 'Query':
+                        ctrl=
+                            <div key={i} className="drag-wrapper" draggable={true} onDragStart={that._dragStart}>
+                                <Query {...node.data} className="no-drag"/>
+                                <span className="properties fa fa-cog" onClick={propertyCb.bind(that,i)}></span>
                             </div>;
                         break;
                     case 'Shadow':
@@ -275,6 +327,8 @@ var Row=React.createClass({
     },
     componentDidMount:function(){
         SyncStore.addMoveListener(this._move);
+        let _config=$("#_config")[0];
+        _config.addEventListener("config",this._propertyCallback);
     },
     componentWillUnmount:function(){
         SyncStore.removeMoveListener(this._move);

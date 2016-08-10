@@ -44,6 +44,12 @@ app.post('/sduyingxin/*',function(req,res) {
     proxy.web(req, res, {target:'http://localhost:8080'});
 });
 
+app.get('/gradms/*',function(req,res) {
+    console.log("proxy gradms action======");
+    proxy.web(req, res, {target:'http://localhost:8090'});
+});
+
+
 app.post('/get_css.do',function(req,res) {
     var path=req.body.path;
     var component=req.body.component;

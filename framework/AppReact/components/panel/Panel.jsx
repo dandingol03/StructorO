@@ -46,11 +46,25 @@ var Panel=React.createClass({
     fetch:function(){
         var url=this.props.bean.url;
         var params=this.props.bean.params;
+
+        if(this.props.bean.rows!==undefined&&this.props.bean.rows!==null)
+        {
+            //TODO:fetch necessary fields
+            let rows=null;
+            if(Object.prototype.toString.call(this.props.bean.rows)=='[object Object]'||
+                Object.prototype.toString.call(this.props.bean.rows)=='[object Array]')
+            {
+                rows=this.props.bean.rows;
+            }else{
+                rows=JSON.parse(this.props.bean.rows);
+            }
+            params = Object.assign(params, {rows: JSON.stringify(rows)});
+        }
         console.log('url====' + url);
         ProxyQ.queryHandle(
-            null,
+            'GET',
             this.props.bean.url,
-            this.props.bean.params,
+            params,
             null,
             function(response){
                 //这里需要统一规范后台返回的数据格式
@@ -111,10 +125,20 @@ var Panel=React.createClass({
             }
             if(this.props.clickHandle!==undefined&&this.props.clickHandle!==null)
             {
+                let query=null;
+                let target=evt.currentTarget;
+                if($(target).attr("data-query")!==undefined&&$(target).attr("data-query")!==null)
+                    query=JSON.parse($(target).attr("data-query"));
                 if (this.props.syncHandle !== undefined && this.props.syncHandle !== null) {
                     this.props.syncHandle({completed: true});
                 }
-                this.props.clickHandle(params);
+                if(query!==null)
+                {
+                    params=Object.assign(params,{query:query.query});
+                    this.props.clickHandle(params);
+                }
+                else
+                    this.props.clickHandle(params);
             }
             else {//如果本组件为最顶层组件
 
@@ -252,9 +276,9 @@ var Panel=React.createClass({
 
         //为组件类型保留关键字,以下为扩展的字段组件
         var reserved={
-            "query":true,
-            "input":true,
-            "select":true,
+            "Query":true,
+            "Input":true,
+            "Select":true,
             "span":true,
             "textarea":true,
             "radio":true,
@@ -429,10 +453,19 @@ var Panel=React.createClass({
                         //加入所有当前能够支持的组件分支
                         switch(coms[1])
                         {
-                            case 'query':
+                            case 'Query':
                                 if(state.bean!==null&&state.bean!==undefined) {
                                     if (Object.prototype.toString.call(coms[0].split("=>")) == '[object Array]' && coms[0].split("=>").length >= 2) {
-                                        ctrl = <button type='submit' name="queryButton" onClick={clickHandle}>
+                                        let data_query=null;
+                                        if(coms[2]!==undefined&&coms[2]!==null)
+                                        {
+                                            if(Object.prototype.toString.call(coms[2])=='[object Object]')
+                                                data_query=JSON.stringify(coms[2]);
+                                            else
+                                                data_query=coms[2];
+                                        }
+
+                                        ctrl = <button type='submit' name="queryButton" onClick={clickHandle} data-query={data_query}>
                                             {coms[0].split("=>")[1]}</button>;
                                     }
                                     else {
@@ -453,7 +486,7 @@ var Panel=React.createClass({
                                 //当最后一个为query组件时,取消之前的label td
                                 label=null;
                                 break;
-                            case 'input':
+                            case 'Input':
                                 var ctrlName;
                                 if (coms[0].indexOf('=>') !== -1 && coms[0].split('=>').length >= 2)
                                 {
@@ -505,7 +538,7 @@ var Panel=React.createClass({
                                 else
                                     ctrl=<input type='text' name={ctrlName}/>;
                                 break;
-                            case 'select':
+                            case 'Select':
                                 //select组件的第4个字段:为eval调用
                                 if(state.bean!==undefined&&state.bean!==null)
                                 {

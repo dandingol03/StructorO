@@ -29,13 +29,30 @@
     bottom: 2px;
 }
 
+.border-ctrl.hide{
+    display: none;
+}
+
 .border-ctrl .selected-overlay-button-edit:hover{
     color: #33aa52;
+    cursor:pointer;
 }
 
 .border-ctrl .selected-overlay-button-copy-paste:hover{
     color:#33aa52;
+    cursor:pointer;
 }
+
+.border-ctrl .selected-overlay-button-rows-edit:hover{
+    color:#33aa52;
+    cursor:pointer;
+}
+
+.border-ctrl .selected-overlay-button-bean-edit:hover{
+    color:#33aa52;
+    cursor:pointer;
+}
+
 
 .rows-editor-wrapper{
     position: absolute;

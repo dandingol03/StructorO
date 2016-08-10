@@ -27,7 +27,10 @@ var RowsEditor=React.createClass({
                     let rowConf={};
                     rowConf.row=[];
                     row.map(function(ctrl,j) {
-                       rowConf.row.push(ctrl.data.ctrlName+'=>'+ctrl.data.label+'|'+ctrl.type);
+                        if(ctrl.type=="Query")
+                            rowConf.row.push(ctrl.data.ctrlName+'=>'+ctrl.data.label+'|'+ctrl.type+'|'+JSON.stringify({query:ctrl.data.query}));
+                        else
+                            rowConf.row.push(ctrl.data.ctrlName+'=>'+ctrl.data.label+'|'+ctrl.type);
                     });
                     rows.push(rowConf);
                 });
@@ -57,9 +60,9 @@ var RowsEditor=React.createClass({
 
         for(let i=0;i<this.state.count;i++) {
             if(this.state.rows[i]!==undefined&&this.state.rows[i]!==null)
-                rows.push(<Row recall={this.recallCb.bind(this,i)} data={this.state.rows[i]} key={i}/>);
+                rows.push(<Row recall={this.recallCb.bind(this,i)} data-row={i} data={this.state.rows[i]} key={i}/>);
             else
-                rows.push(<Row recall={this.recallCb.bind(this,i)} key={i}/>);
+                rows.push(<Row recall={this.recallCb.bind(this,i)} data-row={i} key={i}/>);
         }
 
 

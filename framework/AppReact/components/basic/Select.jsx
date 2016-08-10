@@ -10,6 +10,7 @@ import '../../css/basic/select.css';
 
 var Select=React.createClass({
     selectCb:function(evt){
+        console.log('...select callback');
         var target=evt.target;
         var hidden=this.refs.hidden_field;
         hidden.value=target.value;
@@ -35,7 +36,7 @@ var Select=React.createClass({
     },
     componentWillReceiveProps(props){
         var ob=new Object();
-        if(props.data!==undefined&&props.data!==null) {
+        if(props.data!==this.state.data) {
             ob.data=props.data;
         }
         if(this.state.data$initialed==false)
@@ -55,10 +56,22 @@ var Select=React.createClass({
          var selectCb=this.selectCb;
          var selected = null;
 
+         let defaultValue=null;
+         let ctrlName=null;
+         if(this.props.ctrlName!==undefined&&this.props.ctrlName!==null)
+         {
+             if(this.props.ctrlName.indexOf('=>')!=-1)
+                ctrlName=this.props.ctrlName.split('=>')[0];
+             else
+                ctrlName=this.props.ctrlName;
+         }
+
+
          this.state.data.map(function(item,i) {
              if(item["selected"]!==undefined&&item["selected"]!==null)
              {
-                 options.push(<option value={item.value} key={i} selected>{item.label}</option>);
+                 defaultValue=item.value;
+                 options.push(<option value={item.value} key={i}>{item.label}</option>);
                  if(item.value!==undefined&&item.value!==null)
                     selected=item.value;
              }
@@ -67,11 +80,12 @@ var Select=React.createClass({
          });
         return(
             <div className={"select "+(this.props.className!==undefined&&this.props.className!==null?this.props.className:"")}>
-                <input name={this.props.ctrlName} style={{display:"none"}}
-                       value={selected!==null&&selected!==undefined?selected:''}
+                <input name={ctrlName} style={{display:"none"}}
+                       defaultValue={selected!==null&&selected!==undefined?selected:''}
                        ref="hidden_field"/>
                 <select onChange={selectCb} style={{width:"100%"}}
-                        data-query={this.props["data-query"]!==null&&this.props["data-query"]!==undefined?this.props["data-query"]:null}>
+                        data-query={this.props["data-query"]!==null&&this.props["data-query"]!==undefined?this.props["data-query"]:null}
+                        defaultValue={defaultValue}>
                     {options}
                 </select>
             </div>

@@ -10,6 +10,8 @@ import Calendar from '../../../../framework/AppReact/components/basic/Calendar.j
 import Upload from '../../../../framework/AppReact/components/basic/Upload.jsx';
 import Download from '../../../../framework/AppReact/components/basic/Download.jsx';
 import Panel from '../../../../framework/AppReact/components/panel/Panel.jsx';
+import OrdinaryTable from '../../../../framework/AppReact/components/forms/OrdinaryTable.jsx';
+import PanelTable from '../../../../framework/AppReact/components/compounds/PanelTable.jsx';
 
 import Basic from '../container/Basic.jsx';
 import RowsEditor from '../editor/RowsEditor.jsx';
@@ -30,6 +32,8 @@ var ProxyQ=require('../proxy/ProxyQ');
  * 3.function
  *      1>.onKeyDown,展开所有组件的可放置位置
  *
+ * 4.Blank的重新渲染
+ *      1>.当本组件的挂载组件数据与原先并无不同时,不进行重新渲染,以此设定原则
  *
  */
 
@@ -38,11 +42,27 @@ var ProxyQ=require('../proxy/ProxyQ');
 var QUOTE=222;
 var Blank=React.createClass({
     _beanCallback:function(mes){
-        let ob=mes.detail;
+        let detail=mes.detail;
+        let ob=
+        {
+            url:detail.url,
+            params:
+            {
+                reactPageName:detail.reactPageName,
+                reactActionName:detail.reactActionName
+            }
+        };
         console.log('.....ob is back');
+
         let old={};
         $.extend(true, old, this.state.data);
-        old.data.bean=ob;
+        if(old.data.bean!==undefined&&old.data.bean!==null)
+        {
+            old.data.bean = Object.assign(old.data.bean, ob);
+        }
+        else{
+            old.data.bean=ob;
+        }
         this.setState({data: old});
         var _config=$("#_config")[0];
         _config.removeEventListener("config",this._beanCallback);
@@ -70,7 +90,15 @@ var Blank=React.createClass({
     clickCb:function(event){
         //阻止子组件的点击事件冒泡
         event.stopPropagation();
-        this.setState({clicked: true});
+        let border_ctrl = this.refs["border-ctrl"];
+        if($(border_ctrl).hasClass("hide"))
+        {
+            $(border_ctrl).removeClass("hide");
+        }
+        else{
+            $(border_ctrl).addClass("hide");
+        }
+
     },
     editCb:function(event) {
 
@@ -96,12 +124,29 @@ var Blank=React.createClass({
             setTimeout(showEditor, 120);
 
         }
+        event.stopPropagation();
     },
     beanCb:function(event)
     {
-        window.App.remodal.show();
+        let bean=this.state.data.data.bean;
+        if(bean.params!==undefined&&bean.params!==null)
+        window.App.remodal.show(
+            {
+                url:bean.url!==undefined&&bean.url!==null?bean.url:'/bsuims/reactPageDataRequest.do',
+                reactActionName:bean.params.reactActionName!==undefined&&bean.params.reactActionName!==null?bean.params.reactActionName:'',
+                reactPageName:bean.params.reactPageName!==undefined&&bean.params.reactPageName!==null?bean.params.reactPageName:''}
+        );
+        else{
+            window.App.remodal.show(
+                {
+                    url:'/bsuims/reactPageDataRequest.do',
+                    reactActionName:'',
+                    reactPageName:''
+                });
+        }
         var _config=$("#_config")[0];
         _config.addEventListener("config",this._beanCallback);
+        event.stopPropagation();
     },
     saveRowsCb:function(ob){
         if(Object.prototype.toString.call(ob)=='[object Array]'&&ob.length>0) {
@@ -110,10 +155,21 @@ var Blank=React.createClass({
             metadata.data.data=null;
             if(Object.prototype.toString.call(ob)=='[object Array]')
             {
-                metadata.data.bean = JSON.stringify(ob);
+                if(metadata.data.bean!==undefined&&metadata.data.bean!==null)
+                {
+                    metadata.data.bean = Object.assign(metadata.data.bean,{rows:JSON.stringify(ob)});
+                }
+                else
+                    metadata.data.bean = {rows:ob};
             }
             else
+            {
+                if(metadata.data.bean!==undefined&&metadata.data.bean!==null)
+                {
+                    metadata.data.bean=Object.assign(metadata.data.bean,ob);
+                }
                 metadata.data.bean=ob;
+            }
 
             this.setState({data: metadata,rowsEditable:false});//clicked=false,收起RowsEditor的配置面板
         }
@@ -312,7 +368,7 @@ var Blank=React.createClass({
             });
         }
 
-        if(this.state.clicked==true) {
+
             let helps=[];
             helps.push(
                 <div className="selected-overlay-button selected-overlay-button-edit" key={0}>
@@ -342,11 +398,11 @@ var Blank=React.createClass({
                 }
 
             borderCtrl=
-                <div className="border-ctrl">
+                <div className="border-ctrl hide" ref="border-ctrl">
                     {helps}
                 </div>;
 
-        }
+
 
         if(this.state.rowsEditable==true) {
             rowsEditor=
@@ -402,6 +458,12 @@ var Blank=React.createClass({
                     break;
                 case 'Panel':
                     self=<Panel {...this.state.data.data}/>;
+                    break;
+                case 'OrdinaryTable':
+                    self=<OrdinaryTable {...this.state.data.data}/>;
+                    break;
+                case 'PanelTable':
+                    self=<PanelTable {...this.state.data.data}/>;
                     break;
                 default:
                     break;

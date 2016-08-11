@@ -38,6 +38,15 @@ var RowsEditor=React.createClass({
             }
         }
     },
+    _close:function(){
+        if(this.state.rows.length>0)
+        {
+            let rows=null;
+            if(this.state.rows.length>0)
+            rows=this.state.rows;
+            this.props.closeRowsCb(rows);
+        }
+    },
     _add:function(){
         this.setState({count: this.state.count+1});
     },
@@ -52,7 +61,10 @@ var RowsEditor=React.createClass({
     },
     getInitialState:function()
     {
-        return ({count: 1,rows:[]});
+        let rows=[];
+        if(this.props.rows!==undefined&&this.props.rows!==null)
+            rows=this.props.rows;
+        return ({count: 1,rows:rows});
     },
     render:function(){
 
@@ -74,6 +86,7 @@ var RowsEditor=React.createClass({
                 <div className="delete-row"><span className="fa fa-minus" onClick={this._minus}></span></div>
                 <div className="plus-row"><span className="fa fa-plus" onClick={this._add}></span></div>
                 <div className="save-all"><span className="fa fa-floppy-o" onClick={this._save}></span></div>
+                <div className="close-all"><span className="fa fa-times" onClick={this._close}></span></div>
             </div>
         );
     },

@@ -12,6 +12,7 @@ import Download from '../../../../framework/AppReact/components/basic/Download.j
 import Panel from '../../../../framework/AppReact/components/panel/Panel.jsx';
 import OrdinaryTable from '../../../../framework/AppReact/components/forms/OrdinaryTable.jsx';
 import PanelTable from '../../../../framework/AppReact/components/compounds/PanelTable.jsx';
+import CommonFunction from '../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/CommonFunction.jsx';
 
 import Basic from '../container/Basic.jsx';
 import RowsEditor from '../editor/RowsEditor.jsx';
@@ -173,6 +174,12 @@ var Blank=React.createClass({
 
             this.setState({data: metadata,rowsEditable:false});//clicked=false,收起RowsEditor的配置面板
         }
+    },
+    closeRowsCb:function(ob)
+    {
+        if(Object.prototype.toString.call(ob)=='[object Array]')
+            this.state.rows=ob;
+        this.setState({rowsEditable: false});
     },
     syncWithStore:function(vector,type,ob,callback){
         if(type!==undefined&&type!==null)
@@ -407,7 +414,7 @@ var Blank=React.createClass({
         if(this.state.rowsEditable==true) {
             rowsEditor=
                 <div className="rows-editor-wrapper">
-                   <RowsEditor saveRowsCb={this.saveRowsCb}/>
+                   <RowsEditor saveRowsCb={this.saveRowsCb} rows={this.state.rows} closeRowsCb={this.closeRowsCb}/>
                 </div>;
         }
 
@@ -464,6 +471,9 @@ var Blank=React.createClass({
                     break;
                 case 'PanelTable':
                     self=<PanelTable {...this.state.data.data}/>;
+                    break;
+                case 'CommonFunction':
+                    self=<CommonFunction {...this.state.data.data}/>;
                     break;
                 default:
                     break;

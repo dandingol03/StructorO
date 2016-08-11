@@ -48,7 +48,7 @@
     "data":
     [
       {
-        "label":"dnding","value":"dnding"
+        "label":"dnding","value":"dnding","selected":true
       },
       {
         "label":"vergile","value":"vergile"
@@ -63,8 +63,8 @@
     "data":
     [
       {"row":["stuType|span|1142051104"]},
-      {"row":["perIdCard|input|true"]},
-      {"row":["anyway|query"]}
+      {"row":["perIdCard|Input|true"]},
+      {"row":["anyway|Query"]}
     ],
     "autoComplete":true,
     "auto":true,
@@ -129,6 +129,9 @@
         "reactPageName":"newCultivateAllCourseQueryPage"
       }
     }
+  },
+  "CommonFunction":{
+    "auto":true
   }
 
 }

@@ -78,6 +78,11 @@ var Select=React.createClass({
              else
                 options.push(<option value={item.value} key={i}>{item.label}</option>);
          });
+         if(defaultValue==null)
+         {
+             defaultValue=this.state.data[0].value;
+             selected=defaultValue;
+         }
         return(
             <div className={"select "+(this.props.className!==undefined&&this.props.className!==null?this.props.className:"")}>
                 <input name={ctrlName} style={{display:"none"}}

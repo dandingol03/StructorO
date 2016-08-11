@@ -200,6 +200,24 @@ app.get('/get/AppReact/*',function(req,res) {
     }
 });
 
+app.get('/images/*',function(req,res) {
+    var path=null;
+    if(Object.prototype.toString.call(req.params)=='[object Object]')
+    {
+        path=req.params[0];
+        path='./framework/AppReact/build/images/'+path;
+        try{
+            var content=fs.readFileSync(path,'binary');
+            res.writeHead(200, {"Content-Type": "image/png"});
+            res.write(content, "binary");
+            res.end();
+        }catch(e)
+        {
+            console.error('error=' + e.toString());
+        }
+    }
+});
+
 app.post('/app/changeType',function(req,res) {
     var type=req.body.type;
     console.log("type====" + type);

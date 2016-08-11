@@ -1,0 +1,43 @@
+[
+  {
+    "label": "个人信息",
+    "img": "/images/serviceHobby/ico/y1.png",
+    "type":"Panel",
+    "content": {
+      "auto":true,
+      "bean":{
+        "url":"/bsuims/reactPageDataRequest.do",
+        "params": {
+          "reactActionName": "getStudentRegisterInfoReact",
+          "reactPageName": "freshmanWelcomeWorkbenchRulePage"
+        }
+      }
+    }
+  },
+  {
+    "label": "修改密码",
+    "img": "/images/serviceHobby/ico/y3.png",
+    "type": "Panel",
+    "content": {
+      "title":"修改密码",
+      "auto": true,
+      "bean": {
+        "url": "/bsuims/reactPageDataRequest.do",
+        "params": {
+          "reactActionName": "changePasswordInitReact",
+          "reactPageName": "userPasswordManageRulePage"
+        }
+      }
+    }
+  },
+  {
+    "label": "入学指南",
+    "img": "/images/serviceHobby/ico/y4.png",
+    "type":"IFrame",
+    "content":{
+      "src":"/downloads/ruxuezhinan.pdf",
+      "width":"1000px",
+      "height":"500px"
+    }
+  }
+]

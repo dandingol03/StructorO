@@ -54,3 +54,21 @@
     color:#006600;
     cursor: pointer;
 }
+
+.rows-editor .close-all{
+    float: left;
+
+}
+
+.rows-editor .close-all span{
+    font-size: 1.8em;
+    margin-left:10px;
+    margin-top: 6px;
+    color:#f54747;
+}
+
+.rows-editor .close-all span:hover{
+    color:#37ffc4;
+    cursor: pointer;
+}
+

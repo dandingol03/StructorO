@@ -218,6 +218,21 @@ app.get('/images/*',function(req,res) {
     }
 });
 
+app.get('/downloads/*',function(req,res) {
+    var path=null;
+    if(Object.prototype.toString.call(req.params)=='[object Object]')
+    {
+        path=req.params[0];
+        path=__dirname+'/framework/AppReact/build/downloads/'+path;
+        try{
+            res.sendFile(path);
+        }catch(e)
+        {
+            console.error('error=' + e.toString());
+        }
+    }
+});
+
 app.post('/app/changeType',function(req,res) {
     var type=req.body.type;
     console.log("type====" + type);

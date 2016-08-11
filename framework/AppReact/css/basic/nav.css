@@ -14,7 +14,7 @@
 }
 
 /**navigation part**/
-#navigation {
+.Nav .navigation {
     position: fixed;
     left:0;
     right:0;
@@ -27,12 +27,12 @@
     _padding-top:9px;_position:absolute;_top: expression(eval(document.documentElement.scrollTop)+0);
 }
 
-#navigation .center {
-    width: 1263px;
+.Nav .navigation .center {
+    width: 100%;
     height: 30px;
     margin: 0 auto;
 }
-#navigation .link {
+.Nav .navigation .link {
     /*width: 650px;*/
     margin-left: 60px;
     height: 30px;
@@ -40,21 +40,26 @@
     color: #eee;
     float: right;
 }
-#navigation .link .user{
+.Nav .navigation .link .user{
     width: 80px;
     text-align: center;
     float: left;
 }
-#navigation .link li {
+
+.Nav .navigation ul.link{
+    list-style: none;
+}
+
+.Nav .navigation .link li {
     width: 40px;
     text-align: center;
     float: left;
 }
-#navigation .link a {
+.Nav .navigation .link a {
     color: #eee;
     display: block;
 }
-#navigation .link a:hover, #nav .active a {
+.Nav .navigation .link a:hover, #nav .active a {
     background-color: #0066b3;
 }
 
@@ -114,7 +119,7 @@
 .nav ul li {
     float: left;
     font-size: 18px;
-    font-family: "Microsoft Yahei",Arial, Helvetica, sans-serif,"ºÚÌå";
+    font-family: "Microsoft Yahei",Arial, Helvetica, sans-serif,"ï¿½ï¿½ï¿½ï¿½";
     display: inline-block;
     color: #666;
 }

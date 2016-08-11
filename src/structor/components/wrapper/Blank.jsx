@@ -1,10 +1,8 @@
 import React from 'react';
 import {render} from 'react-dom';
 import '../../css/blank.css';
-import Grid from '../../../../framework/AppReact/components/basic/Grid.jsx';
 import CPanel from '../../../../framework/AppReact/components/basic/CPanel.jsx';
 import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
-import Radio from '../../../../framework/AppReact/components/basic/Radio.jsx';
 import Attention from '../../../../framework/AppReact/components/basic/Attention.jsx';
 import Calendar from '../../../../framework/AppReact/components/basic/Calendar.jsx';
 import Upload from '../../../../framework/AppReact/components/basic/Upload.jsx';
@@ -13,6 +11,10 @@ import Panel from '../../../../framework/AppReact/components/panel/Panel.jsx';
 import OrdinaryTable from '../../../../framework/AppReact/components/forms/OrdinaryTable.jsx';
 import PanelTable from '../../../../framework/AppReact/components/compounds/PanelTable.jsx';
 import CommonFunction from '../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/CommonFunction.jsx';
+import ScaleBar from '../../../../framework/AppReact/components/basic/ScaleBar.jsx';
+import Note from '../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/Note.jsx';
+import Footer from '../../../../framework/AppReact/components/basic/Footer.jsx';
+import Nav from '../../../../framework/AppReact/components/basic/Nav.jsx';
 
 import Basic from '../container/Basic.jsx';
 import RowsEditor from '../editor/RowsEditor.jsx';
@@ -441,13 +443,6 @@ var Blank=React.createClass({
                             </Basic>
                         </div>;
                     break;
-                case 'Radio':
-                    self=<Radio>
-                        </Radio>;
-                    break;
-                case 'Grid':
-                    self=<Grid {...this.state.data.data}/>;
-                    break;
                 case 'Table':
                     self=<Table {...this.state.data.data}/>;
                     break;
@@ -474,6 +469,18 @@ var Blank=React.createClass({
                     break;
                 case 'CommonFunction':
                     self=<CommonFunction {...this.state.data.data}/>;
+                    break;
+                case 'ScaleBar':
+                    self=<ScaleBar {...this.state.data.data}/>;
+                    break;
+                case 'Note':
+                    self=<Note {...this.state.data.data}/>;
+                    break;
+                case 'Footer':
+                    self=<Footer {...this.state.data.data}/>;
+                    break;
+                case 'Nav':
+                    self=<Nav {...this.state.data.data}/>;
                     break;
                 default:
                     break;

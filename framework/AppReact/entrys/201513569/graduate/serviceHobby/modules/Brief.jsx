@@ -1,5 +1,6 @@
 import React from 'react';
 import {render} from 'react-dom';
+import '../../../../../css/serviceHobby/basic/brief.css'
 var ProxyQ=require('../../../../../components/proxy/ProxyQ.js');
 var SyncStore = require('../../../../../components/flux/stores/SyncStore');
 /**

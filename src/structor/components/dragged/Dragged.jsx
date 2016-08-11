@@ -2,8 +2,6 @@ import React from 'react';
 import {render} from 'react-dom';
 import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
 import CPanel from '../../../../framework/AppReact/components/basic/CPanel.jsx';
-import Grid from '../../../../framework/AppReact/components/basic/Grid.jsx';
-import Radio from '../../../../framework/AppReact/components/basic/Radio.jsx';
 import Attention from '../../../../framework/AppReact/components/basic/Attention.jsx';
 import Calendar from '../../../../framework/AppReact/components/basic/Calendar.jsx';
 import Upload from '../../../../framework/AppReact/components/basic/Upload.jsx';
@@ -15,6 +13,10 @@ import PanelTable from '../../../../framework/AppReact/components/compounds/Pane
 import Input from '../../../../framework/AppReact/components/basic/Input.jsx';
 import Query from '../../../../framework/AppReact/components/basic/Query.jsx';
 import CommonFunction from '../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/CommonFunction.jsx';
+import Note from '../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/Note.jsx';
+import ScaleBar from '../../../../framework/AppReact/components/basic/ScaleBar.jsx';
+import Footer from '../../../../framework/AppReact/components/basic/Footer.jsx';
+import Nav from '../../../../framework/AppReact/components/basic/Nav.jsx';
 import '../../css/dragged.css';
 
 var SyncStore=require('../flux/stores/SyncStore');
@@ -36,13 +38,29 @@ var Dragged=React.createClass({
     _dragStart:function(event){
 
         if(this.state.type!==undefined&&this.state.type!==null) {
-            event.dataTransfer.setData(this.state.type,
-            JSON.stringify(
-                {
-                    type:this.state.type,
-                    data:this.state.data
-                }
-            ));
+            let data=this.state.data;
+            switch(this.state.type)
+            {
+                case 'ScaleBar':
+                    delete data.className;
+                    event.dataTransfer.setData(this.state.type,
+                        JSON.stringify(
+                            {
+                                type:this.state.type,
+                                data:data
+                            }
+                        ));
+                    break;
+                default:
+                    event.dataTransfer.setData(this.state.type,
+                        JSON.stringify(
+                            {
+                                type:this.state.type,
+                                data:data
+                            }
+                        ));
+                    break;
+            }
         }
 
         setTimeout(function () {
@@ -98,18 +116,6 @@ var Dragged=React.createClass({
                     ctrl=
                         <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
                             <CPanel {...ob}/>
-                        </div>;
-                    break;
-                case 'Grid':
-                    ctrl=
-                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
-                            <Grid {...ob}/>
-                        </div>;
-                    break;
-                case 'Radio':
-                    ctrl=
-                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
-                            <Radio {...ob}/>
                         </div>;
                     break;
                 case 'Attention':
@@ -173,6 +179,29 @@ var Dragged=React.createClass({
                             <CommonFunction {...ob}/>
                         </div>;
                     break;
+                case 'ScaleBar':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <ScaleBar {...ob}/>
+                        </div>;
+                    break;
+                case 'Note':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <Note {...ob}/>
+                        </div>;
+                    break;
+                case 'Footer':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <Footer {...ob}/>
+                        </div>;
+                    break;
+                case 'Nav':
+                    ctrl=
+                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <Nav {...ob}/>
+                        </div>;
                     break;
                 default:
                     break;

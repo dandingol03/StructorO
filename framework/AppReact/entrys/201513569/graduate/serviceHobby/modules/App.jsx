@@ -13,7 +13,7 @@ import Scales from '../data/scaleBar.json';
 import Scrolls from '../data/scrolls.json';
 import CommonFunction from './CommonFunction.jsx';
 import Brief from './Brief.jsx';
-
+import Note from './Note.jsx';
 
 var App =React.createClass({
     app$init:function(){
@@ -28,19 +28,7 @@ var App =React.createClass({
          */
             <div>
                 <Nav logo={Deploy.getResourceDeployPrefix()+"/"+"images/school_logo.png"} data={MENU}/>
-
-                <div className="topbg"></div>
-
-                <div className="keyNavigation">
-                    <div className="top">
-                        <div className="block">
-                            <Brief data={['欢迎登陆山东大学数字迎新系统，请仔细阅读报道须知和各类通知,','并尽快选择下面的功能按要求完善相关信息和业务申请.']}/>
-                        </div>
-                    </div>
-                    <div className="bottom">
-                        <CommonFunction auto={true}/>
-                    </div>
-                </div>
+                <Note notes={['欢迎登陆山东大学数字迎新系统，请仔细阅读报道须知和各类通知,','并尽快选择下面的功能按要求完善相关信息和业务申请.']}/>
                 {this.props.children}
                 <ScaleBar data={Scales}/>
                 <Footer/>

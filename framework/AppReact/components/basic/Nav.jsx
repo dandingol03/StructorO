@@ -370,8 +370,8 @@ var Nav=React.createClass({
 
 
             return (
-                <div >
-                    <div id="navigation">
+                <div className="Nav">
+                    <div className="navigation">
                         <div className="center">
                             <ul className="link">
                                 <li><a id="bell" href="javascript:void(0)" className="fa fa-bell-o"
@@ -395,8 +395,8 @@ var Nav=React.createClass({
                             {logo}
                             {nav}
                         </div>
-
                     </div>
+                    <div className="topbg"></div>
                 </div>);
         }
     },

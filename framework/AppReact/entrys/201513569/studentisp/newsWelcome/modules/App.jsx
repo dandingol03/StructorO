@@ -92,8 +92,6 @@ var App = React.createClass({
                             <CommonFunction auto={true}/>
                         </div>
                     </div>
-
-                    {this.props.children}
                     <ScaleBar data={Scales}/>
                     <Footer/>
                 </div>

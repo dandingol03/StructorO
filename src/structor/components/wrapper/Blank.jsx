@@ -329,7 +329,12 @@ var Blank=React.createClass({
         if(this.props.vector!==undefined&&this.props.vector!==null) {
             vector=this.props.vector;
         }
-        return ({prefix: null, suffix: null,data:data,child:[],clicked:false,vector:vector});
+        var child=[];
+        if(this.props.child!==undefined&&this.props.child!==null)
+        {
+            child=this.props.child;
+        }
+        return ({prefix: null, suffix: null,data:data,child:child,clicked:false,vector:vector});
     },
     componentWillReceiveProps:function(props){
         let ob={};

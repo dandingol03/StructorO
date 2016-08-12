@@ -1,0 +1,12 @@
+{
+  "Root":
+  {
+    "path":"/",
+    "component":"App",
+    "IndexRoute":
+    {
+      "component":"Home"
+    },
+    "Routes":[]
+  }
+}

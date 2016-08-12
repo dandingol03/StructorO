@@ -1,11 +1,10 @@
 import React from 'react';
 import {render} from 'react-dom';
+import Blank from '../../components/wrapper/Blank.jsx';
 var SyncStore=require('../flux/stores/SyncStore');
 var ProxyQ=require('../proxy/ProxyQ');
 var Container=React.createClass({
     _onExport:function(data){
-        console.log('....');
-        console.log('....');
         if(data!==undefined&&data!==null&&data.detail.export==true)
         {
             //TODO:export data
@@ -24,9 +23,14 @@ var Container=React.createClass({
             );
         }
     },
+    getInitialState:function(){
+        return ({data: null});
+    },
     render:function(){
       return (
           <div>
+              <Blank data={{type:'Basic'}}>
+              </Blank>
               {this.props.children}
           </div>
       )

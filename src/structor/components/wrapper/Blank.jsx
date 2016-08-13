@@ -10,7 +10,6 @@ import Download from '../../../../framework/AppReact/components/basic/Download.j
 import Panel from '../../../../framework/AppReact/components/panel/Panel.jsx';
 import OrdinaryTable from '../../../../framework/AppReact/components/forms/OrdinaryTable.jsx';
 import PanelTable from '../../../../framework/AppReact/components/compounds/PanelTable.jsx';
-import CommonFunction from '../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/CommonFunction.jsx';
 import ScaleBar from '../../../../framework/AppReact/components/basic/ScaleBar.jsx';
 import Note from '../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/Note.jsx';
 import Footer from '../../../../framework/AppReact/components/basic/Footer.jsx';
@@ -471,9 +470,6 @@ var Blank=React.createClass({
                     break;
                 case 'PanelTable':
                     self=<PanelTable {...this.state.data.data}/>;
-                    break;
-                case 'CommonFunction':
-                    self=<CommonFunction {...this.state.data.data}/>;
                     break;
                 case 'ScaleBar':
                     self=<ScaleBar {...this.state.data.data}/>;

@@ -7,7 +7,13 @@ var <%- module.name %> = require('<%- module.route %>');
 <% });
 %>
 
+var <%- className %> = React.createClass({
 
-    render(
-        ${content}
-        , document.getElementById('root'));
+    render:<%- func %>(){
+
+      return (
+            ${content}
+            );
+    }
+});
+module.exports= <%- className %>;

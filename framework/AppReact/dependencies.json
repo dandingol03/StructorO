@@ -1,10 +1,14 @@
 [
   {
     "name":"Panel",
-    "route":"../../../AppReact/components/basic/Panel.jsx"
+    "route":"../../../../framework/AppReact/components/panel/Panel.jsx"
   },
   {
     "name":"OrdinaryTable",
-    "route":"../../../AppReact/components/form/OrdinaryTable.jsx"
+    "route":"../../../../framework/AppReact/components/form/OrdinaryTable.jsx"
+  },
+  {
+    "name":"PanelTable",
+    "route":"../../../../framework/AppReact/components/compounds/PanelTable.jsx"
   }
 ]

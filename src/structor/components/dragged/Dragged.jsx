@@ -12,7 +12,6 @@ import OrdinaryTable from '../../../../framework/AppReact/components/forms/Ordin
 import PanelTable from '../../../../framework/AppReact/components/compounds/PanelTable.jsx';
 import Input from '../../../../framework/AppReact/components/basic/Input.jsx';
 import Query from '../../../../framework/AppReact/components/basic/Query.jsx';
-import CommonFunction from '../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/CommonFunction.jsx';
 import Note from '../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/Note.jsx';
 import ScaleBar from '../../../../framework/AppReact/components/basic/ScaleBar.jsx';
 import Footer from '../../../../framework/AppReact/components/basic/Footer.jsx';
@@ -171,12 +170,6 @@ var Dragged=React.createClass({
                     ctrl=
                         <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
                             <Query {...ob}/>
-                        </div>;
-                    break;
-                case 'CommonFunction':
-                    ctrl=
-                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
-                            <CommonFunction {...ob}/>
                         </div>;
                     break;
                 case 'ScaleBar':

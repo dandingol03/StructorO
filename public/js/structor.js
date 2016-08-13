@@ -56,14 +56,33 @@ window.Structor.dispatchRenderDraggedEvent=function(ob) {
  *
  */
 window.Structor.dispatchExportEvent=function(){
+    let route={};
+    let $ul=$("ul[class='dropdown-menu routes']");
+    route.name=$("button[title='View page info']").children('span').text().trim();
+    route.url=$ul.find('li a[data-name="'+route.name+'"]').text();
     var iframe=$("#desktop-page").children("iframe")[0];
     var document=iframe.contentDocument;
     var obj=document.getElementById("export");
     //fit to advance web-browser such as firefox,chrome
     var event=document.createEvent('CustomEvent');
-    event.initCustomEvent('export',false,true,{export:true});
+    event.initCustomEvent('export',false,true,{export:true,route:route});
     obj.dispatchEvent(event);
 }
+
+window.Structor.dispatchUrlChangedEvent=function(){
+    let route={};
+    let $ul=$("ul[class='dropdown-menu routes']");
+    route.name=$("button[title='View page info']").children('span').text().trim();
+    route.url=$ul.find('li a[data-name="'+route.name+'"]').text();
+    var iframe=$("#desktop-page").children("iframe")[0];
+    var document=iframe.contentDocument;
+    var obj=document.getElementById("_url_change");
+    //fit to advance web-browser such as firefox,chrome
+    var event=document.createEvent('CustomEvent');
+    event.initCustomEvent('__url__change',false,true,{route:route});
+    obj.dispatchEvent(event);
+}
+
 
 
 window.Structor.remodal=new Object();

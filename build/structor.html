@@ -73,6 +73,35 @@
                 }
             });
 
+            //路由列表初始化
+            window.Structor.queryHandle('GET','/get_routes.do',null,null,function(response)
+            {
+                let routes=response.routes;
+                let $url_span = $("button[title='View page info']").children('span');
+                $url_span.text('App');
+                let $ul=$("ul[class='dropdown-menu routes']");
+                $ul.find("li").remove();
+                let li_header=document.createElement('li');
+                li_header.setAttribute('role', 'presentation');
+                li_header.setAttribute('class', 'dropdown-header');
+                li_header.innerText = 'Switch to:';
+                $ul.append(li_header);
+                for(var className in routes)
+                {
+                    let route = routes[className];
+                    let url=route.url;
+                    let li = document.createElement('li');
+                    li.innerHTML='<a href="javascript:void(0);" data-name="'+className+'">'+url+'</a>';
+                    $(li).click(function(className){
+                        $url_span.text(className);
+                        window.Structor.dispatchUrlChangedEvent();
+                    }.bind(this,className));
+                    $ul.append(li);
+                }
+
+            });
+
+
             window.Structor.remodal.inst=$('[data-remodal-id="re-modal"]').remodal({
             });
 
@@ -202,7 +231,7 @@
                         <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                             <!-- react-text: 61 -->&nbsp;&nbsp;<!-- /react-text --><span class="caret"></span><!-- react-text: 63 -->&nbsp;&nbsp;<!-- /react-text -->
                         </button>
-                        <ul class="dropdown-menu" role="menu" style="overflow-y: auto; max-height: 12em;">
+                        <ul class="dropdown-menu routes" role="menu" style="overflow-y: auto; max-height: 12em;">
                             <li role="presentation" class="dropdown-header">Switch to:</li>
                             <li><a href="#">/home [IndexRoute]</a></li>
                             <li><a href="#">[App]</a></li>

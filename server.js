@@ -40,13 +40,24 @@ app.get('/', function (req, res) {
 });
 
 app.post('/sduyingxin/*',function(req,res) {
-    console.log("req======");
-    proxy.web(req, res, {target:'http://localhost:8080'});
+    console.log("proxy sduyingxin======");
+    try{
+        proxy.web(req, res, {target:'http://localhost:8080'});
+    }
+    catch(e)
+    {
+        res.send({re: -1, content: "tomcat has not been started"});
+    }
 });
 
 app.get('/gradms/*',function(req,res) {
     console.log("proxy gradms action======");
-    proxy.web(req, res, {target:'http://localhost:8090'});
+    try{
+        proxy.web(req, res, {target:'http://localhost:8090'});
+    }catch(e)
+    {
+        res.send({re: -1, content: "tomcat has not been started"});
+    }
 });
 
 
@@ -90,6 +101,21 @@ app.post('/save_css.do',function(req,res) {
     }
 });
 
+
+app.get('/get_nodes.do',function(req,res) {
+
+    var name='App';
+    var path='/';
+    try{
+        var content = fs.readFileSync('./src/client/gen/graduate/serviceHobby' + path + name + '.json', 'utf-8');
+        if(content!==undefined&&content!==null)
+            res.send({_nodes: content});
+    }catch(e)
+    {
+        res.send({re: -1});
+    }
+});
+
 app.post('/do_export.do',function(req,res) {
     var _tree=null;
     if(req.body._tree!==undefined&&req.body._tree!==null)
@@ -99,19 +125,38 @@ app.post('/do_export.do',function(req,res) {
         else
             _tree=req.body._tree;
     }
-    _tree.ob=new Object();
-    _tree.ob.type='div';
+    _tree.type='Basic';
+
     var framework=req.body.framework;
+    var route=req.body.route;
+    if(Object.prototype.toString.call(route)=='[object String]')
+        route=JSON.parse(route);
+    var indent='        ';
+    var indent_step='   ';
+
+
+
+    var modules={};
     try{
-        var indent='        ';
-        var nesting=function(in$param){
+
+        if(route.url=='/')
+        {
+            var json = JSON.stringify(_tree);
+            fs.writeFileSync('./src/client/gen/graduate/serviceHobby'+route.url+route.name+'.json',json,'utf-8');
+        }
+
+
+
+        var nesting=function(in$param,indent){
             var out$param='';
-            out$param+=indent+'\<'+in$param.ob.type+' ';
-            if(in$param.ob.data!==undefined&&in$param.ob.data!==null)
+            out$param+=indent+'\<'+in$param.type+' ';
+            if(modules[in$param.type]==undefined||modules[in$param.type]==null&&in$param.type!='div')
+                modules[in$param.type]=true;
+            if(in$param.data!==undefined&&in$param.data!==null)
             {
-                for(var field in in$param.ob.data)
+                for(var field in in$param.data)
                 {
-                    out$param+=field+'={'+JSON.stringify(in$param.ob.data[field])+'}';
+                    out$param+=field+'={'+JSON.stringify(in$param.data[field])+'}';
                     out$param+=' ';
                 }
             }
@@ -122,26 +167,33 @@ app.post('/do_export.do',function(req,res) {
                 if(isNaN(parseInt(index)))
                     continue;
                 isLeaf=true;
-                out$param+=nesting(in$param[index],out$param);
+                out$param+=nesting(in$param[index],indent+indent_step);
             }
             if(isLeaf==false)
             {
                 return out$param.substring(0,out$param.length-2)+'/\>\n';
             }else{
-                out$param+=indent+'\</'+in$param.ob.type+'\>\n';
+                out$param+=indent+'\</'+in$param.type+'\>\n';
                 return out$param;
             }
         };
         var before_compile=new Object();
         before_compile.content='';
-        before_compile.content=nesting(_tree);
+        before_compile.content=nesting(_tree,indent);
         var dependencies= fs.readFileSync('framework/' + framework + '/dependencies.json','utf-8');
         if(dependencies!==null&&dependencies!==undefined)
             dependencies=JSON.parse(dependencies);
+        var filters=[];
+        dependencies.map(function(dep,i) {
+           if(modules[dep.name]==true)
+               filters.push(dep);
+        });
         var  content=fs.readFileSync('./src/structor/template/main.tpl','utf-8');
         var  se = _.template(content);
-        var compiled=se({'dependencies':dependencies,'content':'\n'+before_compile.content},{escape:'<'});
-        fs.writeFileSync('./src/client/gen/index.js',compiled,'utf-8');
+        //TODO:update generate class name
+
+        var compiled=se({'func':'function','className':route.name,'dependencies':filters,'content':'\n'+before_compile.content},{escape:['<','function']});
+        fs.writeFileSync('./src/client/gen/graduate/serviceHobby/index.js',compiled,'utf-8');
         res.send({re: 1, content: 'document has been generated successfully'});
     }catch(e)
     {
@@ -151,6 +203,10 @@ app.post('/do_export.do',function(req,res) {
 });
 
 app.get('/get_render_page.do',function(req,res) {
+    res.sendfile('build/index.html');
+});
+
+app.post('/get_render_page.do',function(req,res) {
     res.sendfile('build/index.html');
 });
 
@@ -179,6 +235,20 @@ app.post('/get_metadata.do',function(req,res) {
     }
 });
 
+app.get('/get_routes.do', function (req, res) {
+    try{
+        var client='graduate/serviceHobby';
+        var path='./src/client/gen/'+client+'/routes.json';
+        var content = fs.readFileSync(path, 'utf-8');
+        if(Object.prototype.toString.call(content)!='[object Object]'||Object.prototype.toString.call(content)!='[object Array]')
+            content = JSON.parse(content);
+        res.send({routes: content});
+    }catch(e)
+    {
+        res.send({re: -1});
+    }
+});
+
 app.get('/bundle.js',function(req,res) {
    res.sendfile('build/bundle.js');
 });
@@ -197,6 +267,22 @@ app.get('/get/AppReact/*',function(req,res) {
         {
             console.error('error=' + e.toString());
         }
+    }
+});
+
+
+/**
+ * 搜索特定路径下的路由配置文件
+ */
+app.get('/get/gen/graduate/serviceHobby/routes',function(req,res)
+{
+    try{
+        var configures = fs.readFileSync('./src/client/gen/graduate/serviceHobby/routes.json', 'utf-8');
+        res.send({configures:configures});
+    }catch(e)
+    {
+        console.error(e.toString());
+        res.send({re: -1});
     }
 });
 

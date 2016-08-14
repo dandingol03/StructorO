@@ -7,15 +7,6 @@
     ]
 
   },
-  "Table":{
-    "data":
-    [
-      {"email":"1291248710@qq.com","perName":"wjj","perNum":1142051104,"perIdCard":460},
-      {"email":"9046001@qq.com","perName":"danding","perNum":1142051102,"perIdCard":101}
-    ],
-    "auto":true,
-    "filterField":["email","perName","perNum","perIdCard"]
-  },
   "Calendar":
   {
     "data":"2015-05-12",
@@ -157,6 +148,7 @@
     "logo":"images/school_logo.png",
     "data":
     [
+
       {
         "label":"个人信息管理","sub":[
         {"label":"修改密码","query":""},
@@ -221,6 +213,28 @@
       ]
       }
     ]
-}
+  },
+  "HighLight":{
+    "type":"OrdinaryTable",
+    "title":"<span  style=\"font-size: 14px;color: #6EA0FF;font-weight:bold;text-align:center\">个人信息状态</span>",
+    "query":{
+              "url":"/bsuims/reactPageDataRequest.do",
+              "params":
+              {
+                "reactActionName": "registerInformationReact",
+                "reactPageName"  : "registerRulePage"
+              }
+            },
+    "filterField":{
+                  "stuName":true,
+                  "stuNum":true,
+                  "feeStatus":true,
+                  "baseInfoFillStatus":true,
+                  "moralityFillStatus":true,
+                  "greenwayStatus":true,
+                  "trafiicFillStatus":true,
+                  "studyStateStr":true
+                  }
+  }
 
 }

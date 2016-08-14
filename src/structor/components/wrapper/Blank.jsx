@@ -2,7 +2,6 @@ import React from 'react';
 import {render} from 'react-dom';
 import '../../css/blank.css';
 import CPanel from '../../../../framework/AppReact/components/basic/CPanel.jsx';
-import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
 import Attention from '../../../../framework/AppReact/components/basic/Attention.jsx';
 import Calendar from '../../../../framework/AppReact/components/basic/Calendar.jsx';
 import Upload from '../../../../framework/AppReact/components/basic/Upload.jsx';
@@ -14,6 +13,7 @@ import ScaleBar from '../../../../framework/AppReact/components/basic/ScaleBar.j
 import Note from '../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/Note.jsx';
 import Footer from '../../../../framework/AppReact/components/basic/Footer.jsx';
 import Nav from '../../../../framework/AppReact/components/basic/Nav.jsx';
+import HighLight from '../../../../framework/AppReact/components/basic/HighLight.jsx';
 
 import Basic from '../container/Basic.jsx';
 import RowsEditor from '../editor/RowsEditor.jsx';
@@ -385,9 +385,6 @@ var Blank=React.createClass({
                             </Basic>
                         </div>;
                     break;
-                case 'Table':
-                    self=<Table {...this.state.data}/>;
-                    break;
                 case 'Attention':
                     self=<Attention {...this.state.data}/>;
                     break;
@@ -420,6 +417,9 @@ var Blank=React.createClass({
                     break;
                 case 'Nav':
                     self=<Nav {...this.state.data}/>;
+                    break;
+                case 'HighLight':
+                    self=<HighLight {...this.state.data}/>;
                     break;
                 default:
                     break;

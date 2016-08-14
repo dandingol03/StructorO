@@ -1,6 +1,5 @@
 import React from 'react';
 import {render} from 'react-dom';
-import Table from '../../../../framework/AppReact/components/basic/Table.jsx';
 import CPanel from '../../../../framework/AppReact/components/basic/CPanel.jsx';
 import Attention from '../../../../framework/AppReact/components/basic/Attention.jsx';
 import Calendar from '../../../../framework/AppReact/components/basic/Calendar.jsx';
@@ -16,6 +15,7 @@ import Note from '../../../../framework/AppReact/entrys/201513569/graduate/servi
 import ScaleBar from '../../../../framework/AppReact/components/basic/ScaleBar.jsx';
 import Footer from '../../../../framework/AppReact/components/basic/Footer.jsx';
 import Nav from '../../../../framework/AppReact/components/basic/Nav.jsx';
+import HighLight from '../../../../framework/AppReact/components/basic/HighLight.jsx';
 import '../../css/dragged.css';
 
 var SyncStore=require('../flux/stores/SyncStore');
@@ -105,12 +105,6 @@ var Dragged=React.createClass({
             }
 
             switch (this.state.type) {
-                case 'Table':
-                    ctrl=
-                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
-                            <Table {...ob}/>
-                        </div>;
-                    break;
                 case 'CPanel':
                     ctrl=
                         <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
@@ -194,6 +188,12 @@ var Dragged=React.createClass({
                     ctrl=
                         <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
                             <Nav {...ob}/>
+                        </div>;
+                    break;
+                case 'HighLight':
+                    ctrl=
+                        <div style={{padding:"20px"}} draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
+                            <HighLight {...ob}/>
                         </div>;
                     break;
                 default:

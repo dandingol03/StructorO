@@ -5,6 +5,9 @@ background: linear-gradient(to top, rgba(0, 102, 179,0.5), rgba(196, 227, 248,0)
 
 .Home{
     margin-top:-100px;
+    min-height:650px;
+    margin-top:0px;
+    padding-bottom:30px;
 }
 
 .total{

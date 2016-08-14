@@ -38,7 +38,7 @@ var Home =React.createClass({
 
 
      return (
-         <div className="total" style={{minHeight:"650px",marginTop:"0px",paddingBottom:"30px"}}>
+         <div className="total Home">
              <HighLight type="OrdinaryTable"
                         title='<span  style="font-size: 14px;color: #6EA0FF;font-weight:bold;text-align:center">个人信息状态</span>'
                         query={{ url:'/bsuims/reactPageDataRequest.do',

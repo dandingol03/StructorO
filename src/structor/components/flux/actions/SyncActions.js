@@ -37,6 +37,15 @@ var SyncActions = {
         });
     },
 
+    sync:function(ob,callback)
+    {
+        AppDispatcher.dispatch({
+            type: SyncConstants.SYNC,
+            ob:ob,
+            callback:callback
+        });
+    },
+
     drop:function(vector,ob,callback) {
         AppDispatcher.dispatch({
             type:SyncConstants.DROP,

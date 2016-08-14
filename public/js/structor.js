@@ -59,7 +59,7 @@ window.Structor.dispatchExportEvent=function(){
     let route={};
     let $ul=$("ul[class='dropdown-menu routes']");
     route.name=$("button[title='View page info']").children('span').text().trim();
-    route.url=$ul.find('li a[data-name="'+route.name+'"]').text();
+    route.url=$ul.find('li a[data-name="'+route.name+'"]').attr('data-url');
     var iframe=$("#desktop-page").children("iframe")[0];
     var document=iframe.contentDocument;
     var obj=document.getElementById("export");
@@ -69,11 +69,11 @@ window.Structor.dispatchExportEvent=function(){
     obj.dispatchEvent(event);
 }
 
-window.Structor.dispatchUrlChangedEvent=function(){
+window.Structor.dispatchUrlChangedEvent=function(url){
     let route={};
     let $ul=$("ul[class='dropdown-menu routes']");
     route.name=$("button[title='View page info']").children('span').text().trim();
-    route.url=$ul.find('li a[data-name="'+route.name+'"]').text();
+    route.url=url
     var iframe=$("#desktop-page").children("iframe")[0];
     var document=iframe.contentDocument;
     var obj=document.getElementById("_url_change");
@@ -131,6 +131,27 @@ window.Structor.remodal.show=function(ob){
 }
 window.Structor.remodal.hide=function(){
     window.Structor.remodal.inst.close();
+}
+
+window.Structor.Route={};
+window.Structor.Route.remodal={};
+window.Structor.Route.remodal.inst=null;
+window.Structor.Route.remodal.callback_queue=[];
+window.Structor.Route.remodal.show=function() {
+    window.Structor.Route.remodal.inst.open();
+};
+window.Structor.Route.remodal.confirm=function(target){
+    let con = $(target).parent('div').find('.modal-content');
+    let route={};
+    route.name=con.find('input[name="route_name"]').val();
+    route.url=con.find('input[name="route_url"]').val();
+    //TODO:invoke new route to local server
+    window.Structor.queryHandle('POST','/save_newRoute.do',{route:JSON.stringify(route)},null,function(response) {
+        console.log(response.content);
+    });
+    con.find('input[name="route_name"]').val('');
+    con.find('input[name="route_url"]').val('')
+    window.Structor.Route.remodal.inst.close();
 }
 
 window.Structor.dispatchConfigInPanelEvent=function(target){

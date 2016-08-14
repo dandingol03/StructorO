@@ -37,6 +37,8 @@ var ProxyQ=require('../proxy/ProxyQ');
  * 4.Blank的重新渲染
  *      1>.当本组件的挂载组件数据与原先并无不同时,不进行重新渲染,以此设定原则
  *
+ * 5.className=='drop-wrapper
+ *
  */
 
 
@@ -68,23 +70,6 @@ var Blank=React.createClass({
         this.setState({data: old});
         var _config=$("#_config")[0];
         _config.removeEventListener("config",this._beanCallback);
-    },
-    onKeyDown:function(event){
-        switch (event.keyCode)
-        {
-            case QUOTE:
-                if(event.metaKey==true)
-                {
-                    console.log('......command+quote');
-                    if(this.state.dragged!==true)
-                        this.setState({dragged:true});
-                    else
-                        this.setState({dragged: false});
-                }
-                break;
-            default:
-                break;
-        }
     },
     onMouseDown:function(event){
         SyncActions.folding();
@@ -256,67 +241,24 @@ var Blank=React.createClass({
         let data =ev.dataTransfer.getData(type);
         if(Object.prototype.toString.call(data)=='[object String]')
             data = eval('(' + data + ')');
-        if($(target).hasClass('drop-wrapper')) {
+        if($(target).hasClass('drop-wrapper'))//拽落行为发生在容器性组件内部
+        {
             //this.state.child.push(data);
             //this.setState({child: this.state.child});
-            let ob={index:this.state.child.length,data:data.data,type:data.type};
+            let ob={index:this.state.nodes.length,data:data.data,type:data.type};
             this.syncWithStore(this.props.vector,'create', ob,function(parent){
-                let _nodes=[];
-                for(var index in parent) {
-                    if(isNaN(parseInt(index)))
-                        continue;
-                    _nodes.push(parent[index]);
-                }
-                this.setState({child: _nodes});
+                let _nodes=parent.nodes;
+                this.setState({nodes: _nodes});
             }.bind(this));
-        }else if(pos!==null) {
-            if($(target).hasClass('prefix'))
-            {
-                if(this.props.dropHandle!==undefined&&this.props.dropHandle!==null)
-                {
-                    var vector= [] ;
-                    $.extend(true,vector,this.props.vector);
-                    if(vector.length==1)
-                        vector=null;
-                    else{
-                        vector.splice(vector.length - 1, 1);
-                    }
-                    this.props.dropHandle(vector,pos , data);
-                }
-
-            }else if($(target).hasClass('suffix'))
-            {
-                if(this.props.dropHandle!==undefined&&this.props.dropHandle!==null)
-                {
-                    var vector=[];
-                    var vector=$.extend(true,vector,this.props.vector);
-                    if(vector.length==1)
-                        vector=null;
-                    else{
-                        $.extend(true,vector,this.props.vector);
-                        vector.splice(vector.length - 1, 1);
-                    }
-                    this.props.dropHandle(vector,pos + 1, data);
-                }
-            }else
-            {
-                return;
-            }
-            this.setState({dragged:false});
-        }else{}
+        }
     },
     dropHandle:function(vector,pos,data) {
         //this.state.child.splice(pos, 0, data);
         //this.setState({child: this.state.child});
         let ob = {index: pos, type:data.type,data: data.data};
         this.syncWithStore(vector,'create', ob,function(parent){
-            let _nodes=[];
-            for(var index in parent) {
-                if(isNaN(parseInt(index)))
-                    continue;
-                _nodes.push(parent[index]);
-            }
-            this.setState({child: _nodes});
+            let _nodes=parent.nodes;
+            this.setState({nodes: _nodes});
         }.bind(this));
     },
     getInitialState:function(){
@@ -328,51 +270,47 @@ var Blank=React.createClass({
         if(this.props.vector!==undefined&&this.props.vector!==null) {
             vector=this.props.vector;
         }
-        var child=[];
-        if(this.props.child!==undefined&&this.props.child!==null)
+        var nodes=[];
+        if(this.props.nodes!==undefined&&this.props.nodes!==null)
         {
-            child=this.props.child;
+            nodes=this.props.nodes;
         }
-        return ({prefix: null, suffix: null,data:data,child:child,clicked:false,vector:vector});
+        var type=null;
+        if(this.props.type!==undefined&&this.props.type!==null)
+            type=this.props.type;
+        return ({data:data,nodes:nodes,clicked:false,vector:vector,type:type});
     },
     componentWillReceiveProps:function(props){
         let ob={};
         if(props.data!==this.props.data)
             ob.data=props.data;
+        if(props.type!==this.props.type)
+            ob.type=props.type;
+        if(props.vector!==this.props.vector)
+            ob.vector=props.vector;
+        if(props.nodes!==this.props.nodes)
+            ob.nodes=props.nodes;
         this.setState(ob);
     },
     render:function(){
 
-        let prefix=null;
-        let suffix=null;
+
         let nodes=null;
         let borderCtrl=null;
         let rowsEditor=null;
 
-        if(this.state.dragged==true&&this.props.dropHandle!==undefined&&this.props.dropHandle!==null)
-        {
-            prefix=  <div className="prefix"
-                          onDragOver={this.dragOver}
-                          onDragLeave={this.dragLeave}
-                          onDrop={this.drop.bind(this,this.props.index)}>
-                <div>deposite here</div>
-            </div>;
-            suffix=<div className="suffix"
-                        onDrop={this.drop.bind(this,this.props.index)}>
-                <div>deposite here</div>
-            </div>;
-        }
 
-        if(this.state.child.length>0)
+
+        if(this.state.nodes.length>0)
         {
             nodes=[];
             let that=this;
-            this.state.child.map(function(node,i) {
+            this.state.nodes.map(function(node,i) {
                 let ctrl=null;
                 if(node.type!==undefined&&node.type!==null&&node.type!='')
                 {
                     ctrl=
-                        <Blank key={i} data={node} dropHandle={that.dropHandle} removeHandle={that.removeCb} index={i} vector={node.vector}>
+                        <Blank key={i} data={node.data} type={node.type} dropHandle={that.dropHandle} removeHandle={that.removeCb} index={i} vector={node.vector}>
                         </Blank>;
                 }
 
@@ -395,8 +333,8 @@ var Blank=React.createClass({
             );
 
             //加入row的拖拽模式
-            if(this.state.data.data!==undefined&&this.state.data.data!==null)
-                if(this.state.data.data.rowsEditable==true)
+            if(this.state.data!==undefined&&this.state.data!==null)
+                if(this.state.data.rowsEditable==true)
                 {
                     helps.push(
                         <div className="selected-overlay-button selected-overlay-button-rows-edit" key={2}>
@@ -425,8 +363,8 @@ var Blank=React.createClass({
         }
 
         let self=null;
-        if(this.state.data!==null&&this.state.data!==undefined) {
-            switch (this.state.data.type) {
+        if(this.state.type!==null&&this.state.type!==undefined) {
+            switch (this.state.type) {
                 case 'CPanel':
                     let inst=<CPanel/>;
                     if(Object.prototype.toString.call(inst.type.prototype.dropEnable)=='[object Function]'&&inst.type.prototype.dropEnable()==true)
@@ -448,40 +386,40 @@ var Blank=React.createClass({
                         </div>;
                     break;
                 case 'Table':
-                    self=<Table {...this.state.data.data}/>;
+                    self=<Table {...this.state.data}/>;
                     break;
                 case 'Attention':
-                    self=<Attention {...this.state.data.data}/>;
+                    self=<Attention {...this.state.data}/>;
                     break;
                 case 'Calendar':
-                    self=<Calendar {...this.state.data.data}/>;
+                    self=<Calendar {...this.state.data}/>;
                     break;
                 case 'Upload':
-                    self=<Upload {...this.state.data.data}/>;
+                    self=<Upload {...this.state.data}/>;
                     break;
                 case 'Download':
-                    self=<Download {...this.state.data.data}/>;
+                    self=<Download {...this.state.data}/>;
                     break;
                 case 'Panel':
-                    self=<Panel {...this.state.data.data}/>;
+                    self=<Panel {...this.state.data}/>;
                     break;
                 case 'OrdinaryTable':
-                    self=<OrdinaryTable {...this.state.data.data}/>;
+                    self=<OrdinaryTable {...this.state.data}/>;
                     break;
                 case 'PanelTable':
-                    self=<PanelTable {...this.state.data.data}/>;
+                    self=<PanelTable {...this.state.data}/>;
                     break;
                 case 'ScaleBar':
-                    self=<ScaleBar {...this.state.data.data}/>;
+                    self=<ScaleBar {...this.state.data}/>;
                     break;
                 case 'Note':
-                    self=<Note {...this.state.data.data}/>;
+                    self=<Note {...this.state.data}/>;
                     break;
                 case 'Footer':
-                    self=<Footer {...this.state.data.data}/>;
+                    self=<Footer {...this.state.data}/>;
                     break;
                 case 'Nav':
-                    self=<Nav {...this.state.data.data}/>;
+                    self=<Nav {...this.state.data}/>;
                     break;
                 default:
                     break;
@@ -490,17 +428,15 @@ var Blank=React.createClass({
 
         return(
             <div onClick={this.clickCb} className="blank" ref="blank">
-                {prefix}
                 {self}
                 {borderCtrl}
                 {rowsEditor}
-                {suffix}
                 <span style={{display:"block",height:"20px"}}></span>
             </div>
         );
     },
     componentDidMount:function(){
-        document.addEventListener('keydown',this.onKeyDown);
+
         let dom=this.refs.blank;
         dom.addEventListener('mousedown', this.onMouseDown);
     },
@@ -510,7 +446,7 @@ var Blank=React.createClass({
     componentWillUnmount:function(){
         let dom=this.refs.blank;
         dom.removeEventListener('mousedown', this.onMouseDown);
-        document.removeEventListener('keydown',this.onKeyDown);
+
     }
 });
 module.exports=Blank;

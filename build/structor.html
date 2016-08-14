@@ -91,19 +91,24 @@
                     let route = routes[className];
                     let url=route.url;
                     let li = document.createElement('li');
-                    li.innerHTML='<a href="javascript:void(0);" data-name="'+className+'">'+url+'</a>';
+                    li.innerHTML='<a href="javascript:void(0);" data-name="'+className+'" data-url="'+url+'">'+className+' : '+url+'</a>';
                     $(li).click(function(className){
                         $url_span.text(className);
-                        window.Structor.dispatchUrlChangedEvent();
-                    }.bind(this,className));
+                        window.Structor.dispatchUrlChangedEvent(url);
+                    }.bind(this,className,url));
                     $ul.append(li);
                 }
 
             });
 
-
+            //初始化配置模态框
             window.Structor.remodal.inst=$('[data-remodal-id="re-modal"]').remodal({
             });
+
+            //初始化路由模态框
+            window.Structor.Route.remodal.inst=$('[data-remodal-id="route-modal"]').remodal({
+            });
+
 
         });
     </script>
@@ -132,6 +137,28 @@
     <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
     <button data-remodal-action="confirm" class="remodal-confirm" onclick="window.Structor.dispatchConfigInPanelEvent(this)">OK</button>
 </div>
+
+<!-- route remodal -->
+<div  data-remodal-id="route-modal" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
+    <button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+    <div class="modal-header" style="text-align: left;padding-left: 0px">configure new page</div>
+    <div class="modal-content" style="text-align: left;padding:15px;margin-bottom: 20px">
+        <div style="margin-bottom: 5px">
+            <span style="width: 100px;display: inline-block">mapping name:</span>
+            <input type="text" name="route_name" style="width: 200px"/>
+        </div>
+        <div style="margin-bottom: 5px">
+            <span style="width: 100px;display: inline-block">mapping url:</span>
+            <input type="text" name="route_url" style="width: 200px   "/>
+        </div>
+    </div>
+    <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
+    <button data-remodal-action="confirm" class="remodal-confirm" onclick="window.Structor.Route.remodal.confirm(this)">OK</button>
+</div>
+
+
+
+
 
 <div id="render"></div>
 
@@ -240,7 +267,8 @@
                     </div>
                 </div>
                 <div class="btn-group" role="group" style="padding: 0px; margin: 0px 0px 0px 0.5em;">
-                    <button class="btn btn-default btn-xs" title="Create new page"><span class="fa fa-plus" style="margin: 0px 0.5em;"></span>
+                    <button class="btn btn-default btn-xs" title="Create new page" onclick="window.Structor.Route.remodal.show()">
+                        <span class="fa fa-plus" onclick="" style="margin: 0px 0.5em;"></span>
                     </button>
                     <button class="btn btn-default btn-xs" title="Clone current page"><span class="fa fa-copy" style="margin: 0px 0.5em;"></span></button>
                     <div class="btn-group" role="group">

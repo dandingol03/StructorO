@@ -1,14 +1,30 @@
 [
   {
     "name":"Panel",
-    "route":"../../../../framework/AppReact/components/panel/Panel.jsx"
+    "route":"../../../../../framework/AppReact/components/panel/Panel.jsx"
   },
   {
     "name":"OrdinaryTable",
-    "route":"../../../../framework/AppReact/components/form/OrdinaryTable.jsx"
+    "route":"../../../../../framework/AppReact/components/form/OrdinaryTable.jsx"
   },
   {
     "name":"PanelTable",
-    "route":"../../../../framework/AppReact/components/compounds/PanelTable.jsx"
+    "route":"../../../../../framework/AppReact/components/compounds/PanelTable.jsx"
+  },
+  {
+    "name":"Basic",
+    "route":"../../../../../src/structor/components/container/Basic.jsx"
+  },
+  {
+    "name":"Nav",
+    "route":"../../../../../framework/AppReact/components/basic/Nav.jsx"
+  },
+  {
+    "name":"Note",
+    "route":"../../../../../framework/AppReact/entrys/201513569/graduate/serviceHobby/modules/Note.jsx"
+  },
+  {
+    "name":"ScaleBar",
+    "route":"../../../../../framework/AppReact/components/basic/ScaleBar.jsx"
   }
 ]

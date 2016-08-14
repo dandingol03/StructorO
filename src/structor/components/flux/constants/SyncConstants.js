@@ -12,5 +12,6 @@ module.exports = keyMirror({
     DROP:null,
     FOLDING:null,
     MOVE:null,
-    DRAG_END:null
+    DRAG_END:null,
+    SYNC:null
 });

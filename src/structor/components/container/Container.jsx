@@ -2,31 +2,38 @@ import React from 'react';
 import {render} from 'react-dom';
 import { Link } from 'react-router'
 import Blank from '../../components/wrapper/Blank.jsx';
+import App from '../../../../src/client/gen/graduate/serviceHobby/App.jsx';
 var SyncStore=require('../flux/stores/SyncStore');
+var SyncAction = require('../flux/actions/SyncActions');
 var ProxyQ=require('../proxy/ProxyQ');
 
-
 /**
- *    <Blank data={{type:'Basic'}}>
- </Blank>
+ *   1.Home和App是分开的
+ *   2.则Home和App不可同时导出
  */
 
 var Container=React.createClass({
-    fetch_nodes:function(){
-        ProxyQ.queryHandle('GET', '/get_nodes.do', null, null, function (response) {
+    fetch_node:function(){
+        ProxyQ.queryHandle('GET', '/get_node.do', null, null, function (response) {
             console.log('...');
-            if(response._nodes!==undefined&&response._nodes!==null)
+            if(response._node!==undefined&&response._node!==null)
             {
-                let _nodes=response._nodes;
-                if(Object.prototype.toString.call(_nodes)=='[object String]')
-                    _nodes = JSON.parse(_nodes);
-                this.setState({data: _nodes});
+                let _node=response._node;
+                if(Object.prototype.toString.call(_node)=='[object String]')
+                    _node = JSON.parse(_node);
+                this.setState({data: _node});
+                //TODO:sync remote data with inside data
+                SyncAction.sync(_node,function(){
+                    console.log('sync success');
+                });
             }
         }.bind(this));
     },
     fetch_gen:function()
     {
-
+        setTimeout(function () {
+            this.setState({gen: true});
+        }.bind(this), 300);
     },
     _onUrlChanged:function(data)
     {
@@ -63,7 +70,7 @@ var Container=React.createClass({
         }
     },
     getInitialState:function(){
-        return ({data: null,exportable:true,json:null});
+        return ({data: null,exportable:true,gen:null});
     },
     render:function(){
         if(this.state.exportable==true)//可导出可编辑
@@ -71,10 +78,10 @@ var Container=React.createClass({
             if(this.state.data==null||this.state.data==undefined)
             {
                 //f(this.props.auto==true)
-                this.fetch_nodes();
+                this.fetch_node();
                 return(
                     <div className="Container">
-                        <Blank data={{type:'Basic'}}>
+                        <Blank {...{type:'Basic'}}>
                         </Blank>
                     </div>
                 );
@@ -82,25 +89,30 @@ var Container=React.createClass({
             else{
                 console.log('...');
                 console.log('...');
-                console.log('...');
                 return (
                     <div>
-                        <Blank data={this.state.data}>
+                        <Blank {...this.state.data}>
                         </Blank>
+                        <Link to='/get_render_page.do/password'>link to password modify</Link>
                         {this.props.children}
                     </div>
                 )
             }
         }else{
-            if(this.state.json==null)//拉取生成的源代码文件
+            if(this.state.gen==null)//拉取生成的源代码文件
             {
-                this.fetch_json();
+                this.fetch_gen();
                 return(
                   <div>
                   </div>
                 );
             }else{
-                //TODO:render App.jsx
+                return (
+                    <div className="Container">
+                        <App/>
+                        {this.props.children}
+                    </div>
+                );
             }
         }
     },

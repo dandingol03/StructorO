@@ -1,7 +1,9 @@
 import React from 'react';
 import {render} from 'react-dom';
 import { Link } from 'react-router'
+import { browserHistory } from 'react-router'
 import Blank from '../../components/wrapper/Blank.jsx';
+import Home from '../../components/home/Home.jsx';
 import App from '../../../../src/client/gen/graduate/serviceHobby/App.jsx';
 var SyncStore=require('../flux/stores/SyncStore');
 var SyncAction = require('../flux/actions/SyncActions');
@@ -10,11 +12,12 @@ var ProxyQ=require('../proxy/ProxyQ');
 /**
  *   1.Home和App是分开的
  *   2.则Home和App不可同时导出
+ *   3.url_changed事件同时封装了name
  */
 
 var Container=React.createClass({
     fetch_node:function(){
-        ProxyQ.queryHandle('GET', '/get_node.do', null, null, function (response) {
+        ProxyQ.queryHandle(null, '/get_node.do', {url:'/',name:'App'}, null, function (response) {
             console.log('...');
             if(response._node!==undefined&&response._node!==null)
             {
@@ -32,7 +35,7 @@ var Container=React.createClass({
     fetch_gen:function()
     {
         setTimeout(function () {
-            this.setState({gen: true});
+            this.setState({gen: true,exportable:false});
         }.bind(this), 300);
     },
     _onUrlChanged:function(data)
@@ -40,12 +43,21 @@ var Container=React.createClass({
         if(data!==undefined&&data!==null)
         {
             var route=data.detail.route;
-            if(route.name!=='App')//convert app.json to App.jsx
+            if(route.navigator!==undefined&&route.navigator!==null)
             {
-                this.setState({exportable: false});
-            }else//convert App.jsx to app.json
-            {
-                this.setState({exportable: true});
+                let behide=function(){
+                    browserHistory.push(route.navigator);
+                }
+                setTimeout(behide,300);
+            }else{
+                if(route.name!=='App')//convert app.json to App.jsx
+                {
+                    this.fetch_gen();
+                    this.setState({exportable: false,name:route.name});
+                }else//convert App.jsx to app.json
+                {
+                    this.setState({exportable: true,name:route.name});
+                }
             }
         }
     },
@@ -73,6 +85,14 @@ var Container=React.createClass({
         return ({data: null,exportable:true,gen:null});
     },
     render:function(){
+        let ch=null;
+        if(this.state.name=='Home')
+            ch=<Home exportable={true}/>;
+        else
+            ch=
+                <div>
+                    {this.props.children}
+                </div>;
         if(this.state.exportable==true)//可导出可编辑
         {
             if(this.state.data==null||this.state.data==undefined)
@@ -94,26 +114,19 @@ var Container=React.createClass({
                         <Blank {...this.state.data}>
                         </Blank>
                         <Link to='/get_render_page.do/password'>link to password modify</Link>
-                        {this.props.children}
+                        {ch}
                     </div>
                 )
             }
         }else{
-            if(this.state.gen==null)//拉取生成的源代码文件
-            {
-                this.fetch_gen();
-                return(
-                  <div>
-                  </div>
-                );
-            }else{
                 return (
                     <div className="Container">
-                        <App/>
-                        {this.props.children}
+                        <App>
+                            {ch}
+                        </App>
                     </div>
                 );
-            }
+
         }
     },
     componentDidMount:function(){

@@ -32,9 +32,6 @@
                 $(".slide-part").css("left"," calc(4em + 150px)");
             }
         }
-        function doExport(){
-
-        }
         $(document).ready(function(){
             $("#render")[0].addEventListener("render",function(data) {
                 var ob=data.detail;
@@ -114,6 +111,36 @@
     </script>
 </head>
 <body>
+
+<!-- component modal -->
+<div class="modal fade" style="z-index: 1050" id="component-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">new component</h4>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 10px">
+                    <span style="display: inline-block;width: 200px">components: </span>
+                    <select type="text" name="url">
+                        <option>请选择</option>
+                        <option>Pass   </option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 10px">
+                    <span style="display: inline-block;width: 200px">url: </span><input type="text" name="url"/>
+                </div>
+                <div style="margin-bottom: 0px">
+                    <span style="display: inline-block;width: 200px">component name: </span><input type="text" name="name"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                <button type="button" class="btn btn-primary" onclick="window.Structor.createNewComponentEvent(this)">create</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- config remodal -->
@@ -302,7 +329,12 @@
                 <div class="btn-group" role="group" style="padding: 0px; margin: 0px 0px 0px 0.5em;">
                     <button class="btn btn-default btn-xs" disabled="" title="Show selected component options"><span class="fa fa-gears" style="margin: 0px 0.5em;"></span>
                     </button>
-                    <button class="btn btn-default btn-xs" disabled="" title="Generate the source code for a new component"><span style="margin: 0px 0.5em;">New component</span></button>
+                    <button class="btn btn-default btn-xs" title="Generate the source code for a new component" onclick="  javascript:$('#component-modal').modal('show');">
+                        <span style="margin: 0px 0.5em;">New component</span>
+                    </button>
+                    <button class="btn btn-default btn-xs" style="margin-left:20px;margin-right:40px;border:1px solid #0D8026">
+                        <span class="component-selected" style="font-size: 1.2em;font-weight: bolder;">null</span>
+                    </button>
                 </div>
                 <div style="padding: 0px; margin: 0px 0px 0px 0.5em;">
                     <div class="btn-group" role="group">

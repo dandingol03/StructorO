@@ -112,14 +112,20 @@ app.post('/save_css.do',function(req,res) {
 });
 
 
-app.get('/get_node.do',function(req,res) {
+app.post('/get_node.do',function(req,res) {
 
-    var name='App';
-    var path='/';
+    var name=req.body.name;
+    var path=req.body.url;
     try{
-        var content = fs.readFileSync('./src/client/gen/graduate/serviceHobby' + path + name + '.json', 'utf-8');
-        if(content!==undefined&&content!==null)
-            res.send({_node: content});
+        var existed=fs.existsSync('./src/client/gen/graduate/serviceHobby/'+path+name+'.json');
+        if(existed)
+        {
+            var content = fs.readFileSync('./src/client/gen/graduate/serviceHobby' + path + name + '.json', 'utf-8');
+            if(content!==undefined&&content!==null)
+                res.send({_node: content});
+        }else{
+            res.send({re: -1});
+        }
     }catch(e)
     {
         res.send({re: -1});
@@ -209,8 +215,7 @@ app.post('/do_export.do',function(req,res) {
                filters.push(dep);
         });
         var content=null;
-        if(route.name=='App')
-            content=fs.readFileSync('./src/structor/template/main.tpl','utf-8');
+        content=fs.readFileSync('./src/structor/template/main.tpl','utf-8');
         var  se = _.template(content);
 
         var compiled=se({'func':'function','className':route.name,'dependencies':filters,'content':'\n'+before_compile.content},{escape:['<','function']});

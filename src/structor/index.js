@@ -7,6 +7,7 @@ import Format from './components/format/Format.jsx';
 import Css from './components/css/Css.jsx';
 import Home from './components/home/Home.jsx';
 import MainSection from './components/mainSection/MainSection.jsx';
+import Edit from './components/editor/Edit.jsx';
 import Export from './components/export/Export.jsx';
 import PasswordModify from './PasswordModify.jsx';
 
@@ -21,6 +22,7 @@ function Boot(){
                 <Route path="/get_render_page.do/export" component={MainSection}/>
                 <Route path="/get_render_page.do/password" component={PasswordModify}/>
             </Route>
+            <Route path='/get_render_page.do/edit_component/:name/:url' component={Edit}/>
         </Router>
     ), document.getElementById('root'));
 }

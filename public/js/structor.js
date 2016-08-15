@@ -73,7 +73,7 @@ window.Structor.dispatchUrlChangedEvent=function(url){
     let route={};
     let $ul=$("ul[class='dropdown-menu routes']");
     route.name=$("button[title='View page info']").children('span').text().trim();
-    route.url=url
+    route.url=url;
     var iframe=$("#desktop-page").children("iframe")[0];
     var document=iframe.contentDocument;
     var obj=document.getElementById("_url_change");
@@ -190,4 +190,22 @@ window.Structor.dispatchConfigInPanelEvent=function(target){
     window.Structor.remodal.clear(con);
     event.initCustomEvent('config',false,true,ob);
     obj.dispatchEvent(event);
+}
+
+window.Structor.createNewComponentEvent=function(target){
+    let con=$(target).parent('div').parent('.modal-content').children('.modal-body');
+    let name=con.find('input[name="name"]').val();
+    let url=con.find('input[name="url"]').val();
+    var iframe=$("#desktop-page").children("iframe")[0];
+    var document=iframe.contentDocument;
+    var obj=document.getElementById("_url_change");
+    var event=document.createEvent('CustomEvent');
+    if(url==''||url=='/')
+        url = 'blank';
+    let route={name:name,url:url,navigator:'/get_render_page.do/edit_component/'+name+'/'+url};
+    event.initCustomEvent('__url__change',false,true,{route:route});
+    obj.dispatchEvent(event);
+
+    $('#component-modal').modal('hide');
+    $('.component-selected').text(name);
 }

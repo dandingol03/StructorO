@@ -1,7 +1,6 @@
 import React from 'react';
 import {render} from 'react-dom';
 import CPanel from '../../../../framework/AppReact/components/basic/CPanel.jsx';
-import Attention from '../../../../framework/AppReact/components/basic/Attention.jsx';
 import Calendar from '../../../../framework/AppReact/components/basic/Calendar.jsx';
 import Upload from '../../../../framework/AppReact/components/basic/Upload.jsx';
 import Download from '../../../../framework/AppReact/components/basic/Download.jsx';
@@ -109,12 +108,6 @@ var Dragged=React.createClass({
                     ctrl=
                         <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
                             <CPanel {...ob}/>
-                        </div>;
-                    break;
-                case 'Attention':
-                    ctrl=
-                        <div draggable={true} onDragStart={this._dragStart} onDragEnd={this._dragEnd} onDrag={this.dragging}>
-                            <Attention {...ob}/>
                         </div>;
                     break;
                 case 'Calendar':

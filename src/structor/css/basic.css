@@ -1,6 +1,7 @@
 .basic{
     width:100%;
-    min-height: 300px;
+    min-height: 400px;
     border:2px dashed #0000ff;
     padding: 0px 15px;
+    margin-bottom:50px;
 }

@@ -151,9 +151,9 @@ var HighLight = React.createClass({
         }
 
         return (
-            <div className="highLight" style={{height:"440px",position:"relative"}} ref="highLight">
+            <div className="highLight" style={{height:"640px",position:"relative"}} ref="highLight">
                 <div className="left"
-                     style={{left:"11%",width:"80%",position:"absolute",float:"left",height: "100%",textAlign:"center"}}>
+                     style={{left:"7%",width:"80%",position:"absolute",float:"left",height: "100%",textAlign:"center"}}>
                     <div className="component">
                         {component}
                     </div>

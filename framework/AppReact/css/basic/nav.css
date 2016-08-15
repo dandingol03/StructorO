@@ -13,7 +13,10 @@
     display: inline;
 }
 
-/**navigation part**/
+.Nav{
+    position: relative;
+}
+
 .Nav .navigation {
     position: fixed;
     left:0;

@@ -2,7 +2,6 @@ import React from 'react';
 import {render} from 'react-dom';
 import '../../css/blank.css';
 import CPanel from '../../../../framework/AppReact/components/basic/CPanel.jsx';
-import Attention from '../../../../framework/AppReact/components/basic/Attention.jsx';
 import Calendar from '../../../../framework/AppReact/components/basic/Calendar.jsx';
 import Upload from '../../../../framework/AppReact/components/basic/Upload.jsx';
 import Download from '../../../../framework/AppReact/components/basic/Download.jsx';
@@ -384,9 +383,6 @@ var Blank=React.createClass({
                                 {nodes}
                             </Basic>
                         </div>;
-                    break;
-                case 'Attention':
-                    self=<Attention {...this.state.data}/>;
                     break;
                 case 'Calendar':
                     self=<Calendar {...this.state.data}/>;

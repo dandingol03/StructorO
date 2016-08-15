@@ -1,12 +1,4 @@
 {
-  "Attention":
-  {
-    "data":[
-      {"label":"政策文件","route":"/comminfoservice/link/systemGuideLinkInfoViewInit.do"},
-      {"label":"通知浏览","route":"/groupnews/grouptypenews_list.do"}
-    ]
-
-  },
   "Calendar":
   {
     "data":"2015-05-12",
